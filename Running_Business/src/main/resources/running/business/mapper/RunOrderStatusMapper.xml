@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.running.business.mapper.RunOrderStatusMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderStatus" >
+    <id column="orderid" property="orderid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="did" property="did" jdbcType="INTEGER" />
+    <result column="order_is_submit" property="orderIsSubmit" jdbcType="INTEGER" />
+    <result column="order_is_pay" property="orderIsPay" jdbcType="INTEGER" />
+    <result column="order_is_orders" property="orderIsOrders" jdbcType="INTEGER" />
+    <result column="order_is_send" property="orderIsSend" jdbcType="INTEGER" />
+    <result column="order_is_finish" property="orderIsFinish" jdbcType="INTEGER" />
+    <result column="order_orders_time" property="orderOrdersTime" jdbcType="TIMESTAMP" />
+    <result column="order_finish_time" property="orderFinishTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    orderid, uid, did, order_is_submit, order_is_pay, order_is_orders, order_is_send, 
+    order_is_finish, order_orders_time, order_finish_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderStatusExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_order_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from run_order_status
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from run_order_status
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderStatusExample" >
+    delete from run_order_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunOrderStatus" >
+    insert into run_order_status (orderid, uid, did, 
+      order_is_submit, order_is_pay, order_is_orders, 
+      order_is_send, order_is_finish, order_orders_time, 
+      order_finish_time)
+    values (#{orderid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
+      #{orderIsSubmit,jdbcType=INTEGER}, #{orderIsPay,jdbcType=INTEGER}, #{orderIsOrders,jdbcType=INTEGER}, 
+      #{orderIsSend,jdbcType=INTEGER}, #{orderIsFinish,jdbcType=INTEGER}, #{orderOrdersTime,jdbcType=TIMESTAMP}, 
+      #{orderFinishTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrderStatus" >
+    insert into run_order_status
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        orderid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="did != null" >
+        did,
+      </if>
+      <if test="orderIsSubmit != null" >
+        order_is_submit,
+      </if>
+      <if test="orderIsPay != null" >
+        order_is_pay,
+      </if>
+      <if test="orderIsOrders != null" >
+        order_is_orders,
+      </if>
+      <if test="orderIsSend != null" >
+        order_is_send,
+      </if>
+      <if test="orderIsFinish != null" >
+        order_is_finish,
+      </if>
+      <if test="orderOrdersTime != null" >
+        order_orders_time,
+      </if>
+      <if test="orderFinishTime != null" >
+        order_finish_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="did != null" >
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsSubmit != null" >
+        #{orderIsSubmit,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsPay != null" >
+        #{orderIsPay,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsOrders != null" >
+        #{orderIsOrders,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsSend != null" >
+        #{orderIsSend,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsFinish != null" >
+        #{orderIsFinish,jdbcType=INTEGER},
+      </if>
+      <if test="orderOrdersTime != null" >
+        #{orderOrdersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderFinishTime != null" >
+        #{orderFinishTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunOrderStatusExample" resultType="java.lang.Integer" >
+    select count(*) from run_order_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update run_order_status
+    <set >
+      <if test="record.orderid != null" >
+        orderid = #{record.orderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.did != null" >
+        did = #{record.did,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderIsSubmit != null" >
+        order_is_submit = #{record.orderIsSubmit,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderIsPay != null" >
+        order_is_pay = #{record.orderIsPay,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderIsOrders != null" >
+        order_is_orders = #{record.orderIsOrders,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderIsSend != null" >
+        order_is_send = #{record.orderIsSend,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderIsFinish != null" >
+        order_is_finish = #{record.orderIsFinish,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderOrdersTime != null" >
+        order_orders_time = #{record.orderOrdersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderFinishTime != null" >
+        order_finish_time = #{record.orderFinishTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update run_order_status
+    set orderid = #{record.orderid,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
+      did = #{record.did,jdbcType=INTEGER},
+      order_is_submit = #{record.orderIsSubmit,jdbcType=INTEGER},
+      order_is_pay = #{record.orderIsPay,jdbcType=INTEGER},
+      order_is_orders = #{record.orderIsOrders,jdbcType=INTEGER},
+      order_is_send = #{record.orderIsSend,jdbcType=INTEGER},
+      order_is_finish = #{record.orderIsFinish,jdbcType=INTEGER},
+      order_orders_time = #{record.orderOrdersTime,jdbcType=TIMESTAMP},
+      order_finish_time = #{record.orderFinishTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunOrderStatus" >
+    update run_order_status
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="did != null" >
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsSubmit != null" >
+        order_is_submit = #{orderIsSubmit,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsPay != null" >
+        order_is_pay = #{orderIsPay,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsOrders != null" >
+        order_is_orders = #{orderIsOrders,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsSend != null" >
+        order_is_send = #{orderIsSend,jdbcType=INTEGER},
+      </if>
+      <if test="orderIsFinish != null" >
+        order_is_finish = #{orderIsFinish,jdbcType=INTEGER},
+      </if>
+      <if test="orderOrdersTime != null" >
+        order_orders_time = #{orderOrdersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderFinishTime != null" >
+        order_finish_time = #{orderFinishTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrderStatus" >
+    update run_order_status
+    set uid = #{uid,jdbcType=INTEGER},
+      did = #{did,jdbcType=INTEGER},
+      order_is_submit = #{orderIsSubmit,jdbcType=INTEGER},
+      order_is_pay = #{orderIsPay,jdbcType=INTEGER},
+      order_is_orders = #{orderIsOrders,jdbcType=INTEGER},
+      order_is_send = #{orderIsSend,jdbcType=INTEGER},
+      order_is_finish = #{orderIsFinish,jdbcType=INTEGER},
+      order_orders_time = #{orderOrdersTime,jdbcType=TIMESTAMP},
+      order_finish_time = #{orderFinishTime,jdbcType=TIMESTAMP}
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </update>
+</mapper>

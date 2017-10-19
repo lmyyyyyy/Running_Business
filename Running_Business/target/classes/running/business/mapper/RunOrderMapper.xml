@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.running.business.mapper.RunOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrder" >
+    <id column="orderid" property="orderid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="did" property="did" jdbcType="INTEGER" />
+    <result column="business_name" property="businessName" jdbcType="VARCHAR" />
+    <result column="business_address" property="businessAddress" jdbcType="VARCHAR" />
+    <result column="order_goods" property="orderGoods" jdbcType="VARCHAR" />
+    <result column="order_remark" property="orderRemark" jdbcType="VARCHAR" />
+    <result column="order_price" property="orderPrice" jdbcType="DOUBLE" />
+    <result column="order_fee" property="orderFee" jdbcType="DOUBLE" />
+    <result column="order_tip" property="orderTip" jdbcType="DOUBLE" />
+    <result column="order_type" property="orderType" jdbcType="INTEGER" />
+    <result column="order_recv_address" property="orderRecvAddress" jdbcType="INTEGER" />
+    <result column="order_phone" property="orderPhone" jdbcType="VARCHAR" />
+    <result column="order_speed" property="orderSpeed" jdbcType="VARCHAR" />
+    <result column="order_sendtime" property="orderSendtime" jdbcType="TIMESTAMP" />
+    <result column="order_recv_longitude" property="orderRecvLongitude" jdbcType="VARCHAR" />
+    <result column="order_recv_latitude" property="orderRecvLatitude" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    orderid, uid, did, business_name, business_address, order_goods, order_remark, order_price, 
+    order_fee, order_tip, order_type, order_recv_address, order_phone, order_speed, order_sendtime, 
+    order_recv_longitude, order_recv_latitude, order_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from run_order
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from run_order
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderExample" >
+    delete from run_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunOrder" >
+    insert into run_order (orderid, uid, did, 
+      business_name, business_address, order_goods, 
+      order_remark, order_price, order_fee, 
+      order_tip, order_type, order_recv_address, 
+      order_phone, order_speed, order_sendtime, 
+      order_recv_longitude, order_recv_latitude, 
+      order_time)
+    values (#{orderid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
+      #{businessName,jdbcType=VARCHAR}, #{businessAddress,jdbcType=VARCHAR}, #{orderGoods,jdbcType=VARCHAR}, 
+      #{orderRemark,jdbcType=VARCHAR}, #{orderPrice,jdbcType=DOUBLE}, #{orderFee,jdbcType=DOUBLE}, 
+      #{orderTip,jdbcType=DOUBLE}, #{orderType,jdbcType=INTEGER}, #{orderRecvAddress,jdbcType=INTEGER}, 
+      #{orderPhone,jdbcType=VARCHAR}, #{orderSpeed,jdbcType=VARCHAR}, #{orderSendtime,jdbcType=TIMESTAMP}, 
+      #{orderRecvLongitude,jdbcType=VARCHAR}, #{orderRecvLatitude,jdbcType=VARCHAR}, 
+      #{orderTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrder" >
+    insert into run_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        orderid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="did != null" >
+        did,
+      </if>
+      <if test="businessName != null" >
+        business_name,
+      </if>
+      <if test="businessAddress != null" >
+        business_address,
+      </if>
+      <if test="orderGoods != null" >
+        order_goods,
+      </if>
+      <if test="orderRemark != null" >
+        order_remark,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="orderFee != null" >
+        order_fee,
+      </if>
+      <if test="orderTip != null" >
+        order_tip,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="orderRecvAddress != null" >
+        order_recv_address,
+      </if>
+      <if test="orderPhone != null" >
+        order_phone,
+      </if>
+      <if test="orderSpeed != null" >
+        order_speed,
+      </if>
+      <if test="orderSendtime != null" >
+        order_sendtime,
+      </if>
+      <if test="orderRecvLongitude != null" >
+        order_recv_longitude,
+      </if>
+      <if test="orderRecvLatitude != null" >
+        order_recv_latitude,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderid != null" >
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="did != null" >
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="businessName != null" >
+        #{businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessAddress != null" >
+        #{businessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGoods != null" >
+        #{orderGoods,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRemark != null" >
+        #{orderRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderFee != null" >
+        #{orderFee,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTip != null" >
+        #{orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderRecvAddress != null" >
+        #{orderRecvAddress,jdbcType=INTEGER},
+      </if>
+      <if test="orderPhone != null" >
+        #{orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSpeed != null" >
+        #{orderSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSendtime != null" >
+        #{orderSendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRecvLongitude != null" >
+        #{orderRecvLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRecvLatitude != null" >
+        #{orderRecvLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunOrderExample" resultType="java.lang.Integer" >
+    select count(*) from run_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update run_order
+    <set >
+      <if test="record.orderid != null" >
+        orderid = #{record.orderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.did != null" >
+        did = #{record.did,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessName != null" >
+        business_name = #{record.businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessAddress != null" >
+        business_address = #{record.businessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderGoods != null" >
+        order_goods = #{record.orderGoods,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderRemark != null" >
+        order_remark = #{record.orderRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderPrice != null" >
+        order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderFee != null" >
+        order_fee = #{record.orderFee,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderTip != null" >
+        order_tip = #{record.orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderType != null" >
+        order_type = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderRecvAddress != null" >
+        order_recv_address = #{record.orderRecvAddress,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderPhone != null" >
+        order_phone = #{record.orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSpeed != null" >
+        order_speed = #{record.orderSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSendtime != null" >
+        order_sendtime = #{record.orderSendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderRecvLongitude != null" >
+        order_recv_longitude = #{record.orderRecvLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderRecvLatitude != null" >
+        order_recv_latitude = #{record.orderRecvLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderTime != null" >
+        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update run_order
+    set orderid = #{record.orderid,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
+      did = #{record.did,jdbcType=INTEGER},
+      business_name = #{record.businessName,jdbcType=VARCHAR},
+      business_address = #{record.businessAddress,jdbcType=VARCHAR},
+      order_goods = #{record.orderGoods,jdbcType=VARCHAR},
+      order_remark = #{record.orderRemark,jdbcType=VARCHAR},
+      order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      order_fee = #{record.orderFee,jdbcType=DOUBLE},
+      order_tip = #{record.orderTip,jdbcType=DOUBLE},
+      order_type = #{record.orderType,jdbcType=INTEGER},
+      order_recv_address = #{record.orderRecvAddress,jdbcType=INTEGER},
+      order_phone = #{record.orderPhone,jdbcType=VARCHAR},
+      order_speed = #{record.orderSpeed,jdbcType=VARCHAR},
+      order_sendtime = #{record.orderSendtime,jdbcType=TIMESTAMP},
+      order_recv_longitude = #{record.orderRecvLongitude,jdbcType=VARCHAR},
+      order_recv_latitude = #{record.orderRecvLatitude,jdbcType=VARCHAR},
+      order_time = #{record.orderTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunOrder" >
+    update run_order
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="did != null" >
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="businessName != null" >
+        business_name = #{businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessAddress != null" >
+        business_address = #{businessAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="orderGoods != null" >
+        order_goods = #{orderGoods,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRemark != null" >
+        order_remark = #{orderRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderFee != null" >
+        order_fee = #{orderFee,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTip != null" >
+        order_tip = #{orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderRecvAddress != null" >
+        order_recv_address = #{orderRecvAddress,jdbcType=INTEGER},
+      </if>
+      <if test="orderPhone != null" >
+        order_phone = #{orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSpeed != null" >
+        order_speed = #{orderSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSendtime != null" >
+        order_sendtime = #{orderSendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRecvLongitude != null" >
+        order_recv_longitude = #{orderRecvLongitude,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRecvLatitude != null" >
+        order_recv_latitude = #{orderRecvLatitude,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrder" >
+    update run_order
+    set uid = #{uid,jdbcType=INTEGER},
+      did = #{did,jdbcType=INTEGER},
+      business_name = #{businessName,jdbcType=VARCHAR},
+      business_address = #{businessAddress,jdbcType=VARCHAR},
+      order_goods = #{orderGoods,jdbcType=VARCHAR},
+      order_remark = #{orderRemark,jdbcType=VARCHAR},
+      order_price = #{orderPrice,jdbcType=DOUBLE},
+      order_fee = #{orderFee,jdbcType=DOUBLE},
+      order_tip = #{orderTip,jdbcType=DOUBLE},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_recv_address = #{orderRecvAddress,jdbcType=INTEGER},
+      order_phone = #{orderPhone,jdbcType=VARCHAR},
+      order_speed = #{orderSpeed,jdbcType=VARCHAR},
+      order_sendtime = #{orderSendtime,jdbcType=TIMESTAMP},
+      order_recv_longitude = #{orderRecvLongitude,jdbcType=VARCHAR},
+      order_recv_latitude = #{orderRecvLatitude,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=TIMESTAMP}
+    where orderid = #{orderid,jdbcType=INTEGER}
+  </update>
+</mapper>
