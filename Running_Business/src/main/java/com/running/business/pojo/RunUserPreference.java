@@ -1,17 +1,21 @@
 package com.running.business.pojo;
 
-/**
- * 用户-我的偏好
- * @author Administrator
- *
- */
 public class RunUserPreference {
-	//用户id
+    private Integer id;
+
     private Integer uid;
-	//偏好类型
+
     private String userGoodstype;
-    //商品
+
     private String userGoods;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUid() {
         return uid;

@@ -10,7 +10,7 @@ public interface RunUserCouponMapper {
 
     int deleteByExample(RunUserCouponExample example);
 
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunUserCoupon record);
 
@@ -18,7 +18,7 @@ public interface RunUserCouponMapper {
 
     List<RunUserCoupon> selectByExample(RunUserCouponExample example);
 
-    RunUserCoupon selectByPrimaryKey(Integer uid);
+    RunUserCoupon selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunUserCoupon record, @Param("example") RunUserCouponExample example);
 

@@ -10,7 +10,7 @@ public interface RunOrderMapper {
 
     int deleteByExample(RunOrderExample example);
 
-    int deleteByPrimaryKey(Integer orderid);
+    int deleteByPrimaryKey(String orderid);
 
     int insert(RunOrder record);
 
@@ -18,7 +18,7 @@ public interface RunOrderMapper {
 
     List<RunOrder> selectByExample(RunOrderExample example);
 
-    RunOrder selectByPrimaryKey(Integer orderid);
+    RunOrder selectByPrimaryKey(String orderid);
 
     int updateByExampleSelective(@Param("record") RunOrder record, @Param("example") RunOrderExample example);
 

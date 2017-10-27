@@ -10,7 +10,7 @@ public interface RunUserAddressMapper {
 
     int deleteByExample(RunUserAddressExample example);
 
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunUserAddress record);
 
@@ -18,7 +18,7 @@ public interface RunUserAddressMapper {
 
     List<RunUserAddress> selectByExample(RunUserAddressExample example);
 
-    RunUserAddress selectByPrimaryKey(Integer uid);
+    RunUserAddress selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunUserAddress record, @Param("example") RunUserAddressExample example);
 

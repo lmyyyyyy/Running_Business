@@ -1,15 +1,19 @@
 package com.running.business.pojo;
 
-/**
- * 配送员地址
- * @author Administrator
- *
- */
 public class RunDeliveryAddress {
-	//配送员id
+    private Integer id;
+
     private Integer did;
-    //配送员地址
+
     private String deliveryAddress;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getDid() {
         return did;

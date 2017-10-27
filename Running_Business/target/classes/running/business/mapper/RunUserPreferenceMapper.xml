@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunUserPreferenceMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunUserPreference" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
     <result column="user_goodstype" property="userGoodstype" jdbcType="VARCHAR" />
     <result column="user_goods" property="userGoods" jdbcType="VARCHAR" />
   </resultMap>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, user_goodstype, user_goods
+    id, uid, user_goodstype, user_goods
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunUserPreferenceExample" >
     select
@@ -85,11 +86,11 @@
     select 
     <include refid="Base_Column_List" />
     from run_user_preference
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_user_preference
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunUserPreferenceExample" >
     delete from run_user_preference
@@ -98,14 +99,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunUserPreference" >
-    insert into run_user_preference (uid, user_goodstype, user_goods
-      )
-    values (#{uid,jdbcType=INTEGER}, #{userGoodstype,jdbcType=VARCHAR}, #{userGoods,jdbcType=VARCHAR}
-      )
+    insert into run_user_preference (id, uid, user_goodstype, 
+      user_goods)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userGoodstype,jdbcType=VARCHAR}, 
+      #{userGoods,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunUserPreference" >
     insert into run_user_preference
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="uid != null" >
         uid,
       </if>
@@ -117,6 +121,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
       </if>
@@ -137,6 +144,9 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update run_user_preference
     <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
@@ -153,7 +163,8 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_user_preference
-    set uid = #{record.uid,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
       user_goodstype = #{record.userGoodstype,jdbcType=VARCHAR},
       user_goods = #{record.userGoods,jdbcType=VARCHAR}
     <if test="_parameter != null" >
@@ -163,6 +174,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunUserPreference" >
     update run_user_preference
     <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="userGoodstype != null" >
         user_goodstype = #{userGoodstype,jdbcType=VARCHAR},
       </if>
@@ -170,12 +184,13 @@
         user_goods = #{userGoods,jdbcType=VARCHAR},
       </if>
     </set>
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunUserPreference" >
     update run_user_preference
-    set user_goodstype = #{userGoodstype,jdbcType=VARCHAR},
+    set uid = #{uid,jdbcType=INTEGER},
+      user_goodstype = #{userGoodstype,jdbcType=VARCHAR},
       user_goods = #{userGoods,jdbcType=VARCHAR}
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

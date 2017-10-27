@@ -10,7 +10,7 @@ public interface RunUserBalanceRecordMapper {
 
     int deleteByExample(RunUserBalanceRecordExample example);
 
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunUserBalanceRecord record);
 
@@ -18,7 +18,7 @@ public interface RunUserBalanceRecordMapper {
 
     List<RunUserBalanceRecord> selectByExample(RunUserBalanceRecordExample example);
 
-    RunUserBalanceRecord selectByPrimaryKey(Integer uid);
+    RunUserBalanceRecord selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunUserBalanceRecord record, @Param("example") RunUserBalanceRecordExample example);
 

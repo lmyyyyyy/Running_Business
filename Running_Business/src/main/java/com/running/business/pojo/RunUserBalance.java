@@ -1,14 +1,8 @@
 package com.running.business.pojo;
 
-/**
- * 用户余额
- * @author Administrator
- *
- */
 public class RunUserBalance {
-	//用户id
     private Integer uid;
-    //用户余额
+
     private Double userBalance;
 
     public Integer getUid() {

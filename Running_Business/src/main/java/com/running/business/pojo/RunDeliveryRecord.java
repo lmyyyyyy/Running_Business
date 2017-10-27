@@ -2,26 +2,30 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 配送员提现记录
- * @author Administrator
- *
- */
 public class RunDeliveryRecord {
-	//配送员id
+    private Integer id;
+
     private Integer did;
-    //原余额
+
     private Double deliveryOldBalance;
-    //提现金额
+
     private Double deliveryAmount;
-    //提现后余额
+
     private Double deliveryNewBalance;
-    //提现方式
+
     private String deliveryType;
-    //提现账号
+
     private String deliveryNumber;
-    //提现时间
+
     private Date deliveryTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getDid() {
         return did;

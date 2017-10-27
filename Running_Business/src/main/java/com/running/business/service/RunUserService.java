@@ -1,17 +1,25 @@
 package com.running.business.service;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.running.business.common.BaseResult;
 import com.running.business.pojo.RunUser;
+
 
 public interface RunUserService {
 	
-	int addUser(RunUser user);
-	void delUser(Integer uid);
-	void updateUser(RunUser user);
+	BaseResult<Object> addUser(RunUser user);
+	BaseResult<Object> delUser(Integer uid);
+	BaseResult<Object> updateUser(RunUser user);
 	
-	RunUser getRunUser(Integer id);
-	RunUser getRunUser(String username, String password);
-	List<RunUser> getAllRunUser();
+	
+	BaseResult<Object> checkUser(String username);
+	BaseResult<Object> getRunUser(Integer id);
+	BaseResult<Object> login(String username, String password, HttpServletRequest request, HttpServletResponse response);
+	BaseResult<Object> getAllRunUser();
+	
+	BaseResult<Object> getUserByToken(String token);
+	BaseResult<Object> logout(String token);
 	
 }

@@ -10,7 +10,7 @@ public interface RunOrderPayMapper {
 
     int deleteByExample(RunOrderPayExample example);
 
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunOrderPay record);
 
@@ -18,7 +18,7 @@ public interface RunOrderPayMapper {
 
     List<RunOrderPay> selectByExample(RunOrderPayExample example);
 
-    RunOrderPay selectByPrimaryKey(Integer uid);
+    RunOrderPay selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunOrderPay record, @Param("example") RunOrderPayExample example);
 

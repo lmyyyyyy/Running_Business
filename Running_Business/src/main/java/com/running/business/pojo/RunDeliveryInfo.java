@@ -1,26 +1,22 @@
 package com.running.business.pojo;
 
-/**
- * 配送员信息
- * @author Administrator
- *
- */
 public class RunDeliveryInfo {
-	//配送员id
     private Integer did;
-    //配送员头像
+
     private String deliveryPhoto;
-    //配送员姓名
+
     private String deliveryName;
-    //配送员身份证号
+
     private String deliveryCard;
-    //配送员性别
+
     private Integer deliveryGender;
-    //配送员电话
+
     private String deliveryPhone;
-    //积分
+
+    private String deliveryAddress;
+
     private Integer deliveryPoint;
-    //级数
+
     private String deliveryLevel;
 
     public Integer getDid() {
@@ -69,6 +65,14 @@ public class RunDeliveryInfo {
 
     public void setDeliveryPhone(String deliveryPhone) {
         this.deliveryPhone = deliveryPhone == null ? null : deliveryPhone.trim();
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress == null ? null : deliveryAddress.trim();
     }
 
     public Integer getDeliveryPoint() {

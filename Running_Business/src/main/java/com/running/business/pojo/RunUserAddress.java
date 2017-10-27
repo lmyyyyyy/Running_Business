@@ -1,15 +1,19 @@
 package com.running.business.pojo;
 
-/**
- * 用户地址
- * @author Administrator
- *
- */
 public class RunUserAddress {
-	//用户id
+    private Integer id;
+
     private Integer uid;
-    //用户地址
+
     private String userAddress;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUid() {
         return uid;

@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunOrderPayMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderPay" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="orderid" property="orderid" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
     <result column="order_price" property="orderPrice" jdbcType="DOUBLE" />
     <result column="order_tip" property="orderTip" jdbcType="DOUBLE" />
     <result column="order_subtract" property="orderSubtract" jdbcType="DOUBLE" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, orderid, order_price, order_tip, order_subtract, order_actual_price, order_type, 
+    id, uid, orderid, order_price, order_tip, order_subtract, order_actual_price, order_type, 
     order_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderPayExample" >
@@ -91,11 +92,11 @@
     select 
     <include refid="Base_Column_List" />
     from run_order_pay
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_order_pay
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderPayExample" >
     delete from run_order_pay
@@ -104,16 +105,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunOrderPay" >
-    insert into run_order_pay (uid, orderid, order_price, 
-      order_tip, order_subtract, order_actual_price, 
-      order_type, order_time)
-    values (#{uid,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{orderPrice,jdbcType=DOUBLE}, 
-      #{orderTip,jdbcType=DOUBLE}, #{orderSubtract,jdbcType=DOUBLE}, #{orderActualPrice,jdbcType=DOUBLE}, 
-      #{orderType,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP})
+    insert into run_order_pay (id, uid, orderid, 
+      order_price, order_tip, order_subtract, 
+      order_actual_price, order_type, order_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, 
+      #{orderPrice,jdbcType=DOUBLE}, #{orderTip,jdbcType=DOUBLE}, #{orderSubtract,jdbcType=DOUBLE}, 
+      #{orderActualPrice,jdbcType=DOUBLE}, #{orderType,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrderPay" >
     insert into run_order_pay
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="uid != null" >
         uid,
       </if>
@@ -140,11 +146,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
       </if>
       <if test="orderid != null" >
-        #{orderid,jdbcType=INTEGER},
+        #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null" >
         #{orderPrice,jdbcType=DOUBLE},
@@ -175,11 +184,14 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update run_order_pay
     <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
       <if test="record.orderid != null" >
-        orderid = #{record.orderid,jdbcType=INTEGER},
+        orderid = #{record.orderid,jdbcType=VARCHAR},
       </if>
       <if test="record.orderPrice != null" >
         order_price = #{record.orderPrice,jdbcType=DOUBLE},
@@ -206,8 +218,9 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_order_pay
-    set uid = #{record.uid,jdbcType=INTEGER},
-      orderid = #{record.orderid,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
+      orderid = #{record.orderid,jdbcType=VARCHAR},
       order_price = #{record.orderPrice,jdbcType=DOUBLE},
       order_tip = #{record.orderTip,jdbcType=DOUBLE},
       order_subtract = #{record.orderSubtract,jdbcType=DOUBLE},
@@ -221,8 +234,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunOrderPay" >
     update run_order_pay
     <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="orderid != null" >
-        orderid = #{orderid,jdbcType=INTEGER},
+        orderid = #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null" >
         order_price = #{orderPrice,jdbcType=DOUBLE},
@@ -243,17 +259,18 @@
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrderPay" >
     update run_order_pay
-    set orderid = #{orderid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=INTEGER},
+      orderid = #{orderid,jdbcType=VARCHAR},
       order_price = #{orderPrice,jdbcType=DOUBLE},
       order_tip = #{orderTip,jdbcType=DOUBLE},
       order_subtract = #{orderSubtract,jdbcType=DOUBLE},
       order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},
       order_type = #{orderType,jdbcType=VARCHAR},
       order_time = #{orderTime,jdbcType=TIMESTAMP}
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

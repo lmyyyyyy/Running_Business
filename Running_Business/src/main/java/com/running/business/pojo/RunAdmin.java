@@ -1,18 +1,12 @@
 package com.running.business.pojo;
 
-/**
- * 管理员
- * @author Administrator
- *
- */
 public class RunAdmin {
-	//管理员id
     private Integer adminId;
-    //管理员账号
+
     private String adminUsername;
-    //管理员密码
+
     private String adminPassword;
-    //创建时间
+
     private String adminTime;
 
     public Integer getAdminId() {

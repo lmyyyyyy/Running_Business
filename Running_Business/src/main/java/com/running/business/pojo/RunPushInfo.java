@@ -2,23 +2,17 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 推送消息
- * @author Administrator
- *
- */
 public class RunPushInfo {
-	//消息id
     private Integer pid;
-    //推送标题
+
     private String pushTitle;
-    //推送内容
+
     private String pushContent;
-    //推送图片
+
     private String pushPhoto;
-    //推送状态 0：关闭，1：打开
+
     private Integer pushStatus;
-    //创建时间
+
     private Date pushTime;
 
     public Integer getPid() {

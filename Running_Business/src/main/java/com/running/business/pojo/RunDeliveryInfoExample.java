@@ -504,6 +504,76 @@ public class RunDeliveryInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andDeliveryAddressIsNull() {
+            addCriterion("delivery_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressIsNotNull() {
+            addCriterion("delivery_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressEqualTo(String value) {
+            addCriterion("delivery_address =", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressNotEqualTo(String value) {
+            addCriterion("delivery_address <>", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressGreaterThan(String value) {
+            addCriterion("delivery_address >", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("delivery_address >=", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressLessThan(String value) {
+            addCriterion("delivery_address <", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressLessThanOrEqualTo(String value) {
+            addCriterion("delivery_address <=", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressLike(String value) {
+            addCriterion("delivery_address like", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressNotLike(String value) {
+            addCriterion("delivery_address not like", value, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressIn(List<String> values) {
+            addCriterion("delivery_address in", values, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressNotIn(List<String> values) {
+            addCriterion("delivery_address not in", values, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressBetween(String value1, String value2) {
+            addCriterion("delivery_address between", value1, value2, "deliveryAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryAddressNotBetween(String value1, String value2) {
+            addCriterion("delivery_address not between", value1, value2, "deliveryAddress");
+            return (Criteria) this;
+        }
+
         public Criteria andDeliveryPointIsNull() {
             addCriterion("delivery_point is null");
             return (Criteria) this;

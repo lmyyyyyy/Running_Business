@@ -2,55 +2,49 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 订单信息表
- * @author Administrator
- *
- */
 public class RunOrder {
-	//订单号
-    private Integer orderid;
-    //用户id
+    private String orderid;
+
     private Integer uid;
-    //配送员id
+
     private Integer did;
-    //商家名称
+
     private String businessName;
-    //商家地址
+
     private String businessAddress;
-    //商品
+
     private String orderGoods;
-    //备注
+
     private String orderRemark;
-    //价格
+
     private Double orderPrice;
-    //配送费
+
     private Double orderFee;
-    //消费
+
     private Double orderTip;
-    //支付方式 0：在线；1：到付
+
     private Integer orderType;
-    //收货地址
+
     private Integer orderRecvAddress;
-    //联系方式
+
     private String orderPhone;
-    //配置速度
+
     private String orderSpeed;
-    //配送时间
+
     private Date orderSendtime;
-    //经度
+
     private String orderRecvLongitude;
-    //纬度
+
     private String orderRecvLatitude;
-    //订单时间
+
     private Date orderTime;
 
-    public Integer getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public Integer getUid() {

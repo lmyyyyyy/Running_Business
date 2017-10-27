@@ -10,7 +10,7 @@ public interface RunOrderStatusMapper {
 
     int deleteByExample(RunOrderStatusExample example);
 
-    int deleteByPrimaryKey(Integer orderid);
+    int deleteByPrimaryKey(String orderid);
 
     int insert(RunOrderStatus record);
 
@@ -18,7 +18,7 @@ public interface RunOrderStatusMapper {
 
     List<RunOrderStatus> selectByExample(RunOrderStatusExample example);
 
-    RunOrderStatus selectByPrimaryKey(Integer orderid);
+    RunOrderStatus selectByPrimaryKey(String orderid);
 
     int updateByExampleSelective(@Param("record") RunOrderStatus record, @Param("example") RunOrderStatusExample example);
 

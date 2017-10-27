@@ -1,23 +1,19 @@
 package com.running.business.pojo;
 
-/**
- * 用户信息
- * @author Administrator
- *
- */
 public class RunUserInfo {
-	//用户id
     private Integer uid;
-    //用户头像
+
     private String userPhoto;
-    //用户姓名
+
     private String userName;
-    //用户性别
+
     private Integer userGender;
-    //用户手机
+
     private String userPhone;
-    //用户积分
+
     private Integer userPoint;
+
+    private String userAddress;
 
     public Integer getUid() {
         return uid;
@@ -65,5 +61,13 @@ public class RunUserInfo {
 
     public void setUserPoint(Integer userPoint) {
         this.userPoint = userPoint;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress == null ? null : userAddress.trim();
     }
 }

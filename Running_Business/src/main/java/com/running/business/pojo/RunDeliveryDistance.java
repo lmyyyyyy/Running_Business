@@ -1,18 +1,12 @@
 package com.running.business.pojo;
 
-/**
- * 配送员配置抢单，派单信息
- * @author Administrator
- *
- */
 public class RunDeliveryDistance {
-	//配送员id
     private Integer did;
-    //配送距离
+
     private Double sendDistance;
-    //派单距离
+
     private Double deliveryDistance;
-    //可见订单距离
+
     private Double viewOrderDistance;
 
     public Integer getDid() {

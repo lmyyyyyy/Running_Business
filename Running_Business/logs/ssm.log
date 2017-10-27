@@ -203,4 +203,354 @@ Caused by: java.lang.IllegalArgumentException: Could not resolve resource locati
   [INFO] [2017-10-14 16:58:20][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Sat Oct 14 16:58:19 CST 2017]; parent: Root WebApplicationContext
   [INFO] [2017-10-14 16:58:20][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Sat Oct 14 16:58:19 CST 2017]; parent: Root WebApplicationContext
   [INFO] [2017-10-14 16:58:20][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization completed in 1187 ms
+  [INFO] [2017-10-23 16:47:52][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:47:52 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:47:52][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+  [INFO] [2017-10-23 16:47:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [INFO] [2017-10-23 16:47:54][org.hibernate.validator.internal.util.Version]HV000001: Hibernate Validator 5.0.2.Final
+  [INFO] [2017-10-23 16:47:54][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:47:52 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:47:54][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:47:52 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:48:27][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:48:27 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:48:27][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+  [INFO] [2017-10-23 16:48:27][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [INFO] [2017-10-23 16:48:28][org.hibernate.validator.internal.util.Version]HV000001: Hibernate Validator 5.0.2.Final
+  [INFO] [2017-10-23 16:48:28][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:48:27 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:48:28][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: org.springframework.context.support.ClassPathXmlApplicationContext@6e5cbebb: startup date [Mon Oct 23 16:48:27 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:49:28][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@aee1f98: startup date [Mon Oct 23 16:49:28 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:49:28][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:49:28][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:49:28][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:49:29][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:49:29][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 16:50:04][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@771af2f9: startup date [Mon Oct 23 16:50:04 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:50:04][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:50:05][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:50:05][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:50:05][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:50:06][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 16:50:38][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6b26a8dc: startup date [Mon Oct 23 16:50:38 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:50:38][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:50:39][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:50:39][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:50:39][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:50:40][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 16:54:05][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@37183a79: startup date [Mon Oct 23 16:54:05 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:54:05][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:54:06][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:54:06][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:54:06][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:54:07][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 16:55:08][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@17a6fa31: startup date [Mon Oct 23 16:55:08 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:55:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:55:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:55:08][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:55:08][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:55:09][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 16:56:21][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@5373b318: startup date [Mon Oct 23 16:56:21 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 16:56:21][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 16:56:22][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 16:56:22][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 16:56:22][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 16:56:23][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:10:59][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 17:10:59 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:10:59][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:10:59][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:11:00][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:11:00][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:11:00][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:21:51][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 17:21:51 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:21:51][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:21:51][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:21:52][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:21:52][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:21:52][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:26:02][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:26:02 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:26:02][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:26:03][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:26:03][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:26:03][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:26:04][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:27:48][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:27:48 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:27:48][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:27:49][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:27:49][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:27:49][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:27:50][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:28:39][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:28:39 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:28:39][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:28:40][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:28:40][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:28:40][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:28:41][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:31:13][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:31:13 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:31:13][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:31:13][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:31:13][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:31:13][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:31:14][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:31:55][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 17:31:55 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:31:55][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:31:56][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:31:56][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:31:56][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:31:57][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:34:38][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:34:38 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:34:38][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:34:38][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:34:38][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:34:38][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:34:39][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:42:59][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:42:59 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:42:59][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:43:00][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:43:00][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:43:00][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:43:01][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 17:44:20][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 17:44:20 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 17:44:21][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 17:44:21][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 17:44:21][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 17:44:21][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 17:44:22][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:26:46][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 19:26:46 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:26:46][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:26:47][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:26:47][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:26:47][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:26:48][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:27:07][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:27:07 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:27:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:27:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:27:08][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:27:08][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:27:09][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:28:10][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:28:10 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:28:10][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:28:10][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:28:11][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:28:11][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:28:11][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:28:45][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:28:45 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:28:45][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:28:46][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:28:46][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:28:46][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:28:47][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:32:14][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 19:32:14 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:32:14][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:32:14][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:32:15][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:32:15][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:32:16][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:33:29][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:33:29 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:33:29][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:33:30][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:33:30][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:33:30][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:33:31][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:34:25][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:34:25 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:34:25][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:34:26][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:34:26][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:34:26][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:34:27][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:35:26][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:35:26 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:35:26][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:35:27][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:35:27][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:35:27][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:35:28][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:36:29][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:36:29 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:36:29][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:36:29][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:36:30][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:36:30][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:36:31][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:38:12][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:38:12 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:38:12][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:38:12][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:38:13][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:38:13][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:38:14][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:43:53][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 19:43:53 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:43:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:43:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:43:54][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:43:54][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:43:54][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:46:13][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:46:13 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:46:13][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:46:14][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:46:14][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:46:14][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:46:15][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:47:08][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:47:08 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:47:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:47:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:47:09][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:47:09][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:47:10][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:47:35][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 19:47:35 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:47:35][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:47:35][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:47:36][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:47:36][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:47:36][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:47:51][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:47:51 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:47:51][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:47:52][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:47:52][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:47:52][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:47:53][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:48:05][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:48:05 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:48:05][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:48:05][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:48:05][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:48:06][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:48:06][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:49:36][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:49:36 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:49:36][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:49:36][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:49:37][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:49:37][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:49:38][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:49:51][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:49:51 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:49:51][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:49:52][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:49:52][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:49:52][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:49:53][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:52:41][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:52:41 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:52:41][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:52:42][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:52:42][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:52:42][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:52:43][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:52:45][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [org/springframework/jdbc/support/sql-error-codes.xml]
+  [INFO] [2017-10-23 19:52:45][org.springframework.jdbc.support.SQLErrorCodesFactory]SQLErrorCodes loaded: [DB2, Derby, H2, HSQL, Informix, MS-SQL, MySQL, Oracle, PostgreSQL, Sybase, Hana]
+  [INFO] [2017-10-23 19:53:35][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@30e4cb81: startup date [Mon Oct 23 19:53:35 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:53:35][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:53:35][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:53:36][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:53:36][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:53:37][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:54:34][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:54:34 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:54:34][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:54:34][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:54:35][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:54:35][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:54:36][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:54:53][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 19:54:53 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:54:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:54:54][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:54:54][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:54:54][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:54:55][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:57:06][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@5efd2ebd: startup date [Mon Oct 23 19:57:06 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:57:06][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:57:07][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:57:07][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:57:07][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:57:08][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:57:40][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4007ab03: startup date [Mon Oct 23 19:57:40 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:57:40][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:57:41][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:57:41][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:57:41][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:57:42][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:57:50][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:57:50 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:57:50][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:57:51][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:57:51][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:57:51][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:57:52][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 19:58:16][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@376c72cc: startup date [Mon Oct 23 19:58:16 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 19:58:16][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 19:58:16][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 19:58:17][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 19:58:17][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 19:58:18][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:07:53][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 20:07:53 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:07:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:07:54][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:07:54][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:07:54][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:07:55][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:16:27][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 20:16:27 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:16:27][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:16:28][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:16:28][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:16:28][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:16:29][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:23:30][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7cec9b3a: startup date [Mon Oct 23 20:23:30 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:23:30][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:23:31][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:23:31][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:23:31][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:23:32][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:55:00][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@11c33ce9: startup date [Mon Oct 23 20:55:00 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:55:00][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:55:00][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:55:01][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:55:01][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:55:01][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:57:31][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4b5695c8: startup date [Mon Oct 23 20:57:31 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:57:31][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:57:32][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:57:32][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:57:32][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:57:33][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:57:45][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4b5695c8: startup date [Mon Oct 23 20:57:45 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:57:45][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:57:46][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:57:46][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:57:46][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:57:47][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:59:07][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6fe78ee5: startup date [Mon Oct 23 20:59:07 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:59:07][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:59:08][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:59:08][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:59:08][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:59:09][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-23 20:59:25][org.springframework.context.support.ClassPathXmlApplicationContext]Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4b5695c8: startup date [Mon Oct 23 20:59:25 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-23 20:59:25][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-23 20:59:25][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-23 20:59:26][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-23 20:59:26][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-23 20:59:27][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-25 15:24:50][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization started
+  [INFO] [2017-10-25 15:24:50][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing Root WebApplicationContext: startup date [Wed Oct 25 15:24:50 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-25 15:24:50][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [INFO] [2017-10-25 15:24:52][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [INFO] [2017-10-25 15:24:52][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization started
+  [INFO] [2017-10-25 15:24:53][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing Root WebApplicationContext: startup date [Wed Oct 25 15:24:53 CST 2017]; root of context hierarchy
+  [INFO] [2017-10-25 15:24:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mybatis.xml]
+  [WARN] [2017-10-25 15:24:53][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-25 15:24:53][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-25 15:24:53][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+  [INFO] [2017-10-25 15:24:53][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [WARN] [2017-10-25 15:24:54][org.mybatis.spring.mapper.ClassPathMapperScanner]Skipping MapperFactoryBean with name 'jedisClient' and 'com.running.business.mapper.JedisClient' mapperInterface. Bean already defined with the same name!
+  [INFO] [2017-10-25 15:24:54][org.springframework.beans.factory.config.PropertyPlaceholderConfigurer]Loading properties file from class path resource [jdbc.properties]
+  [INFO] [2017-10-25 15:24:54][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+  [INFO] [2017-10-25 15:24:54][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-25 15:24:55][com.alibaba.druid.pool.DruidDataSource]{dataSource-1} inited
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization completed in 4511 ms
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.context.ContextLoader]Root WebApplicationContext: initialization completed in 6867 ms
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization started
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization started
+  [INFO] [2017-10-25 15:24:57][org.springframework.web.context.support.XmlWebApplicationContext]Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:57][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+  [INFO] [2017-10-25 15:24:57][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-mvc.xml]
+  [INFO] [2017-10-25 15:24:57][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [INFO] [2017-10-25 15:24:57][org.springframework.beans.factory.xml.XmlBeanDefinitionReader]Loading XML bean definitions from class path resource [spring-jedis.xml]
+  [INFO] [2017-10-25 15:24:57][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+  [INFO] [2017-10-25 15:24:58][org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor]JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+  [INFO] [2017-10-25 15:24:58][org.hibernate.validator.internal.util.Version]HV000001: Hibernate Validator 5.0.2.Final
+  [INFO] [2017-10-25 15:24:58][org.hibernate.validator.internal.util.Version]HV000001: Hibernate Validator 5.0.2.Final
+  [INFO] [2017-10-25 15:24:59][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:59][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:59][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:59][org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter]Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Wed Oct 25 15:24:57 CST 2017]; parent: Root WebApplicationContext
+  [INFO] [2017-10-25 15:24:59][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization completed in 1975 ms
+  [INFO] [2017-10-25 15:25:00][org.springframework.web.servlet.DispatcherServlet]FrameworkServlet 'SpringMVC': initialization completed in 2656 ms
   

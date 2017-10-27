@@ -2,24 +2,32 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 用户-优惠券
- * @author Administrator
- *
- */
 public class RunUserCoupon {
-	//用户ID
+    private Integer id;
+
     private Integer uid;
-    //优惠券标题
+
     private String userTitle;
-    //优惠券内容
+
     private String userContent;
-    //优惠类型
+
     private String userType;
-    //状态 0：不可用，1：可用
+
+    private Double userFull;
+
+    private Double userSubtract;
+
     private Integer userStatus;
-    //过期时间
+
     private Date userExpiredtime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUid() {
         return uid;
@@ -51,6 +59,22 @@ public class RunUserCoupon {
 
     public void setUserType(String userType) {
         this.userType = userType == null ? null : userType.trim();
+    }
+
+    public Double getUserFull() {
+        return userFull;
+    }
+
+    public void setUserFull(Double userFull) {
+        this.userFull = userFull;
+    }
+
+    public Double getUserSubtract() {
+        return userSubtract;
+    }
+
+    public void setUserSubtract(Double userSubtract) {
+        this.userSubtract = userSubtract;
     }
 
     public Integer getUserStatus() {

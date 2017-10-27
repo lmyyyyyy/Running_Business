@@ -2,26 +2,30 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 用户充值记录
- * @author Administrator
- *
- */
 public class RunUserBalanceRecord {
-	//用户id
+    private Integer id;
+
     private Integer uid;
-    //原余额
+
     private Double userOldBalance;
-    //充值金额
+
     private Double userAmount;
-    //充值后余额
+
     private Double userNewBalance;
-    //充值方式
+
     private String userType;
-    //充值账号
+
     private String userNumber;
-    //充值时间
+
     private Date userTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUid() {
         return uid;

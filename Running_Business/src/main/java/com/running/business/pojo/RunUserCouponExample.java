@@ -105,6 +105,66 @@ public class RunUserCouponExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andUidIsNull() {
             addCriterion("uid is null");
             return (Criteria) this;
@@ -372,6 +432,126 @@ public class RunUserCouponExample {
 
         public Criteria andUserTypeNotBetween(String value1, String value2) {
             addCriterion("user_type not between", value1, value2, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullIsNull() {
+            addCriterion("user_full is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullIsNotNull() {
+            addCriterion("user_full is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullEqualTo(Double value) {
+            addCriterion("user_full =", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullNotEqualTo(Double value) {
+            addCriterion("user_full <>", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullGreaterThan(Double value) {
+            addCriterion("user_full >", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullGreaterThanOrEqualTo(Double value) {
+            addCriterion("user_full >=", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullLessThan(Double value) {
+            addCriterion("user_full <", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullLessThanOrEqualTo(Double value) {
+            addCriterion("user_full <=", value, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullIn(List<Double> values) {
+            addCriterion("user_full in", values, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullNotIn(List<Double> values) {
+            addCriterion("user_full not in", values, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullBetween(Double value1, Double value2) {
+            addCriterion("user_full between", value1, value2, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserFullNotBetween(Double value1, Double value2) {
+            addCriterion("user_full not between", value1, value2, "userFull");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractIsNull() {
+            addCriterion("user_subtract is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractIsNotNull() {
+            addCriterion("user_subtract is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractEqualTo(Double value) {
+            addCriterion("user_subtract =", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractNotEqualTo(Double value) {
+            addCriterion("user_subtract <>", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractGreaterThan(Double value) {
+            addCriterion("user_subtract >", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractGreaterThanOrEqualTo(Double value) {
+            addCriterion("user_subtract >=", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractLessThan(Double value) {
+            addCriterion("user_subtract <", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractLessThanOrEqualTo(Double value) {
+            addCriterion("user_subtract <=", value, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractIn(List<Double> values) {
+            addCriterion("user_subtract in", values, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractNotIn(List<Double> values) {
+            addCriterion("user_subtract not in", values, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractBetween(Double value1, Double value2) {
+            addCriterion("user_subtract between", value1, value2, "userSubtract");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSubtractNotBetween(Double value1, Double value2) {
+            addCriterion("user_subtract not between", value1, value2, "userSubtract");
             return (Criteria) this;
         }
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunOrderStatusMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderStatus" >
-    <id column="orderid" property="orderid" jdbcType="INTEGER" />
+    <id column="orderid" property="orderid" jdbcType="VARCHAR" />
     <result column="uid" property="uid" jdbcType="INTEGER" />
     <result column="did" property="did" jdbcType="INTEGER" />
     <result column="order_is_submit" property="orderIsSubmit" jdbcType="INTEGER" />
@@ -89,15 +89,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from run_order_status
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from run_order_status
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderStatusExample" >
     delete from run_order_status
@@ -110,7 +110,7 @@
       order_is_submit, order_is_pay, order_is_orders, 
       order_is_send, order_is_finish, order_orders_time, 
       order_finish_time)
-    values (#{orderid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
+    values (#{orderid,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
       #{orderIsSubmit,jdbcType=INTEGER}, #{orderIsPay,jdbcType=INTEGER}, #{orderIsOrders,jdbcType=INTEGER}, 
       #{orderIsSend,jdbcType=INTEGER}, #{orderIsFinish,jdbcType=INTEGER}, #{orderOrdersTime,jdbcType=TIMESTAMP}, 
       #{orderFinishTime,jdbcType=TIMESTAMP})
@@ -151,7 +151,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderid != null" >
-        #{orderid,jdbcType=INTEGER},
+        #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
@@ -192,7 +192,7 @@
     update run_order_status
     <set >
       <if test="record.orderid != null" >
-        orderid = #{record.orderid,jdbcType=INTEGER},
+        orderid = #{record.orderid,jdbcType=VARCHAR},
       </if>
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
@@ -228,7 +228,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_order_status
-    set orderid = #{record.orderid,jdbcType=INTEGER},
+    set orderid = #{record.orderid,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=INTEGER},
       did = #{record.did,jdbcType=INTEGER},
       order_is_submit = #{record.orderIsSubmit,jdbcType=INTEGER},
@@ -273,7 +273,7 @@
         order_finish_time = #{orderFinishTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrderStatus" >
     update run_order_status
@@ -286,6 +286,6 @@
       order_is_finish = #{orderIsFinish,jdbcType=INTEGER},
       order_orders_time = #{orderOrdersTime,jdbcType=TIMESTAMP},
       order_finish_time = #{orderFinishTime,jdbcType=TIMESTAMP}
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </update>
 </mapper>

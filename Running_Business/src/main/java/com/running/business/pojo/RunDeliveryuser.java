@@ -2,19 +2,13 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 配送员账号
- * @author Administrator
- *
- */
 public class RunDeliveryuser {
-	//配送员id
     private Integer did;
-    //配送员账号
+
     private String deliveryUsername;
-    //配送员密码
+
     private String deliveryPassword;
-    //创建时间
+
     private Date deliveryDate;
 
     public Integer getDid() {

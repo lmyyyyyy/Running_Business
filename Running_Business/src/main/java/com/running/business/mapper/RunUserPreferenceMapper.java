@@ -10,7 +10,7 @@ public interface RunUserPreferenceMapper {
 
     int deleteByExample(RunUserPreferenceExample example);
 
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunUserPreference record);
 
@@ -18,7 +18,7 @@ public interface RunUserPreferenceMapper {
 
     List<RunUserPreference> selectByExample(RunUserPreferenceExample example);
 
-    RunUserPreference selectByPrimaryKey(Integer uid);
+    RunUserPreference selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunUserPreference record, @Param("example") RunUserPreferenceExample example);
 

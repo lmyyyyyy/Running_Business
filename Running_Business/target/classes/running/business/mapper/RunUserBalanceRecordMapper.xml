@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunUserBalanceRecordMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunUserBalanceRecord" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
     <result column="user_old_balance" property="userOldBalance" jdbcType="DOUBLE" />
     <result column="user_amount" property="userAmount" jdbcType="DOUBLE" />
     <result column="user_new_balance" property="userNewBalance" jdbcType="DOUBLE" />
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, user_old_balance, user_amount, user_new_balance, user_type, user_number, user_time
+    id, uid, user_old_balance, user_amount, user_new_balance, user_type, user_number, 
+    user_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunUserBalanceRecordExample" >
     select
@@ -89,11 +91,11 @@
     select 
     <include refid="Base_Column_List" />
     from run_user_balance_record
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_user_balance_record
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunUserBalanceRecordExample" >
     delete from run_user_balance_record
@@ -102,16 +104,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
-    insert into run_user_balance_record (uid, user_old_balance, user_amount, 
-      user_new_balance, user_type, user_number, 
-      user_time)
-    values (#{uid,jdbcType=INTEGER}, #{userOldBalance,jdbcType=DOUBLE}, #{userAmount,jdbcType=DOUBLE}, 
-      #{userNewBalance,jdbcType=DOUBLE}, #{userType,jdbcType=VARCHAR}, #{userNumber,jdbcType=VARCHAR}, 
-      #{userTime,jdbcType=TIMESTAMP})
+    insert into run_user_balance_record (id, uid, user_old_balance, 
+      user_amount, user_new_balance, user_type, 
+      user_number, user_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userOldBalance,jdbcType=DOUBLE}, 
+      #{userAmount,jdbcType=DOUBLE}, #{userNewBalance,jdbcType=DOUBLE}, #{userType,jdbcType=VARCHAR}, 
+      #{userNumber,jdbcType=VARCHAR}, #{userTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
     insert into run_user_balance_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="uid != null" >
         uid,
       </if>
@@ -135,6 +140,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
       </if>
@@ -167,6 +175,9 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update run_user_balance_record
     <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
@@ -195,7 +206,8 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_user_balance_record
-    set uid = #{record.uid,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
       user_old_balance = #{record.userOldBalance,jdbcType=DOUBLE},
       user_amount = #{record.userAmount,jdbcType=DOUBLE},
       user_new_balance = #{record.userNewBalance,jdbcType=DOUBLE},
@@ -209,6 +221,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
     update run_user_balance_record
     <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="userOldBalance != null" >
         user_old_balance = #{userOldBalance,jdbcType=DOUBLE},
       </if>
@@ -228,16 +243,17 @@
         user_time = #{userTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
     update run_user_balance_record
-    set user_old_balance = #{userOldBalance,jdbcType=DOUBLE},
+    set uid = #{uid,jdbcType=INTEGER},
+      user_old_balance = #{userOldBalance,jdbcType=DOUBLE},
       user_amount = #{userAmount,jdbcType=DOUBLE},
       user_new_balance = #{userNewBalance,jdbcType=DOUBLE},
       user_type = #{userType,jdbcType=VARCHAR},
       user_number = #{userNumber,jdbcType=VARCHAR},
       user_time = #{userTime,jdbcType=TIMESTAMP}
-    where uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -10,6 +10,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- spring版本号 -->
 	<spring.version>4.2.0.RELEASE</spring.version>
+	 <spring-data-redis.version>1.6.4.RELEASE</spring-data-redis.version>
 	<!-- mybatis版本号 -->
 	<mybatis.version>3.2.6</mybatis.version>
 	<!-- log4j日志文件管理包版本 -->
@@ -19,6 +20,10 @@
 	<commons-net.version>3.3</commons-net.version>
 	<jedis.version>2.7.2</jedis.version>
 	<solrj.version>4.10.3</solrj.version>
+	<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
+	<httpclient.version>4.3.5</httpclient.version>
+    <commons-httpclient.version>3.0</commons-httpclient.version>
+    <commons-validator.version>1.5.0</commons-validator.version>
   </properties>
   <dependencies>
     <dependency>
@@ -28,6 +33,12 @@
 			<!-- 表示开发的时候引入，发布的时候不会加载此包 -->
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
 		<!-- spring核心包 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -67,7 +78,11 @@
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+         </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
@@ -79,6 +94,11 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis.version}</version>
+        </dependency>
 		<!-- mybatis核心包 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -224,6 +244,24 @@
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>${commons-httpclient.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>${commons-validator.version}</version>
+        </dependency>
 		<!-- solr客户端 -->
 		<!-- <dependency>
 			<groupId>org.apache.solr</groupId>

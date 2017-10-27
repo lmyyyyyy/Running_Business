@@ -493,6 +493,76 @@ public class RunUserInfoExample {
             addCriterion("user_point not between", value1, value2, "userPoint");
             return (Criteria) this;
         }
+
+        public Criteria andUserAddressIsNull() {
+            addCriterion("user_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressIsNotNull() {
+            addCriterion("user_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressEqualTo(String value) {
+            addCriterion("user_address =", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressNotEqualTo(String value) {
+            addCriterion("user_address <>", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressGreaterThan(String value) {
+            addCriterion("user_address >", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("user_address >=", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressLessThan(String value) {
+            addCriterion("user_address <", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressLessThanOrEqualTo(String value) {
+            addCriterion("user_address <=", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressLike(String value) {
+            addCriterion("user_address like", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressNotLike(String value) {
+            addCriterion("user_address not like", value, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressIn(List<String> values) {
+            addCriterion("user_address in", values, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressNotIn(List<String> values) {
+            addCriterion("user_address not in", values, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressBetween(String value1, String value2) {
+            addCriterion("user_address between", value1, value2, "userAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserAddressNotBetween(String value1, String value2) {
+            addCriterion("user_address not between", value1, value2, "userAddress");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunDeliveryRecordMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryRecord" >
-    <id column="did" property="did" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="did" property="did" jdbcType="INTEGER" />
     <result column="delivery_old_balance" property="deliveryOldBalance" jdbcType="DOUBLE" />
     <result column="delivery_amount" property="deliveryAmount" jdbcType="DOUBLE" />
     <result column="delivery_new_balance" property="deliveryNewBalance" jdbcType="DOUBLE" />
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    did, delivery_old_balance, delivery_amount, delivery_new_balance, delivery_type, 
+    id, did, delivery_old_balance, delivery_amount, delivery_new_balance, delivery_type, 
     delivery_number, delivery_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryRecordExample" >
@@ -90,11 +91,11 @@
     select 
     <include refid="Base_Column_List" />
     from run_delivery_record
-    where did = #{did,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_delivery_record
-    where did = #{did,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryRecordExample" >
     delete from run_delivery_record
@@ -103,16 +104,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    insert into run_delivery_record (did, delivery_old_balance, delivery_amount, 
-      delivery_new_balance, delivery_type, delivery_number, 
-      delivery_time)
-    values (#{did,jdbcType=INTEGER}, #{deliveryOldBalance,jdbcType=DOUBLE}, #{deliveryAmount,jdbcType=DOUBLE}, 
-      #{deliveryNewBalance,jdbcType=DOUBLE}, #{deliveryType,jdbcType=VARCHAR}, #{deliveryNumber,jdbcType=VARCHAR}, 
-      #{deliveryTime,jdbcType=TIMESTAMP})
+    insert into run_delivery_record (id, did, delivery_old_balance, 
+      delivery_amount, delivery_new_balance, delivery_type, 
+      delivery_number, delivery_time)
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{deliveryOldBalance,jdbcType=DOUBLE}, 
+      #{deliveryAmount,jdbcType=DOUBLE}, #{deliveryNewBalance,jdbcType=DOUBLE}, #{deliveryType,jdbcType=VARCHAR}, 
+      #{deliveryNumber,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryRecord" >
     insert into run_delivery_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="did != null" >
         did,
       </if>
@@ -136,6 +140,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
@@ -168,6 +175,9 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update run_delivery_record
     <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
@@ -196,7 +206,8 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_delivery_record
-    set did = #{record.did,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
+      did = #{record.did,jdbcType=INTEGER},
       delivery_old_balance = #{record.deliveryOldBalance,jdbcType=DOUBLE},
       delivery_amount = #{record.deliveryAmount,jdbcType=DOUBLE},
       delivery_new_balance = #{record.deliveryNewBalance,jdbcType=DOUBLE},
@@ -210,6 +221,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryRecord" >
     update run_delivery_record
     <set >
+      <if test="did != null" >
+        did = #{did,jdbcType=INTEGER},
+      </if>
       <if test="deliveryOldBalance != null" >
         delivery_old_balance = #{deliveryOldBalance,jdbcType=DOUBLE},
       </if>
@@ -229,16 +243,17 @@
         delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where did = #{did,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryRecord" >
     update run_delivery_record
-    set delivery_old_balance = #{deliveryOldBalance,jdbcType=DOUBLE},
+    set did = #{did,jdbcType=INTEGER},
+      delivery_old_balance = #{deliveryOldBalance,jdbcType=DOUBLE},
       delivery_amount = #{deliveryAmount,jdbcType=DOUBLE},
       delivery_new_balance = #{deliveryNewBalance,jdbcType=DOUBLE},
       delivery_type = #{deliveryType,jdbcType=VARCHAR},
       delivery_number = #{deliveryNumber,jdbcType=VARCHAR},
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,39 +2,33 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 订单状态
- * @author Administrator
- *
- */
 public class RunOrderStatus {
-	//订单id
-    private Integer orderid;
-    //用户id
+    private String orderid;
+
     private Integer uid;
-    //配送员id
+
     private Integer did;
-    //是否确认订单 0：是； 1：否
+
     private Integer orderIsSubmit;
-    //是否支付 0：是； 1：否
+
     private Integer orderIsPay;
-    //是否接单 0：是； 1：否
+
     private Integer orderIsOrders;
-    //是否派送 0：到达商家； 1：买到；2：配送中
+
     private Integer orderIsSend;
-    //是否完成 0：是； 1：否
+
     private Integer orderIsFinish;
-    //接单时间 
+
     private Date orderOrdersTime;
-    //送达时间
+
     private Date orderFinishTime;
 
-    public Integer getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public Integer getUid() {

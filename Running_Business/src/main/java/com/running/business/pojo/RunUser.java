@@ -2,19 +2,13 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 用户账号
- * @author Administrator
- *
- */
 public class RunUser {
-	//用户id
     private Integer uid;
-    //用户账号
+
     private String userUsername;
-    //用户密码
+
     private String userPassword;
-    //创建时间
+
     private Date userDate;
 
     public Integer getUid() {

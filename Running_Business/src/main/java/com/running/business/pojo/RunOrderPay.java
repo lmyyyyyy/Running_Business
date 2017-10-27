@@ -2,28 +2,32 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-/**
- * 订单支付
- * @author Administrator
- *
- */
 public class RunOrderPay {
-	//用户id
+    private Integer id;
+
     private Integer uid;
-    //订单id
-    private Integer orderid;
-    //订单总价
+
+    private String orderid;
+
     private Double orderPrice;
-    //订单小费
+
     private Double orderTip;
-    //订单小费
+
     private Double orderSubtract;
-    //实际价格
+
     private Double orderActualPrice;
-    //方式
+
     private String orderType;
-    //支付时间
+
     private Date orderTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUid() {
         return uid;
@@ -33,12 +37,12 @@ public class RunOrderPay {
         this.uid = uid;
     }
 
-    public Integer getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public Double getOrderPrice() {

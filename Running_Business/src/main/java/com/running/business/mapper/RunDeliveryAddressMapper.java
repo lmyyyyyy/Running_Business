@@ -10,7 +10,7 @@ public interface RunDeliveryAddressMapper {
 
     int deleteByExample(RunDeliveryAddressExample example);
 
-    int deleteByPrimaryKey(Integer did);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RunDeliveryAddress record);
 
@@ -18,7 +18,7 @@ public interface RunDeliveryAddressMapper {
 
     List<RunDeliveryAddress> selectByExample(RunDeliveryAddressExample example);
 
-    RunDeliveryAddress selectByPrimaryKey(Integer did);
+    RunDeliveryAddress selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") RunDeliveryAddress record, @Param("example") RunDeliveryAddressExample example);
 

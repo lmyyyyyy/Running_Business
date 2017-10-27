@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.running.business.mapper.RunOrderMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrder" >
-    <id column="orderid" property="orderid" jdbcType="INTEGER" />
+    <id column="orderid" property="orderid" jdbcType="VARCHAR" />
     <result column="uid" property="uid" jdbcType="INTEGER" />
     <result column="did" property="did" jdbcType="INTEGER" />
     <result column="business_name" property="businessName" jdbcType="VARCHAR" />
@@ -98,15 +98,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from run_order
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from run_order
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderExample" >
     delete from run_order
@@ -122,7 +122,7 @@
       order_phone, order_speed, order_sendtime, 
       order_recv_longitude, order_recv_latitude, 
       order_time)
-    values (#{orderid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
+    values (#{orderid,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
       #{businessName,jdbcType=VARCHAR}, #{businessAddress,jdbcType=VARCHAR}, #{orderGoods,jdbcType=VARCHAR}, 
       #{orderRemark,jdbcType=VARCHAR}, #{orderPrice,jdbcType=DOUBLE}, #{orderFee,jdbcType=DOUBLE}, 
       #{orderTip,jdbcType=DOUBLE}, #{orderType,jdbcType=INTEGER}, #{orderRecvAddress,jdbcType=INTEGER}, 
@@ -190,7 +190,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderid != null" >
-        #{orderid,jdbcType=INTEGER},
+        #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
@@ -255,7 +255,7 @@
     update run_order
     <set >
       <if test="record.orderid != null" >
-        orderid = #{record.orderid,jdbcType=INTEGER},
+        orderid = #{record.orderid,jdbcType=VARCHAR},
       </if>
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
@@ -315,7 +315,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update run_order
-    set orderid = #{record.orderid,jdbcType=INTEGER},
+    set orderid = #{record.orderid,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=INTEGER},
       did = #{record.did,jdbcType=INTEGER},
       business_name = #{record.businessName,jdbcType=VARCHAR},
@@ -392,7 +392,7 @@
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrder" >
     update run_order
@@ -413,6 +413,6 @@
       order_recv_longitude = #{orderRecvLongitude,jdbcType=VARCHAR},
       order_recv_latitude = #{orderRecvLatitude,jdbcType=VARCHAR},
       order_time = #{orderTime,jdbcType=TIMESTAMP}
-    where orderid = #{orderid,jdbcType=INTEGER}
+    where orderid = #{orderid,jdbcType=VARCHAR}
   </update>
 </mapper>
