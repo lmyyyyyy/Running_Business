@@ -1,5 +1,6 @@
-target
+target/
 logs
+build/
 .project
 .classpath
 .settings
@@ -11,4 +12,6 @@ docker*
 classes/
 applicationContext.properties
 /out/
+doc/*.txt
+/TODO
 
