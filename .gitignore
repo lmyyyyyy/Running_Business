@@ -1,6 +1,4 @@
-target/
-logs
-build/
+target
 .project
 .classpath
 .settings
@@ -8,10 +6,12 @@ build/
 /.idea/
 bin
 .gradle
+*.DS_Store
 docker*
+*.sql
 classes/
 applicationContext.properties
-/out/
-doc/*.txt
-/TODO
-
+node_modules/
+*.ipr
+*.iws
+logs
