@@ -12,7 +12,6 @@
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
 	<context:component-scan base-package="com.running.business.controller" />
 	<bean class="com.running.business.swagger.RestApiConfig" />
-	<context:component-scan base-package="com.running.business.controller"/>
 	<!-- 使用 Swagger Restful API文档时，添加此注解 -->
 	<mvc:default-servlet-handler />
 	<import resource="spring-jedis.xml"/>
