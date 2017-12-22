@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Description: <br>
  * 正则表达式工具类
- * @author <a href=mailto:lianle@meituan.com>连乐</a>
+ * @author
  * @date 17/1/3 下午7:48
  */
 public class RegexUtils {

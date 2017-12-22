@@ -4,7 +4,6 @@ import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.RunUserInfoMapper;
-import com.running.business.pojo.RunUserExample;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.pojo.RunUserInfoExample;
 import com.running.business.service.RunUserInfoService;

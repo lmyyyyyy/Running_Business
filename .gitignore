@@ -1,0 +1,14 @@
+target
+logs
+.project
+.classpath
+.settings
+*.iml
+/.idea/
+bin
+.gradle
+docker*
+classes/
+applicationContext.properties
+/out/
+
