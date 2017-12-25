@@ -188,7 +188,7 @@ public class RunUserController extends BaseController {
      * @param callback 回调
      * @return
      */
-    @RequestMapping(value = "/token/{token}", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/token/{token}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "根据token获取用户信息(刘明宇)", notes = "根据token获取用户信息", response = BaseResult.class)
     public Object getUserByToken(@PathVariable String token, String callback) throws Exception {
         logger.info("根据token获取用户信息：", token);
@@ -277,7 +277,7 @@ public class RunUserController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/updatepwd", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/updatepwd", method = RequestMethod.PUT, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "修改用户密码(刘明宇)", notes = "修改用户密码", response = BaseResult.class)
     public BaseResult modifyPwd(@RequestParam("oldPassword") String oldPassword,
                                 @RequestParam("newPassword") String newPassword,
@@ -341,7 +341,7 @@ public class RunUserController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/info", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/info", method = RequestMethod.PUT, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "更新用户信息(刘明宇)", notes = "更新用户信息", response = BaseResult.class)
     public BaseResult updateUserInfo(@RequestBody RunUserInfo userInfo, HttpServletRequest request) throws Exception {
         logger.info("更新用户信息", userInfo.getUserPhone());
@@ -384,7 +384,7 @@ public class RunUserController extends BaseController {
     }
 
     /**
-     *
+     * 根据id获取当前地址信息
      * @param id
      * @param request
      * @return

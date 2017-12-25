@@ -3,6 +3,7 @@ package com.running.business.util;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
+import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,12 @@ public class RequestUtil {
     @Autowired
     private static JedisClient jedisClient;
 
+    /**
+     * 根据request 获取token， token获取缓存中的json字符串
+     *
+     * @param req
+     * @return
+     */
     public static String getToken(HttpServletRequest req) {
         LOGGER.info("Token");
 
@@ -68,12 +75,21 @@ public class RequestUtil {
         }
     }
 
-    public static Integer getUserId(HttpServletRequest req) throws AppException{
+    public static Integer getUserId(HttpServletRequest req) throws AppException {
         String jsonStr = getToken(req);
         RunUser user = JsonUtils.jsonToPojo(jsonStr, RunUser.class);
         if (user == null) {
             throw new AppException(ResultEnum.SESSION_IS_OUT_TIME);
         }
         return user.getUid();
+    }
+
+    public static Integer getAdminId(HttpServletRequest request) throws AppException {
+        String jsonStr = getToken(request);
+        RunAdmin admin = JsonUtils.jsonToPojo(jsonStr, RunAdmin.class);
+        if (admin == null) {
+            throw new AppException(ResultEnum.SESSION_IS_OUT_TIME);
+        }
+        return admin.getAdminId();
     }
 }
