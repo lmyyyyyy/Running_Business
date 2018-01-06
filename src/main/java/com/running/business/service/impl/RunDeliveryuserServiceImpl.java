@@ -12,6 +12,7 @@ import com.running.business.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,7 +23,11 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 
 	@Override
 	public BaseResult addRunDeliveryuser(RunDeliveryuser user) {
-		user.setDeliveryPassword(Run_StringUtil.MD5(user.getDeliveryPassword()));
+		user.setPassword(Run_StringUtil.MD5(user.getPassword()));
+		user.setAddTime(new Date());
+		user.setUpdateTime(new Date());
+		user.setStatus(false);
+		user.setIsDelete(false);
 		runDeliveryuserMapper.insert(user);
 		return BaseResult.success();
 	}
@@ -33,14 +38,17 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 		if (user == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
 		}
-		runDeliveryuserMapper.deleteByPrimaryKey(uid);
+		user.setIsDelete(true);
+		user.setUpdateTime(new Date());
+		runDeliveryuserMapper.updateByPrimaryKeySelective(user);
 		return BaseResult.success(user);
 	}
 
 	@Override
 	public BaseResult updateRunDeliveryuser(RunDeliveryuser user) {
-		user.setDeliveryPassword(Run_StringUtil.MD5(user.getDeliveryPassword()));
-		runDeliveryuserMapper.updateByPrimaryKey(user);
+		user.setPassword(Run_StringUtil.MD5(user.getPassword()));
+		user.setUpdateTime(new Date());
+		runDeliveryuserMapper.updateByPrimaryKeySelective(user);
 		return BaseResult.success();
 	}
 
@@ -48,7 +56,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 	public BaseResult checkRunDeliveryuser(String username) {
 		RunDeliveryuserExample example = new RunDeliveryuserExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andDeliveryUsernameEqualTo(username);
+		criteria.andUserphoneEqualTo(username);
 		List<RunDeliveryuser> list = runDeliveryuserMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
 			return BaseResult.success();
@@ -69,7 +77,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 	public BaseResult login(String username, String password) {
 		RunDeliveryuserExample example = new RunDeliveryuserExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andDeliveryUsernameEqualTo(username);
+		criteria.andUserphoneEqualTo(username);
 		List<RunDeliveryuser> list = null;
 		list = runDeliveryuserMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
@@ -77,8 +85,8 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 		}
 		RunDeliveryuserExample example1 = new RunDeliveryuserExample();
 		Criteria criteria1 = example1.createCriteria();
-		criteria1.andDeliveryUsernameEqualTo(username);
-		criteria1.andDeliveryPasswordEqualTo(Run_StringUtil.MD5(password));
+		criteria1.andUserphoneEqualTo(username);
+		criteria1.andPasswordEqualTo(Run_StringUtil.MD5(password));
 		list = runDeliveryuserMapper.selectByExample(example1);
 		return ValidateUtil.isValid(list) ? BaseResult.success(list.get(0)) : BaseResult.fail(ResultEnum.PWD_ERROR.getCode(), ResultEnum.PWD_ERROR.getMsg());
 	}
@@ -89,6 +97,8 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService{
 		List<RunDeliveryuser> list = null;
 		example = new RunDeliveryuserExample();
 		example.setOrderByClause("delivery_date DESC");
+		Criteria criteria = example.createCriteria();
+		criteria.andIsDeleteEqualTo(false);
 		list = runDeliveryuserMapper.selectByExample(example);
 		return ValidateUtil.isValid(list) ? BaseResult.success(list) : BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 	}

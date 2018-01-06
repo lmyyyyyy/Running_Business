@@ -11,6 +11,7 @@ import com.running.business.service.RunAdminService;
 import com.running.business.util.CookieUtils;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
+import com.running.business.util.TimeUtil;
 import com.running.business.util.ValidateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +62,8 @@ public class RunAdminServiceImpl implements RunAdminService {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
+        admin.setAdminTime(TimeUtil.getCurrDate_yyyy_MM_dd());
+        admin.setUpdateTime(new Date());
         Integer adminId = runAdminMapper.insert(admin);
         return BaseResult.success(adminId);
     }
@@ -77,6 +81,7 @@ public class RunAdminServiceImpl implements RunAdminService {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
+        admin.setUpdateTime(new Date());
         runAdminMapper.updateByPrimaryKeySelective(admin);
         return BaseResult.success(admin);
     }
