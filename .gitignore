@@ -8,7 +8,6 @@ bin
 .gradle
 *.DS_Store
 docker*
-*.sql
 classes/
 applicationContext.properties
 node_modules/

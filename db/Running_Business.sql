@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `Running_Bussiness`.`run_delivery_info` (
   `phone` VARCHAR(45) NOT NULL COMMENT '电话',
   `address` VARCHAR(100) NULL COMMENT '地址',
   `point` INT NULL DEFAULT 0 COMMENT '积分',
-  `level` VARCHAR(45) NULL COMMENT '水平，称号',
+  `level` VARCHAR(45) NULL COMMENT '水平/称号',
   PRIMARY KEY (`did`))
 ENGINE = InnoDB;
 
