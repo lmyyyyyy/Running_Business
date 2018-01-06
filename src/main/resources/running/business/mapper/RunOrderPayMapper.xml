@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunOrderPayMapper" >
+<mapper namespace="running.business.mapper.RunOrderPayMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderPay" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
-    <result column="order_price" property="orderPrice" jdbcType="DOUBLE" />
-    <result column="order_tip" property="orderTip" jdbcType="DOUBLE" />
-    <result column="order_subtract" property="orderSubtract" jdbcType="DOUBLE" />
-    <result column="order_actual_price" property="orderActualPrice" jdbcType="DOUBLE" />
-    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
-    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="order_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_tip" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_subtract" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_actual_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="pay_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pay_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, uid, orderid, order_price, order_tip, order_subtract, order_actual_price, order_type, 
-    order_time
+    id, uid, orderid, order_price, order_tip, order_subtract, order_actual_price, pay_type, 
+    pay_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderPayExample" >
     select
@@ -107,11 +109,11 @@
   <insert id="insert" parameterType="com.running.business.pojo.RunOrderPay" >
     insert into run_order_pay (id, uid, orderid, 
       order_price, order_tip, order_subtract, 
-      order_actual_price, order_type, order_time
+      order_actual_price, pay_type, pay_time
       )
     values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, 
       #{orderPrice,jdbcType=DOUBLE}, #{orderTip,jdbcType=DOUBLE}, #{orderSubtract,jdbcType=DOUBLE}, 
-      #{orderActualPrice,jdbcType=DOUBLE}, #{orderType,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}
+      #{orderActualPrice,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrderPay" >
@@ -138,11 +140,11 @@
       <if test="orderActualPrice != null" >
         order_actual_price,
       </if>
-      <if test="orderType != null" >
-        order_type,
+      <if test="payType != null" >
+        pay_type,
       </if>
-      <if test="orderTime != null" >
-        order_time,
+      <if test="payTime != null" >
+        pay_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -167,11 +169,11 @@
       <if test="orderActualPrice != null" >
         #{orderActualPrice,jdbcType=DOUBLE},
       </if>
-      <if test="orderType != null" >
-        #{orderType,jdbcType=VARCHAR},
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
       </if>
-      <if test="orderTime != null" >
-        #{orderTime,jdbcType=TIMESTAMP},
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -205,11 +207,11 @@
       <if test="record.orderActualPrice != null" >
         order_actual_price = #{record.orderActualPrice,jdbcType=DOUBLE},
       </if>
-      <if test="record.orderType != null" >
-        order_type = #{record.orderType,jdbcType=VARCHAR},
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=INTEGER},
       </if>
-      <if test="record.orderTime != null" >
-        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      <if test="record.payTime != null" >
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -225,8 +227,8 @@
       order_tip = #{record.orderTip,jdbcType=DOUBLE},
       order_subtract = #{record.orderSubtract,jdbcType=DOUBLE},
       order_actual_price = #{record.orderActualPrice,jdbcType=DOUBLE},
-      order_type = #{record.orderType,jdbcType=VARCHAR},
-      order_time = #{record.orderTime,jdbcType=TIMESTAMP}
+      pay_type = #{record.payType,jdbcType=INTEGER},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -252,11 +254,11 @@
       <if test="orderActualPrice != null" >
         order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},
       </if>
-      <if test="orderType != null" >
-        order_type = #{orderType,jdbcType=VARCHAR},
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
       </if>
-      <if test="orderTime != null" >
-        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -269,8 +271,8 @@
       order_tip = #{orderTip,jdbcType=DOUBLE},
       order_subtract = #{orderSubtract,jdbcType=DOUBLE},
       order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},
-      order_type = #{orderType,jdbcType=VARCHAR},
-      order_time = #{orderTime,jdbcType=TIMESTAMP}
+      pay_type = #{payType,jdbcType=INTEGER},
+      pay_time = #{payTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,36 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.running.business.mapper.RunDeliveryInfoMapper">
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryInfo">
-    <id column="did" jdbcType="INTEGER" property="did" />
-    <result column="delivery_photo" jdbcType="VARCHAR" property="deliveryPhoto" />
-    <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
-    <result column="delivery_card" jdbcType="VARCHAR" property="deliveryCard" />
-    <result column="delivery_gender" jdbcType="INTEGER" property="deliveryGender" />
-    <result column="delivery_phone" jdbcType="VARCHAR" property="deliveryPhone" />
-    <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
-    <result column="delivery_point" jdbcType="INTEGER" property="deliveryPoint" />
-    <result column="delivery_level" jdbcType="VARCHAR" property="deliveryLevel" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="running.business.mapper.RunDeliveryInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryInfo" >
+    <constructor >
+      <idArg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="photo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="card" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="gender" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="point" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="level" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -41,25 +43,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -70,207 +72,204 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
-    did, delivery_photo, delivery_name, delivery_card, delivery_gender, delivery_phone, 
-    delivery_address, delivery_point, delivery_level
+  <sql id="Base_Column_List" >
+    did, photo, name, card, gender, phone, address, point, level
   </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryInfoExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
     from run_delivery_info
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from run_delivery_info
     where did = #{did,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_delivery_info
     where did = #{did,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryInfoExample">
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryInfoExample" >
     delete from run_delivery_info
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryInfo">
-    insert into run_delivery_info (did, delivery_photo, delivery_name, 
-      delivery_card, delivery_gender, delivery_phone, 
-      delivery_address, delivery_point, delivery_level
-      )
-    values (#{did,jdbcType=INTEGER}, #{deliveryPhoto,jdbcType=VARCHAR}, #{deliveryName,jdbcType=VARCHAR}, 
-      #{deliveryCard,jdbcType=VARCHAR}, #{deliveryGender,jdbcType=INTEGER}, #{deliveryPhone,jdbcType=VARCHAR}, 
-      #{deliveryAddress,jdbcType=VARCHAR}, #{deliveryPoint,jdbcType=INTEGER}, #{deliveryLevel,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryInfo" >
+    insert into run_delivery_info (did, photo, name, 
+      card, gender, phone, address, 
+      point, level)
+    values (#{did,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{card,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{point,jdbcType=INTEGER}, #{level,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryInfo">
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryInfo" >
     insert into run_delivery_info
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
         did,
       </if>
-      <if test="deliveryPhoto != null">
-        delivery_photo,
+      <if test="photo != null" >
+        photo,
       </if>
-      <if test="deliveryName != null">
-        delivery_name,
+      <if test="name != null" >
+        name,
       </if>
-      <if test="deliveryCard != null">
-        delivery_card,
+      <if test="card != null" >
+        card,
       </if>
-      <if test="deliveryGender != null">
-        delivery_gender,
+      <if test="gender != null" >
+        gender,
       </if>
-      <if test="deliveryPhone != null">
-        delivery_phone,
+      <if test="phone != null" >
+        phone,
       </if>
-      <if test="deliveryAddress != null">
-        delivery_address,
+      <if test="address != null" >
+        address,
       </if>
-      <if test="deliveryPoint != null">
-        delivery_point,
+      <if test="point != null" >
+        point,
       </if>
-      <if test="deliveryLevel != null">
-        delivery_level,
+      <if test="level != null" >
+        level,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
-      <if test="deliveryPhoto != null">
-        #{deliveryPhoto,jdbcType=VARCHAR},
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryName != null">
-        #{deliveryName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryCard != null">
-        #{deliveryCard,jdbcType=VARCHAR},
+      <if test="card != null" >
+        #{card,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryGender != null">
-        #{deliveryGender,jdbcType=INTEGER},
+      <if test="gender != null" >
+        #{gender,jdbcType=BIT},
       </if>
-      <if test="deliveryPhone != null">
-        #{deliveryPhone,jdbcType=VARCHAR},
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryAddress != null">
-        #{deliveryAddress,jdbcType=VARCHAR},
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryPoint != null">
-        #{deliveryPoint,jdbcType=INTEGER},
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
       </if>
-      <if test="deliveryLevel != null">
-        #{deliveryLevel,jdbcType=VARCHAR},
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryInfoExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryInfoExample" resultType="java.lang.Integer" >
     select count(*) from run_delivery_info
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update run_delivery_info
-    <set>
-      <if test="record.did != null">
+    <set >
+      <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
-      <if test="record.deliveryPhoto != null">
-        delivery_photo = #{record.deliveryPhoto,jdbcType=VARCHAR},
+      <if test="record.photo != null" >
+        photo = #{record.photo,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryName != null">
-        delivery_name = #{record.deliveryName,jdbcType=VARCHAR},
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryCard != null">
-        delivery_card = #{record.deliveryCard,jdbcType=VARCHAR},
+      <if test="record.card != null" >
+        card = #{record.card,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryGender != null">
-        delivery_gender = #{record.deliveryGender,jdbcType=INTEGER},
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=BIT},
       </if>
-      <if test="record.deliveryPhone != null">
-        delivery_phone = #{record.deliveryPhone,jdbcType=VARCHAR},
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryAddress != null">
-        delivery_address = #{record.deliveryAddress,jdbcType=VARCHAR},
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryPoint != null">
-        delivery_point = #{record.deliveryPoint,jdbcType=INTEGER},
+      <if test="record.point != null" >
+        point = #{record.point,jdbcType=INTEGER},
       </if>
-      <if test="record.deliveryLevel != null">
-        delivery_level = #{record.deliveryLevel,jdbcType=VARCHAR},
+      <if test="record.level != null" >
+        level = #{record.level,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update run_delivery_info
     set did = #{record.did,jdbcType=INTEGER},
-      delivery_photo = #{record.deliveryPhoto,jdbcType=VARCHAR},
-      delivery_name = #{record.deliveryName,jdbcType=VARCHAR},
-      delivery_card = #{record.deliveryCard,jdbcType=VARCHAR},
-      delivery_gender = #{record.deliveryGender,jdbcType=INTEGER},
-      delivery_phone = #{record.deliveryPhone,jdbcType=VARCHAR},
-      delivery_address = #{record.deliveryAddress,jdbcType=VARCHAR},
-      delivery_point = #{record.deliveryPoint,jdbcType=INTEGER},
-      delivery_level = #{record.deliveryLevel,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+      photo = #{record.photo,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      card = #{record.card,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=BIT},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      point = #{record.point,jdbcType=INTEGER},
+      level = #{record.level,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryInfo" >
     update run_delivery_info
-    <set>
-      <if test="deliveryPhoto != null">
-        delivery_photo = #{deliveryPhoto,jdbcType=VARCHAR},
+    <set >
+      <if test="photo != null" >
+        photo = #{photo,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryName != null">
-        delivery_name = #{deliveryName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryCard != null">
-        delivery_card = #{deliveryCard,jdbcType=VARCHAR},
+      <if test="card != null" >
+        card = #{card,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryGender != null">
-        delivery_gender = #{deliveryGender,jdbcType=INTEGER},
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=BIT},
       </if>
-      <if test="deliveryPhone != null">
-        delivery_phone = #{deliveryPhone,jdbcType=VARCHAR},
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryAddress != null">
-        delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryPoint != null">
-        delivery_point = #{deliveryPoint,jdbcType=INTEGER},
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
       </if>
-      <if test="deliveryLevel != null">
-        delivery_level = #{deliveryLevel,jdbcType=VARCHAR},
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
       </if>
     </set>
     where did = #{did,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryInfo">
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryInfo" >
     update run_delivery_info
-    set delivery_photo = #{deliveryPhoto,jdbcType=VARCHAR},
-      delivery_name = #{deliveryName,jdbcType=VARCHAR},
-      delivery_card = #{deliveryCard,jdbcType=VARCHAR},
-      delivery_gender = #{deliveryGender,jdbcType=INTEGER},
-      delivery_phone = #{deliveryPhone,jdbcType=VARCHAR},
-      delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
-      delivery_point = #{deliveryPoint,jdbcType=INTEGER},
-      delivery_level = #{deliveryLevel,jdbcType=VARCHAR}
+    set photo = #{photo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      card = #{card,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      point = #{point,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR}
     where did = #{did,jdbcType=INTEGER}
   </update>
 </mapper>

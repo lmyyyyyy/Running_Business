@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunInfoMapper" >
+<mapper namespace="running.business.mapper.RunInfoMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunInfo" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="info_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -64,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, content
+    id, content, info_time, add_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunInfoExample" >
     select
@@ -97,8 +101,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunInfo" >
-    insert into run_info (id, content)
-    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR})
+    insert into run_info (id, content, info_time, 
+      add_time)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{infoTime,jdbcType=TIMESTAMP}, 
+      #{addTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunInfo" >
     insert into run_info
@@ -109,6 +115,12 @@
       <if test="content != null" >
         content,
       </if>
+      <if test="infoTime != null" >
+        info_time,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -116,6 +128,12 @@
       </if>
       <if test="content != null" >
         #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="infoTime != null" >
+        #{infoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -134,6 +152,12 @@
       <if test="record.content != null" >
         content = #{record.content,jdbcType=VARCHAR},
       </if>
+      <if test="record.infoTime != null" >
+        info_time = #{record.infoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -142,7 +166,9 @@
   <update id="updateByExample" parameterType="map" >
     update run_info
     set id = #{record.id,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=VARCHAR}
+      content = #{record.content,jdbcType=VARCHAR},
+      info_time = #{record.infoTime,jdbcType=TIMESTAMP},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -153,12 +179,20 @@
       <if test="content != null" >
         content = #{content,jdbcType=VARCHAR},
       </if>
+      <if test="infoTime != null" >
+        info_time = #{infoTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunInfo" >
     update run_info
-    set content = #{content,jdbcType=VARCHAR}
+    set content = #{content,jdbcType=VARCHAR},
+      info_time = #{infoTime,jdbcType=TIMESTAMP},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

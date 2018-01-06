@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunUserBalanceMapper" >
+<mapper namespace="running.business.mapper.RunUserBalanceMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunUserBalance" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="user_balance" property="userBalance" jdbcType="DOUBLE" />
+    <constructor >
+      <idArg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -64,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    uid, user_balance
+    uid, user_balance, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunUserBalanceExample" >
     select
@@ -97,8 +100,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunUserBalance" >
-    insert into run_user_balance (uid, user_balance)
-    values (#{uid,jdbcType=INTEGER}, #{userBalance,jdbcType=DOUBLE})
+    insert into run_user_balance (uid, user_balance, update_time
+      )
+    values (#{uid,jdbcType=INTEGER}, #{userBalance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunUserBalance" >
     insert into run_user_balance
@@ -109,6 +114,9 @@
       <if test="userBalance != null" >
         user_balance,
       </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uid != null" >
@@ -116,6 +124,9 @@
       </if>
       <if test="userBalance != null" >
         #{userBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -134,6 +145,9 @@
       <if test="record.userBalance != null" >
         user_balance = #{record.userBalance,jdbcType=DOUBLE},
       </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -142,7 +156,8 @@
   <update id="updateByExample" parameterType="map" >
     update run_user_balance
     set uid = #{record.uid,jdbcType=INTEGER},
-      user_balance = #{record.userBalance,jdbcType=DOUBLE}
+      user_balance = #{record.userBalance,jdbcType=DOUBLE},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -153,12 +168,16 @@
       <if test="userBalance != null" >
         user_balance = #{userBalance,jdbcType=DOUBLE},
       </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where uid = #{uid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunUserBalance" >
     update run_user_balance
-    set user_balance = #{userBalance,jdbcType=DOUBLE}
+    set user_balance = #{userBalance,jdbcType=DOUBLE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
 </mapper>

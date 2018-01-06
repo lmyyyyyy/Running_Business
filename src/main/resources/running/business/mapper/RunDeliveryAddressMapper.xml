@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunDeliveryAddressMapper" >
+<mapper namespace="running.business.mapper.RunDeliveryAddressMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryAddress" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="did" property="did" jdbcType="INTEGER" />
-    <result column="delivery_address" property="deliveryAddress" jdbcType="VARCHAR" />
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="delivery_address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="longitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="latitude" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, did, delivery_address
+    id, did, delivery_address, longitude, latitude, add_time, update_time, is_delete
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryAddressExample" >
     select
@@ -98,10 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryAddress" >
-    insert into run_delivery_address (id, did, delivery_address
-      )
-    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{deliveryAddress,jdbcType=VARCHAR}
-      )
+    insert into run_delivery_address (id, did, delivery_address, 
+      longitude, latitude, add_time, 
+      update_time, is_delete)
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{deliveryAddress,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryAddress" >
     insert into run_delivery_address
@@ -115,6 +124,21 @@
       <if test="deliveryAddress != null" >
         delivery_address,
       </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -125,6 +149,21 @@
       </if>
       <if test="deliveryAddress != null" >
         #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -146,6 +185,21 @@
       <if test="record.deliveryAddress != null" >
         delivery_address = #{record.deliveryAddress,jdbcType=VARCHAR},
       </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +209,12 @@
     update run_delivery_address
     set id = #{record.id,jdbcType=INTEGER},
       did = #{record.did,jdbcType=INTEGER},
-      delivery_address = #{record.deliveryAddress,jdbcType=VARCHAR}
+      delivery_address = #{record.deliveryAddress,jdbcType=VARCHAR},
+      longitude = #{record.longitude,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +228,33 @@
       <if test="deliveryAddress != null" >
         delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
       </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryAddress" >
     update run_delivery_address
     set did = #{did,jdbcType=INTEGER},
-      delivery_address = #{deliveryAddress,jdbcType=VARCHAR}
+      delivery_address = #{deliveryAddress,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

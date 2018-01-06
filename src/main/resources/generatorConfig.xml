@@ -43,7 +43,7 @@
             targetProject     指定在该项目下所在的路径
         -->
         <javaModelGenerator targetPackage="com.running.business.pojo"
-                            targetProject="src/main/java">
+                            targetProject="generate">
 
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <property name="enableSubPackages" value="false"/>
@@ -56,8 +56,8 @@
         </javaModelGenerator>
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
-        <sqlMapGenerator targetPackage="com.running.business.mapper"
-                         targetProject="src/main/java">
+        <sqlMapGenerator targetPackage="running.business.mapper"
+                         targetProject="generate">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
@@ -66,8 +66,8 @@
                 type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
-        <javaClientGenerator targetPackage="running.business.mapper"
-                             targetProject="src/main/resources" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.running.business.mapper"
+                             targetProject="generate" type="XMLMAPPER">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
