@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunDeliveryuserMapper" >
+<mapper namespace="running.business.mapper.RunDeliveryuserMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryuser" >
-    <id column="did" property="did" jdbcType="INTEGER" />
-    <result column="delivery_username" property="deliveryUsername" jdbcType="VARCHAR" />
-    <result column="delivery_password" property="deliveryPassword" jdbcType="VARCHAR" />
-    <result column="delivery_date" property="deliveryDate" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="userphone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="status" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    did, delivery_username, delivery_password, delivery_date
+    did, userphone, password, add_time, update_time, status, is_delete
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryuserExample" >
     select
@@ -99,10 +104,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" >
-    insert into run_deliveryuser (did, delivery_username, delivery_password, 
-      delivery_date)
-    values (#{did,jdbcType=INTEGER}, #{deliveryUsername,jdbcType=VARCHAR}, #{deliveryPassword,jdbcType=VARCHAR}, 
-      #{deliveryDate,jdbcType=TIMESTAMP})
+    insert into run_deliveryuser (did, userphone, password, 
+      add_time, update_time, status, 
+      is_delete)
+    values (#{did,jdbcType=INTEGER}, #{userphone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}, 
+      #{isDelete,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryuser" >
     insert into run_deliveryuser
@@ -110,28 +117,46 @@
       <if test="did != null" >
         did,
       </if>
-      <if test="deliveryUsername != null" >
-        delivery_username,
+      <if test="userphone != null" >
+        userphone,
       </if>
-      <if test="deliveryPassword != null" >
-        delivery_password,
+      <if test="password != null" >
+        password,
       </if>
-      <if test="deliveryDate != null" >
-        delivery_date,
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
-      <if test="deliveryUsername != null" >
-        #{deliveryUsername,jdbcType=VARCHAR},
+      <if test="userphone != null" >
+        #{userphone,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryPassword != null" >
-        #{deliveryPassword,jdbcType=VARCHAR},
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryDate != null" >
-        #{deliveryDate,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -147,14 +172,23 @@
       <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
-      <if test="record.deliveryUsername != null" >
-        delivery_username = #{record.deliveryUsername,jdbcType=VARCHAR},
+      <if test="record.userphone != null" >
+        userphone = #{record.userphone,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryPassword != null" >
-        delivery_password = #{record.deliveryPassword,jdbcType=VARCHAR},
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryDate != null" >
-        delivery_date = #{record.deliveryDate,jdbcType=TIMESTAMP},
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -164,9 +198,12 @@
   <update id="updateByExample" parameterType="map" >
     update run_deliveryuser
     set did = #{record.did,jdbcType=INTEGER},
-      delivery_username = #{record.deliveryUsername,jdbcType=VARCHAR},
-      delivery_password = #{record.deliveryPassword,jdbcType=VARCHAR},
-      delivery_date = #{record.deliveryDate,jdbcType=TIMESTAMP}
+      userphone = #{record.userphone,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=BIT},
+      is_delete = #{record.isDelete,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -174,23 +211,35 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryuser" >
     update run_deliveryuser
     <set >
-      <if test="deliveryUsername != null" >
-        delivery_username = #{deliveryUsername,jdbcType=VARCHAR},
+      <if test="userphone != null" >
+        userphone = #{userphone,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryPassword != null" >
-        delivery_password = #{deliveryPassword,jdbcType=VARCHAR},
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryDate != null" >
-        delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
       </if>
     </set>
     where did = #{did,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryuser" >
     update run_deliveryuser
-    set delivery_username = #{deliveryUsername,jdbcType=VARCHAR},
-      delivery_password = #{deliveryPassword,jdbcType=VARCHAR},
-      delivery_date = #{deliveryDate,jdbcType=TIMESTAMP}
+    set userphone = #{userphone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=BIT},
+      is_delete = #{isDelete,jdbcType=BIT}
     where did = #{did,jdbcType=INTEGER}
   </update>
 </mapper>

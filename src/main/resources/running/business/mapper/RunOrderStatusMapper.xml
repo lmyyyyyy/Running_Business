@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunOrderStatusMapper" >
+<mapper namespace="running.business.mapper.RunOrderStatusMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderStatus" >
-    <id column="orderid" property="orderid" jdbcType="VARCHAR" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="did" property="did" jdbcType="INTEGER" />
-    <result column="order_is_submit" property="orderIsSubmit" jdbcType="INTEGER" />
-    <result column="order_is_pay" property="orderIsPay" jdbcType="INTEGER" />
-    <result column="order_is_orders" property="orderIsOrders" jdbcType="INTEGER" />
-    <result column="order_is_send" property="orderIsSend" jdbcType="INTEGER" />
-    <result column="order_is_finish" property="orderIsFinish" jdbcType="INTEGER" />
-    <result column="order_orders_time" property="orderOrdersTime" jdbcType="TIMESTAMP" />
-    <result column="order_finish_time" property="orderFinishTime" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_is_submit" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_is_pay" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_is_orders" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_is_send" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_is_finish" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_orders_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="order_finish_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

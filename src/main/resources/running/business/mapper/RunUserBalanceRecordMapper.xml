@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunUserBalanceRecordMapper" >
+<mapper namespace="running.business.mapper.RunUserBalanceRecordMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunUserBalanceRecord" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="user_old_balance" property="userOldBalance" jdbcType="DOUBLE" />
-    <result column="user_amount" property="userAmount" jdbcType="DOUBLE" />
-    <result column="user_new_balance" property="userNewBalance" jdbcType="DOUBLE" />
-    <result column="user_type" property="userType" jdbcType="VARCHAR" />
-    <result column="user_number" property="userNumber" jdbcType="VARCHAR" />
-    <result column="user_time" property="userTime" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="old_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="amount" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="new_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="type" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,8 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, uid, user_old_balance, user_amount, user_new_balance, user_type, user_number, 
-    user_time
+    id, uid, old_balance, amount, new_balance, type, number, add_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunUserBalanceRecordExample" >
     select
@@ -104,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
-    insert into run_user_balance_record (id, uid, user_old_balance, 
-      user_amount, user_new_balance, user_type, 
-      user_number, user_time)
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userOldBalance,jdbcType=DOUBLE}, 
-      #{userAmount,jdbcType=DOUBLE}, #{userNewBalance,jdbcType=DOUBLE}, #{userType,jdbcType=VARCHAR}, 
-      #{userNumber,jdbcType=VARCHAR}, #{userTime,jdbcType=TIMESTAMP})
+    insert into run_user_balance_record (id, uid, old_balance, 
+      amount, new_balance, type, 
+      number, add_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{oldBalance,jdbcType=DOUBLE}, 
+      #{amount,jdbcType=DOUBLE}, #{newBalance,jdbcType=DOUBLE}, #{type,jdbcType=BIT}, 
+      #{number,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
     insert into run_user_balance_record
@@ -120,23 +121,23 @@
       <if test="uid != null" >
         uid,
       </if>
-      <if test="userOldBalance != null" >
-        user_old_balance,
+      <if test="oldBalance != null" >
+        old_balance,
       </if>
-      <if test="userAmount != null" >
-        user_amount,
+      <if test="amount != null" >
+        amount,
       </if>
-      <if test="userNewBalance != null" >
-        user_new_balance,
+      <if test="newBalance != null" >
+        new_balance,
       </if>
-      <if test="userType != null" >
-        user_type,
+      <if test="type != null" >
+        type,
       </if>
-      <if test="userNumber != null" >
-        user_number,
+      <if test="number != null" >
+        number,
       </if>
-      <if test="userTime != null" >
-        user_time,
+      <if test="addTime != null" >
+        add_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -146,23 +147,23 @@
       <if test="uid != null" >
         #{uid,jdbcType=INTEGER},
       </if>
-      <if test="userOldBalance != null" >
-        #{userOldBalance,jdbcType=DOUBLE},
+      <if test="oldBalance != null" >
+        #{oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="userAmount != null" >
-        #{userAmount,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="userNewBalance != null" >
-        #{userNewBalance,jdbcType=DOUBLE},
+      <if test="newBalance != null" >
+        #{newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="userType != null" >
-        #{userType,jdbcType=VARCHAR},
+      <if test="type != null" >
+        #{type,jdbcType=BIT},
       </if>
-      <if test="userNumber != null" >
-        #{userNumber,jdbcType=VARCHAR},
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
       </if>
-      <if test="userTime != null" >
-        #{userTime,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -181,23 +182,23 @@
       <if test="record.uid != null" >
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
-      <if test="record.userOldBalance != null" >
-        user_old_balance = #{record.userOldBalance,jdbcType=DOUBLE},
+      <if test="record.oldBalance != null" >
+        old_balance = #{record.oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="record.userAmount != null" >
-        user_amount = #{record.userAmount,jdbcType=DOUBLE},
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DOUBLE},
       </if>
-      <if test="record.userNewBalance != null" >
-        user_new_balance = #{record.userNewBalance,jdbcType=DOUBLE},
+      <if test="record.newBalance != null" >
+        new_balance = #{record.newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="record.userType != null" >
-        user_type = #{record.userType,jdbcType=VARCHAR},
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=BIT},
       </if>
-      <if test="record.userNumber != null" >
-        user_number = #{record.userNumber,jdbcType=VARCHAR},
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=VARCHAR},
       </if>
-      <if test="record.userTime != null" >
-        user_time = #{record.userTime,jdbcType=TIMESTAMP},
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -208,12 +209,12 @@
     update run_user_balance_record
     set id = #{record.id,jdbcType=INTEGER},
       uid = #{record.uid,jdbcType=INTEGER},
-      user_old_balance = #{record.userOldBalance,jdbcType=DOUBLE},
-      user_amount = #{record.userAmount,jdbcType=DOUBLE},
-      user_new_balance = #{record.userNewBalance,jdbcType=DOUBLE},
-      user_type = #{record.userType,jdbcType=VARCHAR},
-      user_number = #{record.userNumber,jdbcType=VARCHAR},
-      user_time = #{record.userTime,jdbcType=TIMESTAMP}
+      old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      amount = #{record.amount,jdbcType=DOUBLE},
+      new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      type = #{record.type,jdbcType=BIT},
+      number = #{record.number,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,23 +225,23 @@
       <if test="uid != null" >
         uid = #{uid,jdbcType=INTEGER},
       </if>
-      <if test="userOldBalance != null" >
-        user_old_balance = #{userOldBalance,jdbcType=DOUBLE},
+      <if test="oldBalance != null" >
+        old_balance = #{oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="userAmount != null" >
-        user_amount = #{userAmount,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="userNewBalance != null" >
-        user_new_balance = #{userNewBalance,jdbcType=DOUBLE},
+      <if test="newBalance != null" >
+        new_balance = #{newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="userType != null" >
-        user_type = #{userType,jdbcType=VARCHAR},
+      <if test="type != null" >
+        type = #{type,jdbcType=BIT},
       </if>
-      <if test="userNumber != null" >
-        user_number = #{userNumber,jdbcType=VARCHAR},
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
       </if>
-      <if test="userTime != null" >
-        user_time = #{userTime,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -248,12 +249,12 @@
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunUserBalanceRecord" >
     update run_user_balance_record
     set uid = #{uid,jdbcType=INTEGER},
-      user_old_balance = #{userOldBalance,jdbcType=DOUBLE},
-      user_amount = #{userAmount,jdbcType=DOUBLE},
-      user_new_balance = #{userNewBalance,jdbcType=DOUBLE},
-      user_type = #{userType,jdbcType=VARCHAR},
-      user_number = #{userNumber,jdbcType=VARCHAR},
-      user_time = #{userTime,jdbcType=TIMESTAMP}
+      old_balance = #{oldBalance,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DOUBLE},
+      new_balance = #{newBalance,jdbcType=DOUBLE},
+      type = #{type,jdbcType=BIT},
+      number = #{number,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

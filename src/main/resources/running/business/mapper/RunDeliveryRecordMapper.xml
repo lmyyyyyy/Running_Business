@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunDeliveryRecordMapper" >
+<mapper namespace="running.business.mapper.RunDeliveryRecordMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryRecord" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="did" property="did" jdbcType="INTEGER" />
-    <result column="delivery_old_balance" property="deliveryOldBalance" jdbcType="DOUBLE" />
-    <result column="delivery_amount" property="deliveryAmount" jdbcType="DOUBLE" />
-    <result column="delivery_new_balance" property="deliveryNewBalance" jdbcType="DOUBLE" />
-    <result column="delivery_type" property="deliveryType" jdbcType="VARCHAR" />
-    <result column="delivery_number" property="deliveryNumber" jdbcType="VARCHAR" />
-    <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="old_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="amount" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="new_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="type" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,8 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, did, delivery_old_balance, delivery_amount, delivery_new_balance, delivery_type, 
-    delivery_number, delivery_time
+    id, did, old_balance, amount, new_balance, type, number, add_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryRecordExample" >
     select
@@ -104,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    insert into run_delivery_record (id, did, delivery_old_balance, 
-      delivery_amount, delivery_new_balance, delivery_type, 
-      delivery_number, delivery_time)
-    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{deliveryOldBalance,jdbcType=DOUBLE}, 
-      #{deliveryAmount,jdbcType=DOUBLE}, #{deliveryNewBalance,jdbcType=DOUBLE}, #{deliveryType,jdbcType=VARCHAR}, 
-      #{deliveryNumber,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP})
+    insert into run_delivery_record (id, did, old_balance, 
+      amount, new_balance, type, 
+      number, add_time)
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{oldBalance,jdbcType=DOUBLE}, 
+      #{amount,jdbcType=DOUBLE}, #{newBalance,jdbcType=DOUBLE}, #{type,jdbcType=BIT}, 
+      #{number,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryRecord" >
     insert into run_delivery_record
@@ -120,23 +121,23 @@
       <if test="did != null" >
         did,
       </if>
-      <if test="deliveryOldBalance != null" >
-        delivery_old_balance,
+      <if test="oldBalance != null" >
+        old_balance,
       </if>
-      <if test="deliveryAmount != null" >
-        delivery_amount,
+      <if test="amount != null" >
+        amount,
       </if>
-      <if test="deliveryNewBalance != null" >
-        delivery_new_balance,
+      <if test="newBalance != null" >
+        new_balance,
       </if>
-      <if test="deliveryType != null" >
-        delivery_type,
+      <if test="type != null" >
+        type,
       </if>
-      <if test="deliveryNumber != null" >
-        delivery_number,
+      <if test="number != null" >
+        number,
       </if>
-      <if test="deliveryTime != null" >
-        delivery_time,
+      <if test="addTime != null" >
+        add_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -146,23 +147,23 @@
       <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
-      <if test="deliveryOldBalance != null" >
-        #{deliveryOldBalance,jdbcType=DOUBLE},
+      <if test="oldBalance != null" >
+        #{oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryAmount != null" >
-        #{deliveryAmount,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryNewBalance != null" >
-        #{deliveryNewBalance,jdbcType=DOUBLE},
+      <if test="newBalance != null" >
+        #{newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryType != null" >
-        #{deliveryType,jdbcType=VARCHAR},
+      <if test="type != null" >
+        #{type,jdbcType=BIT},
       </if>
-      <if test="deliveryNumber != null" >
-        #{deliveryNumber,jdbcType=VARCHAR},
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryTime != null" >
-        #{deliveryTime,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -181,23 +182,23 @@
       <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
-      <if test="record.deliveryOldBalance != null" >
-        delivery_old_balance = #{record.deliveryOldBalance,jdbcType=DOUBLE},
+      <if test="record.oldBalance != null" >
+        old_balance = #{record.oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="record.deliveryAmount != null" >
-        delivery_amount = #{record.deliveryAmount,jdbcType=DOUBLE},
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DOUBLE},
       </if>
-      <if test="record.deliveryNewBalance != null" >
-        delivery_new_balance = #{record.deliveryNewBalance,jdbcType=DOUBLE},
+      <if test="record.newBalance != null" >
+        new_balance = #{record.newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="record.deliveryType != null" >
-        delivery_type = #{record.deliveryType,jdbcType=VARCHAR},
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=BIT},
       </if>
-      <if test="record.deliveryNumber != null" >
-        delivery_number = #{record.deliveryNumber,jdbcType=VARCHAR},
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryTime != null" >
-        delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -208,12 +209,12 @@
     update run_delivery_record
     set id = #{record.id,jdbcType=INTEGER},
       did = #{record.did,jdbcType=INTEGER},
-      delivery_old_balance = #{record.deliveryOldBalance,jdbcType=DOUBLE},
-      delivery_amount = #{record.deliveryAmount,jdbcType=DOUBLE},
-      delivery_new_balance = #{record.deliveryNewBalance,jdbcType=DOUBLE},
-      delivery_type = #{record.deliveryType,jdbcType=VARCHAR},
-      delivery_number = #{record.deliveryNumber,jdbcType=VARCHAR},
-      delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP}
+      old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      amount = #{record.amount,jdbcType=DOUBLE},
+      new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      type = #{record.type,jdbcType=BIT},
+      number = #{record.number,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,23 +225,23 @@
       <if test="did != null" >
         did = #{did,jdbcType=INTEGER},
       </if>
-      <if test="deliveryOldBalance != null" >
-        delivery_old_balance = #{deliveryOldBalance,jdbcType=DOUBLE},
+      <if test="oldBalance != null" >
+        old_balance = #{oldBalance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryAmount != null" >
-        delivery_amount = #{deliveryAmount,jdbcType=DOUBLE},
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryNewBalance != null" >
-        delivery_new_balance = #{deliveryNewBalance,jdbcType=DOUBLE},
+      <if test="newBalance != null" >
+        new_balance = #{newBalance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryType != null" >
-        delivery_type = #{deliveryType,jdbcType=VARCHAR},
+      <if test="type != null" >
+        type = #{type,jdbcType=BIT},
       </if>
-      <if test="deliveryNumber != null" >
-        delivery_number = #{deliveryNumber,jdbcType=VARCHAR},
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryTime != null" >
-        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -248,12 +249,12 @@
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryRecord" >
     update run_delivery_record
     set did = #{did,jdbcType=INTEGER},
-      delivery_old_balance = #{deliveryOldBalance,jdbcType=DOUBLE},
-      delivery_amount = #{deliveryAmount,jdbcType=DOUBLE},
-      delivery_new_balance = #{deliveryNewBalance,jdbcType=DOUBLE},
-      delivery_type = #{deliveryType,jdbcType=VARCHAR},
-      delivery_number = #{deliveryNumber,jdbcType=VARCHAR},
-      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP}
+      old_balance = #{oldBalance,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DOUBLE},
+      new_balance = #{newBalance,jdbcType=DOUBLE},
+      type = #{type,jdbcType=BIT},
+      number = #{number,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

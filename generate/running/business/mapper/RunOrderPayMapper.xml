@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.running.business.mapper.RunOrderPayMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderPay" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="order_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_tip" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_subtract" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="order_actual_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="pay_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pay_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, uid, orderid, order_price, order_tip, order_subtract, order_actual_price, pay_type, 
+    pay_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderPayExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_order_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from run_order_pay
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from run_order_pay
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunOrderPayExample" >
+    delete from run_order_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunOrderPay" >
+    insert into run_order_pay (id, uid, orderid, 
+      order_price, order_tip, order_subtract, 
+      order_actual_price, pay_type, pay_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, 
+      #{orderPrice,jdbcType=DOUBLE}, #{orderTip,jdbcType=DOUBLE}, #{orderSubtract,jdbcType=DOUBLE}, 
+      #{orderActualPrice,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrderPay" >
+    insert into run_order_pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="orderid != null" >
+        orderid,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="orderTip != null" >
+        order_tip,
+      </if>
+      <if test="orderSubtract != null" >
+        order_subtract,
+      </if>
+      <if test="orderActualPrice != null" >
+        order_actual_price,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTip != null" >
+        #{orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="orderSubtract != null" >
+        #{orderSubtract,jdbcType=DOUBLE},
+      </if>
+      <if test="orderActualPrice != null" >
+        #{orderActualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunOrderPayExample" resultType="java.lang.Integer" >
+    select count(*) from run_order_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update run_order_pay
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderid != null" >
+        orderid = #{record.orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderPrice != null" >
+        order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderTip != null" >
+        order_tip = #{record.orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderSubtract != null" >
+        order_subtract = #{record.orderSubtract,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderActualPrice != null" >
+        order_actual_price = #{record.orderActualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=INTEGER},
+      </if>
+      <if test="record.payTime != null" >
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update run_order_pay
+    set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
+      orderid = #{record.orderid,jdbcType=VARCHAR},
+      order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      order_tip = #{record.orderTip,jdbcType=DOUBLE},
+      order_subtract = #{record.orderSubtract,jdbcType=DOUBLE},
+      order_actual_price = #{record.orderActualPrice,jdbcType=DOUBLE},
+      pay_type = #{record.payType,jdbcType=INTEGER},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunOrderPay" >
+    update run_order_pay
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTip != null" >
+        order_tip = #{orderTip,jdbcType=DOUBLE},
+      </if>
+      <if test="orderSubtract != null" >
+        order_subtract = #{orderSubtract,jdbcType=DOUBLE},
+      </if>
+      <if test="orderActualPrice != null" >
+        order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunOrderPay" >
+    update run_order_pay
+    set uid = #{uid,jdbcType=INTEGER},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      order_price = #{orderPrice,jdbcType=DOUBLE},
+      order_tip = #{orderTip,jdbcType=DOUBLE},
+      order_subtract = #{orderSubtract,jdbcType=DOUBLE},
+      order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},
+      pay_type = #{payType,jdbcType=INTEGER},
+      pay_time = #{payTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

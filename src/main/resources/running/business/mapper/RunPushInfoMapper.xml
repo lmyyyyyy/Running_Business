@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunPushInfoMapper" >
+<mapper namespace="running.business.mapper.RunPushInfoMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo" >
-    <id column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="push_title" property="pushTitle" jdbcType="VARCHAR" />
-    <result column="push_content" property="pushContent" jdbcType="VARCHAR" />
-    <result column="push_photo" property="pushPhoto" jdbcType="VARCHAR" />
-    <result column="push_status" property="pushStatus" jdbcType="INTEGER" />
-    <result column="push_time" property="pushTime" jdbcType="TIMESTAMP" />
+    <constructor >
+      <idArg column="pid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="operator" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="push_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="push_photo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="push_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="push_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo" >
+    <constructor >
+      <idArg column="pid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="operator" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="push_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="push_photo" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="push_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="push_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="push_content" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,8 +85,27 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    pid, push_title, push_content, push_photo, push_status, push_time
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
   </sql>
+  <sql id="Blob_Column_List" >
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunPushInfoExample" >
     select
     <if test="distinct" >
@@ -84,9 +120,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from run_push_info
     where pid = #{pid,jdbcType=INTEGER}
   </select>
@@ -101,11 +139,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo" >
-    insert into run_push_info (pid, push_title, push_content, 
-      push_photo, push_status, push_time
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
       )
-    values (#{pid,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, #{pushContent,jdbcType=VARCHAR}, 
-      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo" >
@@ -114,11 +154,11 @@
       <if test="pid != null" >
         pid,
       </if>
+      <if test="operator != null" >
+        operator,
+      </if>
       <if test="pushTitle != null" >
         push_title,
-      </if>
-      <if test="pushContent != null" >
-        push_content,
       </if>
       <if test="pushPhoto != null" >
         push_photo,
@@ -129,16 +169,25 @@
       <if test="pushTime != null" >
         push_time,
       </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="pushContent != null" >
+        push_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pid != null" >
         #{pid,jdbcType=INTEGER},
       </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=INTEGER},
+      </if>
       <if test="pushTitle != null" >
         #{pushTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="pushContent != null" >
-        #{pushContent,jdbcType=VARCHAR},
       </if>
       <if test="pushPhoto != null" >
         #{pushPhoto,jdbcType=VARCHAR},
@@ -148,6 +197,15 @@
       </if>
       <if test="pushTime != null" >
         #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null" >
+        #{pushContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -163,11 +221,11 @@
       <if test="record.pid != null" >
         pid = #{record.pid,jdbcType=INTEGER},
       </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
       <if test="record.pushTitle != null" >
         push_title = #{record.pushTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="record.pushContent != null" >
-        push_content = #{record.pushContent,jdbcType=VARCHAR},
       </if>
       <if test="record.pushPhoto != null" >
         push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
@@ -178,7 +236,31 @@
       <if test="record.pushTime != null" >
         push_time = #{record.pushTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null" >
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -186,11 +268,13 @@
   <update id="updateByExample" parameterType="map" >
     update run_push_info
     set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
       push_title = #{record.pushTitle,jdbcType=VARCHAR},
-      push_content = #{record.pushContent,jdbcType=VARCHAR},
       push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
       push_status = #{record.pushStatus,jdbcType=INTEGER},
-      push_time = #{record.pushTime,jdbcType=TIMESTAMP}
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -198,11 +282,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo" >
     update run_push_info
     <set >
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
       <if test="pushTitle != null" >
         push_title = #{pushTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="pushContent != null" >
-        push_content = #{pushContent,jdbcType=VARCHAR},
       </if>
       <if test="pushPhoto != null" >
         push_photo = #{pushPhoto,jdbcType=VARCHAR},
@@ -213,16 +297,39 @@
       <if test="pushTime != null" >
         push_time = #{pushTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null" >
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo" >
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
     where pid = #{pid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo" >
     update run_push_info
-    set push_title = #{pushTitle,jdbcType=VARCHAR},
-      push_content = #{pushContent,jdbcType=VARCHAR},
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
       push_photo = #{pushPhoto,jdbcType=VARCHAR},
       push_status = #{pushStatus,jdbcType=INTEGER},
-      push_time = #{pushTime,jdbcType=TIMESTAMP}
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
     where pid = #{pid,jdbcType=INTEGER}
   </update>
 </mapper>
