@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -103,20 +104,20 @@ public class RunUserController extends BaseController {
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
     public BaseResult register(@RequestBody RunUser user) throws Exception {
-        logger.info("注册用户，账号为：" + user.getUserUsername());
+        logger.info("注册用户，账号为：" + user.getUserphone());
         BaseResult result = null;
         try {
-            if (!RegexUtils.checkMobile(user.getUserUsername())) {
+            if (!RegexUtils.checkMobile(user.getUserphone())) {
                 return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
             }
-            if (user.getUserUsername() == null || user.getUserUsername().trim().equals("")
-                    || user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+            if (user.getUserphone() == null || user.getUserphone().trim().equals("")
+                    || user.getUserphone() == null || user.getUserphone().trim().equals("")) {
                 return BaseResult.fail(ResultEnum.INPUT_ERROR);
             }
-            if (user.getUserPassword().length() < 6 || user.getUserPassword().length() > 18) {
+            if (user.getPassword().length() < 6 || user.getPassword().length() > 18) {
                 return BaseResult.fail(ResultEnum.USER_PASSWORD_LEN);
             }
-            result = runUserService.checkUser(user.getUserUsername());
+            result = runUserService.checkUser(user.getUserphone());
             if (!result.getCode().equals("200")) {
                 return result;
             }
@@ -126,13 +127,14 @@ public class RunUserController extends BaseController {
                 RunUserBalance balance = new RunUserBalance();
                 balance.setUid(uid);
                 balance.setUserBalance(0.00d);
+                balance.setUpdateTime(new Date());
                 runUserBalanceService.addRunUserBalance(balance);
                 RunUserInfo runUserInfo = new RunUserInfo();
                 runUserInfo.setUid(uid);
-                runUserInfo.setUserPhone(user.getUserUsername());
+                runUserInfo.setUserPhone(user.getUserphone());
                 runUserInfo.setUserPhoto("/img/default.jpg");
                 runUserInfo.setUserPoint(0);
-                runUserInfo.setUserGender(0);
+                runUserInfo.setUserGender(false);
                 String name = RandomUtil.generateRandomDigitString(5);
                 int count = 0;
                 while (!runUserInfoService.checkNameUnique(name)) {
@@ -163,17 +165,17 @@ public class RunUserController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        logger.info("用户登录：" + user.getUserUsername());
-        System.out.println("用户名" + user.getUserUsername());
-        System.out.println("密码" + user.getUserPassword());
+        logger.info("用户登录：" + user.getUserphone());
+        System.out.println("用户名" + user.getUserphone());
+        System.out.println("密码" + user.getPassword());
         BaseResult result = null;
         try {
-            if (user.getUserUsername() == null || user.getUserUsername().trim().equals("")
-                    || user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+            if (user.getUserphone() == null || user.getUserphone().trim().equals("")
+                    || user.getPassword() == null || user.getPassword().trim().equals("")) {
                 result = BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
                 return result;
             }
-            result = runUserService.login(user.getUserUsername(), user.getUserPassword(), request, response);
+            result = runUserService.login(user.getUserphone(), user.getPassword(), request, response);
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -222,7 +224,7 @@ public class RunUserController extends BaseController {
     public BaseResult logout(@PathVariable String token, HttpServletResponse response) throws Exception {
         logger.info("用户注销", token);
         String callback = "http://localhost:8080";
-        BaseResult result = null;
+        BaseResult result ;
         try {
             result = runUserService.logout(token);
         } catch (AppException ae) {
@@ -257,9 +259,9 @@ public class RunUserController extends BaseController {
         RunUser user = JsonUtils.jsonToPojo(jsonStr, RunUser.class);
         boolean flag;
         try {
-            flag = runUserService.checkPwd(user.getUserUsername(), oldPassword);
+            flag = runUserService.checkPwd(user.getUserphone(), oldPassword);
         } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "check old pwd is error. username = {} oldpwd = {}, error = {}", new Object[]{user.getUserUsername(), oldPassword, ae});
+            logger.error(LOG_PREFIX + "check old pwd is error. username = {} oldpwd = {}, error = {}", new Object[]{user.getUserphone(), oldPassword, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         if (flag) {
@@ -292,14 +294,14 @@ public class RunUserController extends BaseController {
         boolean flag;
         BaseResult result = null;
         try {
-            flag = runUserService.checkPwd(user.getUserUsername(), oldPassword);
+            flag = runUserService.checkPwd(user.getUserphone(), oldPassword);
             if (!flag) {
                 return BaseResult.fail(ResultEnum.PWD_ERROR);
             }
-            user.setUserPassword(newPassword);
+            user.setPassword(newPassword);
             result = runUserService.updateUser(user);
         } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "update pwd is error username = {}, newPassword = {}, error = {}", new Object[]{user.getUserUsername(), newPassword, ae});
+            logger.error(LOG_PREFIX + "update pwd is error username = {}, newPassword = {}, error = {}", new Object[]{user.getUserphone(), newPassword, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return result;

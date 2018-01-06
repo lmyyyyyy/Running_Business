@@ -44,9 +44,9 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	@Test
 	public void addUser() {
 		RunUser user = new RunUser();
-		user.setUserUsername("111113");
-		user.setUserPassword("123456");
-		user.setUserDate(new Date());
+		user.setUserphone("111113");
+		user.setPassword("123456");
+		user.setAddTime(new Date());
 		runUserService.addUser(user);
 	}
 	
@@ -55,9 +55,9 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		BaseResult result = runUserService.getRunUser(5);
 		System.out.println(result.getCode());
 		RunUser user = (RunUser) result.getData();
-		System.out.println(user.getUserUsername());
-		System.out.println(user.getUserPassword());
-		System.out.println(user.getUserDate());
+		System.out.println(user.getUserphone());
+		System.out.println(user.getPassword());
+		System.out.println(user.getAddTime());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -72,8 +72,8 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		System.out.println(page.getTotal());
 		System.out.println(page.getNextPage());
 		for (RunUser user : page.getList()) {
-			System.out.println(user.getUserUsername());
-			System.out.println(user.getUserPassword());
+			System.out.println(user.getUserphone());
+			System.out.println(user.getPassword());
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	public void updateUser() {
 		BaseResult result = runUserService.getRunUser(4);
 		RunUser user = (RunUser) result.getData();
-		user.setUserPassword("1234567");
+		user.setPassword("1234567");
 		result = runUserService.updateUser(user);
 		System.out.println(result.getCode());
 	}

@@ -68,7 +68,7 @@ public class RunUserServiceImpl implements RunUserService {
         }
         RunUserExample example = new RunUserExample();
         Criteria criteria = example.createCriteria();
-        criteria.andUserUsernameEqualTo(username);
+        criteria.andUserphoneEqualTo(username);
         List<RunUser> list = runUserMapper.selectByExample(example);
         if (ValidateUtil.isValid(list)) {
             return BaseResult.fail(ResultEnum.TELTPHONE_USED);
@@ -91,8 +91,8 @@ public class RunUserServiceImpl implements RunUserService {
         }
         RunUserExample example = new RunUserExample();
         Criteria criteria = example.createCriteria();
-        criteria.andUserPasswordEqualTo(Run_StringUtil.MD5(password));
-        criteria.andUserUsernameEqualTo(username);
+        criteria.andPasswordEqualTo(Run_StringUtil.MD5(password));
+        criteria.andUserphoneEqualTo(username);
         List<RunUser> list = runUserMapper.selectByExample(example);
         if (ValidateUtil.isValid(list)) {
             return true;
@@ -111,8 +111,11 @@ public class RunUserServiceImpl implements RunUserService {
         if (user == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
-        user.setUserPassword(Run_StringUtil.MD5(user.getUserPassword()));
-        user.setUserDate(new Date());
+        user.setPassword(Run_StringUtil.MD5(user.getPassword()));
+        user.setAddTime(new Date());
+        user.setUpdateTime(new Date());
+        user.setUserStatus(false);
+        user.setIsDelete(false);
         int uid = runUserMapper.insert(user);
         return BaseResult.success(uid);
     }
@@ -129,7 +132,9 @@ public class RunUserServiceImpl implements RunUserService {
         if (user == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
-        runUserMapper.deleteByPrimaryKey(uid);
+        user.setIsDelete(true);
+        user.setUpdateTime(new Date());
+        runUserMapper.updateByPrimaryKeySelective(user);
         return BaseResult.success(user);
     }
 
@@ -141,11 +146,12 @@ public class RunUserServiceImpl implements RunUserService {
      */
     @Override
     public BaseResult updateUser(RunUser user) throws AppException {
-        if (user == null || user.getUserPassword() == null || user.getUserPassword().equals("")) {
+        if (user == null || user.getPassword() == null || user.getPassword().equals("")) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
-        user.setUserPassword(Run_StringUtil.MD5(user.getUserPassword()));
-        runUserMapper.updateByPrimaryKey(user);
+        user.setPassword(Run_StringUtil.MD5(user.getPassword()));
+        user.setUpdateTime(new Date());
+        runUserMapper.updateByPrimaryKeySelective(user);
         return BaseResult.success();
     }
 
@@ -177,7 +183,7 @@ public class RunUserServiceImpl implements RunUserService {
     public BaseResult login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws AppException {
         RunUserExample example = new RunUserExample();
         Criteria criteria = example.createCriteria();
-        criteria.andUserUsernameEqualTo(username);
+        criteria.andUserphoneEqualTo(username);
         List<RunUser> list = null;
         list = runUserMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
@@ -185,8 +191,8 @@ public class RunUserServiceImpl implements RunUserService {
         }
         RunUserExample example1 = new RunUserExample();
         Criteria criteria1 = example1.createCriteria();
-        criteria1.andUserUsernameEqualTo(username);
-        criteria1.andUserPasswordEqualTo(Run_StringUtil.MD5(password));
+        criteria1.andUserphoneEqualTo(username);
+        criteria1.andPasswordEqualTo(Run_StringUtil.MD5(password));
         list = runUserMapper.selectByExample(example1);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.PWD_ERROR.getCode(), ResultEnum.PWD_ERROR.getMsg());
@@ -195,7 +201,7 @@ public class RunUserServiceImpl implements RunUserService {
         //生成token
         String token = "RU" + UUID.randomUUID().toString();
         //保存用户之前，将用户对象中的密码清空
-        user.setUserPassword(null);
+        user.setPassword(null);
         //把用户信息写入redis
         jedisClient.set(REDIS_USER_SESSION_KEY + ":" + token, JsonUtils.objectToJson(user));
         //设置sesison的生命周期
@@ -218,10 +224,12 @@ public class RunUserServiceImpl implements RunUserService {
         List<RunUser> list = null;
         example = new RunUserExample();
         example.setOrderByClause("user_date DESC");
+        Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(false);
         list = runUserMapper.selectByExample(example);
-        if (!ValidateUtil.isValid(list)) {
+        /*if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
-        }
+        }*/
         return BaseResult.success(list);
     }
 

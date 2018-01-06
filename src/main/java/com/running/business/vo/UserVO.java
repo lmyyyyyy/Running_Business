@@ -14,7 +14,7 @@ public class UserVO {
 
     private String userName;
 
-    private Integer userGender;
+    private Boolean userGender;
 
     private String userPhone;
 
