@@ -116,7 +116,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 		UserVO userVO = new UserVO();
 		userVO.setUid(userInfo.getUid());
 		userVO.setUserPhone(userInfo.getUserPhone());
-		userVO.setUserAddress(userInfo.getUserAddress());
+		userVO.setUserAddress(userInfo.getUserAddressId());
 		userVO.setUserGender(userInfo.getUserGender());
 		userVO.setUserName(userInfo.getUserName());
 		userVO.setUserPhoto(userInfo.getUserPhoto());

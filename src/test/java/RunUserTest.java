@@ -1,10 +1,7 @@
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.mapper.JedisClient;
-import com.running.business.pojo.RunAdmin;
-import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunUser;
 import com.running.business.service.RunUserService;
 import org.junit.Test;
@@ -65,7 +62,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	public void getAllUser(){
 		int currpage = 1;
 		PageHelper.startPage(currpage, 10);
-		BaseResult result = runUserService.getAllRunUser();
+		BaseResult result = runUserService.pageAllRunUser(1, 20, "desc");
 		List<RunUser> list = (List<RunUser>) result.getData();
 		PageInfo<RunUser> page = new PageInfo<RunUser>(list);
 		System.out.println(page.getPages());

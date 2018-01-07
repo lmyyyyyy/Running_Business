@@ -202,14 +202,13 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -353,7 +352,7 @@
                 </configuration>
                 <version>2.3.1</version>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.2</version>
@@ -377,7 +376,7 @@
                         <version>1.3.2</version>
                     </dependency>
                 </dependencies>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 </project>

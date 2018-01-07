@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="running.business.mapper.RunOrderMapper" >
+<mapper namespace="com.running.business.mapper.RunOrderMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrder" >
     <constructor >
       <idArg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -25,6 +25,8 @@
       <arg column="recv_longitude" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="recv_latitude" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pay_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pay_amout" jdbcType="DOUBLE" javaType="java.lang.Double" />
       <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="recv_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -94,7 +96,7 @@
     orderid, uid, did, type, goods, source_address, source_remark_address, source_phone, 
     target_address, target_remark_address, target_phone, remark, require_time, time_long, 
     amount, fee, distance, source_longitude, source_latitude, recv_longitude, recv_latitude, 
-    status, add_time, update_time, recv_time, target_time, finish_time
+    status, pay_type, pay_amout, add_time, update_time, recv_time, target_time, finish_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderExample" >
     select
@@ -134,9 +136,9 @@
       require_time, time_long, amount, 
       fee, distance, source_longitude, 
       source_latitude, recv_longitude, recv_latitude, 
-      status, add_time, update_time, 
-      recv_time, target_time, finish_time
-      )
+      status, pay_type, pay_amout, 
+      add_time, update_time, recv_time, 
+      target_time, finish_time)
     values (#{orderid,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{goods,jdbcType=VARCHAR}, #{sourceAddress,jdbcType=VARCHAR}, 
       #{sourceRemarkAddress,jdbcType=VARCHAR}, #{sourcePhone,jdbcType=VARCHAR}, #{targetAddress,jdbcType=VARCHAR}, 
@@ -144,9 +146,9 @@
       #{requireTime,jdbcType=TIMESTAMP}, #{timeLong,jdbcType=BIGINT}, #{amount,jdbcType=DOUBLE}, 
       #{fee,jdbcType=DOUBLE}, #{distance,jdbcType=DOUBLE}, #{sourceLongitude,jdbcType=VARCHAR}, 
       #{sourceLatitude,jdbcType=VARCHAR}, #{recvLongitude,jdbcType=VARCHAR}, #{recvLatitude,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{recvTime,jdbcType=TIMESTAMP}, #{targetTime,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP}
-      )
+      #{status,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, #{payAmout,jdbcType=DOUBLE}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{recvTime,jdbcType=TIMESTAMP}, 
+      #{targetTime,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrder" >
     insert into run_order
@@ -216,6 +218,12 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payAmout != null" >
+        pay_amout,
       </if>
       <if test="addTime != null" >
         add_time,
@@ -299,6 +307,12 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payAmout != null" >
+        #{payAmout,jdbcType=DOUBLE},
       </if>
       <if test="addTime != null" >
         #{addTime,jdbcType=TIMESTAMP},
@@ -392,6 +406,12 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=INTEGER},
+      </if>
+      <if test="record.payAmout != null" >
+        pay_amout = #{record.payAmout,jdbcType=DOUBLE},
+      </if>
       <if test="record.addTime != null" >
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
@@ -436,6 +456,8 @@
       recv_longitude = #{record.recvLongitude,jdbcType=VARCHAR},
       recv_latitude = #{record.recvLatitude,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
+      pay_type = #{record.payType,jdbcType=INTEGER},
+      pay_amout = #{record.payAmout,jdbcType=DOUBLE},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       recv_time = #{record.recvTime,jdbcType=TIMESTAMP},
@@ -511,6 +533,12 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payAmout != null" >
+        pay_amout = #{payAmout,jdbcType=DOUBLE},
+      </if>
       <if test="addTime != null" >
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
@@ -552,6 +580,8 @@
       recv_longitude = #{recvLongitude,jdbcType=VARCHAR},
       recv_latitude = #{recvLatitude,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      pay_type = #{payType,jdbcType=INTEGER},
+      pay_amout = #{payAmout,jdbcType=DOUBLE},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       recv_time = #{recvTime,jdbcType=TIMESTAMP},

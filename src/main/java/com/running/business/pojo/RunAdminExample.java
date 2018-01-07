@@ -315,62 +315,52 @@ public class RunAdminExample {
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeEqualTo(String value) {
+        public Criteria andAdminTimeEqualTo(Date value) {
             addCriterion("admin_time =", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeNotEqualTo(String value) {
+        public Criteria andAdminTimeNotEqualTo(Date value) {
             addCriterion("admin_time <>", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeGreaterThan(String value) {
+        public Criteria andAdminTimeGreaterThan(Date value) {
             addCriterion("admin_time >", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andAdminTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("admin_time >=", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeLessThan(String value) {
+        public Criteria andAdminTimeLessThan(Date value) {
             addCriterion("admin_time <", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeLessThanOrEqualTo(String value) {
+        public Criteria andAdminTimeLessThanOrEqualTo(Date value) {
             addCriterion("admin_time <=", value, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeLike(String value) {
-            addCriterion("admin_time like", value, "adminTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andAdminTimeNotLike(String value) {
-            addCriterion("admin_time not like", value, "adminTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andAdminTimeIn(List<String> values) {
+        public Criteria andAdminTimeIn(List<Date> values) {
             addCriterion("admin_time in", values, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeNotIn(List<String> values) {
+        public Criteria andAdminTimeNotIn(List<Date> values) {
             addCriterion("admin_time not in", values, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeBetween(String value1, String value2) {
+        public Criteria andAdminTimeBetween(Date value1, Date value2) {
             addCriterion("admin_time between", value1, value2, "adminTime");
             return (Criteria) this;
         }
 
-        public Criteria andAdminTimeNotBetween(String value1, String value2) {
+        public Criteria andAdminTimeNotBetween(Date value1, Date value2) {
             addCriterion("admin_time not between", value1, value2, "adminTime");
             return (Criteria) this;
         }

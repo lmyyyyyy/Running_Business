@@ -13,16 +13,19 @@ public class RunUserInfo {
 
     private Integer userPoint;
 
-    private String userAddress;
+    private Integer userAddressId;
 
-    public RunUserInfo(Integer uid, String userPhoto, String userName, Boolean userGender, String userPhone, Integer userPoint, String userAddress) {
+    private Integer reportedTimes;
+
+    public RunUserInfo(Integer uid, String userPhoto, String userName, Boolean userGender, String userPhone, Integer userPoint, Integer userAddressId, Integer reportedTimes) {
         this.uid = uid;
         this.userPhoto = userPhoto;
         this.userName = userName;
         this.userGender = userGender;
         this.userPhone = userPhone;
         this.userPoint = userPoint;
-        this.userAddress = userAddress;
+        this.userAddressId = userAddressId;
+        this.reportedTimes = reportedTimes;
     }
 
     public RunUserInfo() {
@@ -77,11 +80,19 @@ public class RunUserInfo {
         this.userPoint = userPoint;
     }
 
-    public String getUserAddress() {
-        return userAddress;
+    public Integer getUserAddressId() {
+        return userAddressId;
     }
 
-    public void setUserAddress(String userAddress) {
-        this.userAddress = userAddress == null ? null : userAddress.trim();
+    public void setUserAddressId(Integer userAddressId) {
+        this.userAddressId = userAddressId;
+    }
+
+    public Integer getReportedTimes() {
+        return reportedTimes;
+    }
+
+    public void setReportedTimes(Integer reportedTimes) {
+        this.reportedTimes = reportedTimes;
     }
 }

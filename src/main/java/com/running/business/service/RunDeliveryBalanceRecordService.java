@@ -1,12 +1,12 @@
 package com.running.business.service;
 
 import com.running.business.common.BaseResult;
-import com.running.business.pojo.RunDeliveryRecord;
+import com.running.business.pojo.RunDeliveryBalanceRecord;
 
-public interface RunDeliveryRecordService {
+public interface RunDeliveryBalanceRecordService {
 
-	BaseResult addRunDeliveryRecord(RunDeliveryRecord record);
-	BaseResult updateRunDeliveryRecord(RunDeliveryRecord record);
+	BaseResult addRunDeliveryRecord(RunDeliveryBalanceRecord record);
+	BaseResult updateRunDeliveryRecord(RunDeliveryBalanceRecord record);
 	BaseResult delRunDeliveryRecordByID(Integer id);
 	BaseResult delAllRunDeliveryRecordByDID(Integer did);
 	

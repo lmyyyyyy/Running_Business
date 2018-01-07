@@ -4,6 +4,7 @@ import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
+import com.running.business.interceptor.PermissionInterceptor;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.service.RunAdminInfoService;
@@ -430,6 +431,38 @@ public class RunAdminController extends BaseController {
             }
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "删除用户失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 分页获取所有未被删除的用户列表
+     *
+     * @param page
+     * @param size
+     * @param orderType
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @ApiOperation(value = "分页获取所有未被删除的用户列表(刘明宇)", notes = "分页获取所有未被删除的用户列表", response = BaseResult.class)
+    public BaseResult pageUsers(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                HttpServletRequest request) throws Exception {
+        Integer operator = RequestUtil.getAdminId(request);
+        logger.info("{} 分页获取所有未被删除的用户列表 operator = {}", new Object[]{LOG_PREFIX, operator});
+        if (!PermissionInterceptor.isInvoke(request)) {
+            logger.error("{} 当前用户没有权限进行操作 operator = {}", LOG_PREFIX, operator);
+            return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
+        }
+        BaseResult result;
+        try {
+            result = runUserService.pageAllRunUser(page, size, orderType);
+        } catch (AppException ae) {
+            logger.error("{} 分页获取用户列表失败 operator = {}, error = {}", LOG_PREFIX, operator, ae);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return result;

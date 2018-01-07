@@ -504,73 +504,63 @@ public class RunDeliveryInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andAddressIsNull() {
-            addCriterion("address is null");
+        public Criteria andAddressIdIsNull() {
+            addCriterion("address_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAddressIsNotNull() {
-            addCriterion("address is not null");
+        public Criteria andAddressIdIsNotNull() {
+            addCriterion("address_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAddressEqualTo(String value) {
-            addCriterion("address =", value, "address");
+        public Criteria andAddressIdEqualTo(Integer value) {
+            addCriterion("address_id =", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotEqualTo(String value) {
-            addCriterion("address <>", value, "address");
+        public Criteria andAddressIdNotEqualTo(Integer value) {
+            addCriterion("address_id <>", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressGreaterThan(String value) {
-            addCriterion("address >", value, "address");
+        public Criteria andAddressIdGreaterThan(Integer value) {
+            addCriterion("address_id >", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressGreaterThanOrEqualTo(String value) {
-            addCriterion("address >=", value, "address");
+        public Criteria andAddressIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("address_id >=", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLessThan(String value) {
-            addCriterion("address <", value, "address");
+        public Criteria andAddressIdLessThan(Integer value) {
+            addCriterion("address_id <", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLessThanOrEqualTo(String value) {
-            addCriterion("address <=", value, "address");
+        public Criteria andAddressIdLessThanOrEqualTo(Integer value) {
+            addCriterion("address_id <=", value, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressLike(String value) {
-            addCriterion("address like", value, "address");
+        public Criteria andAddressIdIn(List<Integer> values) {
+            addCriterion("address_id in", values, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotLike(String value) {
-            addCriterion("address not like", value, "address");
+        public Criteria andAddressIdNotIn(List<Integer> values) {
+            addCriterion("address_id not in", values, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressIn(List<String> values) {
-            addCriterion("address in", values, "address");
+        public Criteria andAddressIdBetween(Integer value1, Integer value2) {
+            addCriterion("address_id between", value1, value2, "addressId");
             return (Criteria) this;
         }
 
-        public Criteria andAddressNotIn(List<String> values) {
-            addCriterion("address not in", values, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressBetween(String value1, String value2) {
-            addCriterion("address between", value1, value2, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressNotBetween(String value1, String value2) {
-            addCriterion("address not between", value1, value2, "address");
+        public Criteria andAddressIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("address_id not between", value1, value2, "addressId");
             return (Criteria) this;
         }
 
@@ -701,6 +691,66 @@ public class RunDeliveryInfoExample {
 
         public Criteria andLevelNotBetween(String value1, String value2) {
             addCriterion("level not between", value1, value2, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesIsNull() {
+            addCriterion("reported_times is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesIsNotNull() {
+            addCriterion("reported_times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesEqualTo(Integer value) {
+            addCriterion("reported_times =", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotEqualTo(Integer value) {
+            addCriterion("reported_times <>", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesGreaterThan(Integer value) {
+            addCriterion("reported_times >", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("reported_times >=", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesLessThan(Integer value) {
+            addCriterion("reported_times <", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesLessThanOrEqualTo(Integer value) {
+            addCriterion("reported_times <=", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesIn(List<Integer> values) {
+            addCriterion("reported_times in", values, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotIn(List<Integer> values) {
+            addCriterion("reported_times not in", values, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesBetween(Integer value1, Integer value2) {
+            addCriterion("reported_times between", value1, value2, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("reported_times not between", value1, value2, "reportedTimes");
             return (Criteria) this;
         }
     }

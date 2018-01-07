@@ -47,6 +47,10 @@ public class RunOrder {
 
     private Integer status;
 
+    private Integer payType;
+
+    private Double payAmout;
+
     private Date addTime;
 
     private Date updateTime;
@@ -57,7 +61,7 @@ public class RunOrder {
 
     private Date finishTime;
 
-    public RunOrder(String orderid, Integer uid, Integer did, Integer type, String goods, String sourceAddress, String sourceRemarkAddress, String sourcePhone, String targetAddress, String targetRemarkAddress, String targetPhone, String remark, Date requireTime, Long timeLong, Double amount, Double fee, Double distance, String sourceLongitude, String sourceLatitude, String recvLongitude, String recvLatitude, Integer status, Date addTime, Date updateTime, Date recvTime, String targetTime, Date finishTime) {
+    public RunOrder(String orderid, Integer uid, Integer did, Integer type, String goods, String sourceAddress, String sourceRemarkAddress, String sourcePhone, String targetAddress, String targetRemarkAddress, String targetPhone, String remark, Date requireTime, Long timeLong, Double amount, Double fee, Double distance, String sourceLongitude, String sourceLatitude, String recvLongitude, String recvLatitude, Integer status, Integer payType, Double payAmout, Date addTime, Date updateTime, Date recvTime, String targetTime, Date finishTime) {
         this.orderid = orderid;
         this.uid = uid;
         this.did = did;
@@ -80,6 +84,8 @@ public class RunOrder {
         this.recvLongitude = recvLongitude;
         this.recvLatitude = recvLatitude;
         this.status = status;
+        this.payType = payType;
+        this.payAmout = payAmout;
         this.addTime = addTime;
         this.updateTime = updateTime;
         this.recvTime = recvTime;
@@ -265,6 +271,22 @@ public class RunOrder {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
+    public Double getPayAmout() {
+        return payAmout;
+    }
+
+    public void setPayAmout(Double payAmout) {
+        this.payAmout = payAmout;
     }
 
     public Date getAddTime() {

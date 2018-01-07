@@ -15,16 +15,25 @@ public class RunDeliveryuser {
 
     private Boolean status;
 
+    private Boolean available;
+
     private Boolean isDelete;
 
-    public RunDeliveryuser(Integer did, String userphone, String password, Date addTime, Date updateTime, Boolean status, Boolean isDelete) {
+    private Integer credits;
+
+    private String reviewPhoto;
+
+    public RunDeliveryuser(Integer did, String userphone, String password, Date addTime, Date updateTime, Boolean status, Boolean available, Boolean isDelete, Integer credits, String reviewPhoto) {
         this.did = did;
         this.userphone = userphone;
         this.password = password;
         this.addTime = addTime;
         this.updateTime = updateTime;
         this.status = status;
+        this.available = available;
         this.isDelete = isDelete;
+        this.credits = credits;
+        this.reviewPhoto = reviewPhoto;
     }
 
     public RunDeliveryuser() {
@@ -79,11 +88,35 @@ public class RunDeliveryuser {
         this.status = status;
     }
 
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
     public Boolean getIsDelete() {
         return isDelete;
     }
 
     public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Integer getCredits() {
+        return credits;
+    }
+
+    public void setCredits(Integer credits) {
+        this.credits = credits;
+    }
+
+    public String getReviewPhoto() {
+        return reviewPhoto;
+    }
+
+    public void setReviewPhoto(String reviewPhoto) {
+        this.reviewPhoto = reviewPhoto == null ? null : reviewPhoto.trim();
     }
 }

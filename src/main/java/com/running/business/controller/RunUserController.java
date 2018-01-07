@@ -5,7 +5,6 @@ import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunUser;
-import com.running.business.pojo.RunUserAddress;
 import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RunUserAddressService;

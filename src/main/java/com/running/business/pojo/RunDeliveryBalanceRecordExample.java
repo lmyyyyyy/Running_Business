@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RunDeliveryRecordExample {
+public class RunDeliveryBalanceRecordExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public RunDeliveryRecordExample() {
+    public RunDeliveryBalanceRecordExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

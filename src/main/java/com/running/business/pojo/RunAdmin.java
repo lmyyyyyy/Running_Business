@@ -9,11 +9,11 @@ public class RunAdmin {
 
     private String adminPassword;
 
-    private String adminTime;
+    private Date adminTime;
 
     private Date updateTime;
 
-    public RunAdmin(Integer adminId, String adminUsername, String adminPassword, String adminTime, Date updateTime) {
+    public RunAdmin(Integer adminId, String adminUsername, String adminPassword, Date adminTime, Date updateTime) {
         this.adminId = adminId;
         this.adminUsername = adminUsername;
         this.adminPassword = adminPassword;
@@ -49,12 +49,12 @@ public class RunAdmin {
         this.adminPassword = adminPassword == null ? null : adminPassword.trim();
     }
 
-    public String getAdminTime() {
+    public Date getAdminTime() {
         return adminTime;
     }
 
-    public void setAdminTime(String adminTime) {
-        this.adminTime = adminTime == null ? null : adminTime.trim();
+    public void setAdminTime(Date adminTime) {
+        this.adminTime = adminTime;
     }
 
     public Date getUpdateTime() {

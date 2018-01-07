@@ -485,6 +485,66 @@ public class RunDeliveryuserExample {
             return (Criteria) this;
         }
 
+        public Criteria andAvailableIsNull() {
+            addCriterion("available is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableIsNotNull() {
+            addCriterion("available is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableEqualTo(Boolean value) {
+            addCriterion("available =", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableNotEqualTo(Boolean value) {
+            addCriterion("available <>", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableGreaterThan(Boolean value) {
+            addCriterion("available >", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("available >=", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableLessThan(Boolean value) {
+            addCriterion("available <", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableLessThanOrEqualTo(Boolean value) {
+            addCriterion("available <=", value, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableIn(List<Boolean> values) {
+            addCriterion("available in", values, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableNotIn(List<Boolean> values) {
+            addCriterion("available not in", values, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableBetween(Boolean value1, Boolean value2) {
+            addCriterion("available between", value1, value2, "available");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvailableNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("available not between", value1, value2, "available");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
             return (Criteria) this;
@@ -542,6 +602,136 @@ public class RunDeliveryuserExample {
 
         public Criteria andIsDeleteNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_delete not between", value1, value2, "isDelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsIsNull() {
+            addCriterion("credits is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsIsNotNull() {
+            addCriterion("credits is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsEqualTo(Integer value) {
+            addCriterion("credits =", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsNotEqualTo(Integer value) {
+            addCriterion("credits <>", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsGreaterThan(Integer value) {
+            addCriterion("credits >", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("credits >=", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsLessThan(Integer value) {
+            addCriterion("credits <", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsLessThanOrEqualTo(Integer value) {
+            addCriterion("credits <=", value, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsIn(List<Integer> values) {
+            addCriterion("credits in", values, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsNotIn(List<Integer> values) {
+            addCriterion("credits not in", values, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsBetween(Integer value1, Integer value2) {
+            addCriterion("credits between", value1, value2, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditsNotBetween(Integer value1, Integer value2) {
+            addCriterion("credits not between", value1, value2, "credits");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoIsNull() {
+            addCriterion("review_photo is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoIsNotNull() {
+            addCriterion("review_photo is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoEqualTo(String value) {
+            addCriterion("review_photo =", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoNotEqualTo(String value) {
+            addCriterion("review_photo <>", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoGreaterThan(String value) {
+            addCriterion("review_photo >", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoGreaterThanOrEqualTo(String value) {
+            addCriterion("review_photo >=", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoLessThan(String value) {
+            addCriterion("review_photo <", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoLessThanOrEqualTo(String value) {
+            addCriterion("review_photo <=", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoLike(String value) {
+            addCriterion("review_photo like", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoNotLike(String value) {
+            addCriterion("review_photo not like", value, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoIn(List<String> values) {
+            addCriterion("review_photo in", values, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoNotIn(List<String> values) {
+            addCriterion("review_photo not in", values, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoBetween(String value1, String value2) {
+            addCriterion("review_photo between", value1, value2, "reviewPhoto");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewPhotoNotBetween(String value1, String value2) {
+            addCriterion("review_photo not between", value1, value2, "reviewPhoto");
             return (Criteria) this;
         }
     }
