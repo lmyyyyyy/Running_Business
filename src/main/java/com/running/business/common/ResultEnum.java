@@ -13,7 +13,7 @@ public enum ResultEnum {
     // 用户相关异常
     TELTPHONE_USED("1001001", "用户已注册"),
     TELTPHONE_NOT_REG("1001002", "账号或密码错误"),
-    PWD_ERROR("1001003","密码错误"),
+    PWD_ERROR("1001003", "密码错误"),
     QUERY_ERROR("1001004", "错误的查询"),
     PURL_NULL("1001005", "头像不能为空"),
     PURL_TYPE_WORNG("1001006", "不支持的类型"),
@@ -24,6 +24,19 @@ public enum ResultEnum {
     USER_PHONE_REGEX_IS_NOT("1001011", "用户手机格式错误"),
     USER_PASSWORD_LEN("1001012", "密码长度不能低于6位，不能大于18位"),
 
+    // 配送员相关异常
+    TELTPHONE_DELIVERY("2002001", "用户已注册"),
+    TELTPHONE_DELIVERY_ERROR("2002002", "账号或密码错误"),
+    DELIVERY_PASSWORD_LEN("2002003", "密码长度不能低于6位，不能大于18位"),
+    DELIVERY_PHONE_REGEX_IS_ERROR("2002004", "手机格式错误"),
+    DELIVERY_INFO_ISEMPTY("2002005", "用户信息为空"),
+    DELIVERY_CHECKING("2002006", "账号正在审核中,请耐心等待"),
+    DELIVERY_PHOTO_TOO_BIG("2002007", "图片过大"),
+    DELIVERY_REVIEWPHOTO_IS_NOT_PASS("2002008", "照片审核未通过"),
+    DELIVERY_CARD_REGEX_IS_NOT_PASS("2002009", "身份证格式不正确"),
+    DELIVERY_IS_NOT_AVAILABLE("2002010", "账号已被禁用"),
+    DELIVERY_CREDITS_IS_TOO_LOW("2002011", "账号信用额度过低,已被禁用,如有疑问请忍着"),
+    DELIVERY_REGISTER_SUCCESS("2002012", "账号注册成功,请填写真实的信息"),
 
     // 系统异常
     INPUT_ERROR("99980000", "参数非法"),

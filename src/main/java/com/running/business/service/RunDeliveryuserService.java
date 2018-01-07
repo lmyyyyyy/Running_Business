@@ -1,16 +1,111 @@
 package com.running.business.service;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
+import com.running.business.exception.AppException;
 import com.running.business.pojo.RunDeliveryuser;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface RunDeliveryuserService {
 
-	BaseResult addRunDeliveryuser(RunDeliveryuser user);
-	BaseResult delRunDeliveryuser(Integer uid);
-	BaseResult updateRunDeliveryuser(RunDeliveryuser user);
-	
-	BaseResult checkRunDeliveryuser(String username);
-	BaseResult getRunDeliveryuser(Integer id);
-	BaseResult login(String username, String password);
-	BaseResult getAllRunDeliveryuser();
+    /**
+     * 添加配送员
+     *
+     * @param user
+     * @return
+     */
+    Integer insertRunDeliveryuser(RunDeliveryuser user) throws AppException;
+
+    /**
+     * 根据id删除配送员
+     *
+     * @param uid
+     * @throws AppException
+     */
+    void delRunDeliveryuser(Integer uid) throws AppException;
+
+    /**
+     * 修改配送员密码
+     *
+     * @param user
+     * @throws AppException
+     */
+    void modifyRunDeliveryuserPassword(RunDeliveryuser user) throws AppException;
+
+    /**
+     * 更新配送员信息
+     *
+     * @param runDeliveryuser
+     * @throws AppException
+     */
+    void updateRunDeliveryuser(RunDeliveryuser runDeliveryuser) throws AppException;
+
+    /**
+     * 检查账号是否被注册 true:可用／没注册过 false:不可用／注册过
+     *
+     * @param userphone
+     * @return
+     * @throws AppException
+     */
+    boolean checkRunDeliveryuser(String userphone) throws AppException;
+
+    /**
+     * 根据id获取配送员账号信息
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
+    RunDeliveryuser getRunDeliveryuserById(Integer id) throws AppException;
+
+    /**
+     * 配送员登录
+     *
+     * @param phone
+     * @param password
+     * @param request
+     * @param response
+     * @return
+     * @throws AppException
+     */
+    String login(String phone, String password, HttpServletRequest request, HttpServletResponse response) throws AppException;
+
+    /**
+     * 分页获取未被删除的配送员列表
+     *
+     * @param page
+     * @param size
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    PageInfo<RunDeliveryuser> pageAllRunDeliveryuser(Integer page, Integer size, String orderType) throws AppException;
+
+    /**
+     * 检查账号和密码是否匹配 true:匹配 false:不匹配
+     *
+     * @param phone
+     * @param password
+     * @return
+     * @throws AppException
+     */
+    boolean checkPhoneAndPwd(String phone, String password) throws AppException;
+
+    /**
+     * 根据token从redis中查询配送员信息
+     *
+     * @param token token码
+     * @return 如何为空则返回会话超时，否则更新生命周期，将用户返回
+     */
+    BaseResult getDeliveryuserByToken(String token) throws AppException;
+
+    /**
+     * 注销用户，根据token从redis中查询配送员信息
+     *
+     * @param token token码
+     * @return 如果token为空，说明会话超时，否则将该token删除，返回用户实体
+     */
+    BaseResult logout(String token) throws AppException;
 }

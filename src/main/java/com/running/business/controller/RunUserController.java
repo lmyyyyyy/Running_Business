@@ -102,15 +102,15 @@ public class RunUserController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
-    public BaseResult register(@RequestBody RunUser user) throws Exception {
+        public BaseResult register(@RequestBody RunUser user) throws Exception {
         logger.info("注册用户，账号为：" + user.getUserphone());
         BaseResult result = null;
         try {
             if (!RegexUtils.checkMobile(user.getUserphone())) {
                 return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
             }
-            if (user.getUserphone() == null || user.getUserphone().trim().equals("")
-                    || user.getUserphone() == null || user.getUserphone().trim().equals("")) {
+            if (user.getUserphone() == null || "".equals(user.getUserphone().trim())
+                    || user.getUserphone() == null || "".equals(user.getUserphone().trim())) {
                 return BaseResult.fail(ResultEnum.INPUT_ERROR);
             }
             if (user.getPassword().length() < 6 || user.getPassword().length() > 18) {
@@ -120,7 +120,7 @@ public class RunUserController extends BaseController {
             if (!result.getCode().equals("200")) {
                 return result;
             }
-            result = runUserService.addUser(user);
+            result = runUserService.insertUser(user);
             if (result.getCode().equals("200")) {
                 int uid = (int) result.getData();
                 RunUserBalance balance = new RunUserBalance();

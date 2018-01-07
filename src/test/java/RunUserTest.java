@@ -44,7 +44,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		user.setUserphone("111113");
 		user.setPassword("123456");
 		user.setAddTime(new Date());
-		runUserService.addUser(user);
+		runUserService.insertUser(user);
 	}
 	
 	@Test
@@ -62,8 +62,8 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	public void getAllUser(){
 		int currpage = 1;
 		PageHelper.startPage(currpage, 10);
-		BaseResult result = runUserService.pageAllRunUser(1, 20, "desc");
-		List<RunUser> list = (List<RunUser>) result.getData();
+		PageInfo<RunUser> result = runUserService.pageAllRunUser(1, 20, "desc");
+		List<RunUser> list = result.getList();
 		PageInfo<RunUser> page = new PageInfo<RunUser>(list);
 		System.out.println(page.getPages());
 		System.out.println(page.getTotal());
