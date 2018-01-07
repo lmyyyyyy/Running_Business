@@ -1,8 +1,9 @@
 package com.running.business.mapper;
 
+import java.util.List;
+
 import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserBalanceExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface RunUserBalanceMapper {

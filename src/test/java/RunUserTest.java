@@ -1,10 +1,7 @@
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.mapper.JedisClient;
-import com.running.business.pojo.RunAdmin;
-import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunUser;
 import com.running.business.service.RunUserService;
 import org.junit.Test;

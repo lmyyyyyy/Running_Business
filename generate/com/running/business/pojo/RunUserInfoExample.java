@@ -494,73 +494,123 @@ public class RunUserInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressIsNull() {
-            addCriterion("user_address is null");
+        public Criteria andUserAddressIdIsNull() {
+            addCriterion("user_address_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressIsNotNull() {
-            addCriterion("user_address is not null");
+        public Criteria andUserAddressIdIsNotNull() {
+            addCriterion("user_address_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressEqualTo(String value) {
-            addCriterion("user_address =", value, "userAddress");
+        public Criteria andUserAddressIdEqualTo(Integer value) {
+            addCriterion("user_address_id =", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressNotEqualTo(String value) {
-            addCriterion("user_address <>", value, "userAddress");
+        public Criteria andUserAddressIdNotEqualTo(Integer value) {
+            addCriterion("user_address_id <>", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressGreaterThan(String value) {
-            addCriterion("user_address >", value, "userAddress");
+        public Criteria andUserAddressIdGreaterThan(Integer value) {
+            addCriterion("user_address_id >", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressGreaterThanOrEqualTo(String value) {
-            addCriterion("user_address >=", value, "userAddress");
+        public Criteria andUserAddressIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_address_id >=", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressLessThan(String value) {
-            addCriterion("user_address <", value, "userAddress");
+        public Criteria andUserAddressIdLessThan(Integer value) {
+            addCriterion("user_address_id <", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressLessThanOrEqualTo(String value) {
-            addCriterion("user_address <=", value, "userAddress");
+        public Criteria andUserAddressIdLessThanOrEqualTo(Integer value) {
+            addCriterion("user_address_id <=", value, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressLike(String value) {
-            addCriterion("user_address like", value, "userAddress");
+        public Criteria andUserAddressIdIn(List<Integer> values) {
+            addCriterion("user_address_id in", values, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressNotLike(String value) {
-            addCriterion("user_address not like", value, "userAddress");
+        public Criteria andUserAddressIdNotIn(List<Integer> values) {
+            addCriterion("user_address_id not in", values, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressIn(List<String> values) {
-            addCriterion("user_address in", values, "userAddress");
+        public Criteria andUserAddressIdBetween(Integer value1, Integer value2) {
+            addCriterion("user_address_id between", value1, value2, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressNotIn(List<String> values) {
-            addCriterion("user_address not in", values, "userAddress");
+        public Criteria andUserAddressIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_address_id not between", value1, value2, "userAddressId");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressBetween(String value1, String value2) {
-            addCriterion("user_address between", value1, value2, "userAddress");
+        public Criteria andReportedTimesIsNull() {
+            addCriterion("reported_times is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressNotBetween(String value1, String value2) {
-            addCriterion("user_address not between", value1, value2, "userAddress");
+        public Criteria andReportedTimesIsNotNull() {
+            addCriterion("reported_times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesEqualTo(Integer value) {
+            addCriterion("reported_times =", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotEqualTo(Integer value) {
+            addCriterion("reported_times <>", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesGreaterThan(Integer value) {
+            addCriterion("reported_times >", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("reported_times >=", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesLessThan(Integer value) {
+            addCriterion("reported_times <", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesLessThanOrEqualTo(Integer value) {
+            addCriterion("reported_times <=", value, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesIn(List<Integer> values) {
+            addCriterion("reported_times in", values, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotIn(List<Integer> values) {
+            addCriterion("reported_times not in", values, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesBetween(Integer value1, Integer value2) {
+            addCriterion("reported_times between", value1, value2, "reportedTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportedTimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("reported_times not between", value1, value2, "reportedTimes");
             return (Criteria) this;
         }
     }

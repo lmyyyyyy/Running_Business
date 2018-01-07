@@ -13,22 +13,25 @@ public class RunDeliveryInfo {
 
     private String phone;
 
-    private String address;
+    private Integer addressId;
 
     private Integer point;
 
     private String level;
 
-    public RunDeliveryInfo(Integer did, String photo, String name, String card, Boolean gender, String phone, String address, Integer point, String level) {
+    private Integer reportedTimes;
+
+    public RunDeliveryInfo(Integer did, String photo, String name, String card, Boolean gender, String phone, Integer addressId, Integer point, String level, Integer reportedTimes) {
         this.did = did;
         this.photo = photo;
         this.name = name;
         this.card = card;
         this.gender = gender;
         this.phone = phone;
-        this.address = address;
+        this.addressId = addressId;
         this.point = point;
         this.level = level;
+        this.reportedTimes = reportedTimes;
     }
 
     public RunDeliveryInfo() {
@@ -83,12 +86,12 @@ public class RunDeliveryInfo {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public String getAddress() {
-        return address;
+    public Integer getAddressId() {
+        return addressId;
     }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+    public void setAddressId(Integer addressId) {
+        this.addressId = addressId;
     }
 
     public Integer getPoint() {
@@ -105,5 +108,13 @@ public class RunDeliveryInfo {
 
     public void setLevel(String level) {
         this.level = level == null ? null : level.trim();
+    }
+
+    public Integer getReportedTimes() {
+        return reportedTimes;
+    }
+
+    public void setReportedTimes(Integer reportedTimes) {
+        this.reportedTimes = reportedTimes;
     }
 }

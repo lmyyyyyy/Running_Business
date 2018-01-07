@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="running.business.mapper.RunDeliveryRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryRecord" >
+<mapper namespace="com.running.business.mapper.RefundRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RefundRecord" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="old_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="amount" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="new_balance" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="type" jdbcType="BIT" javaType="java.lang.Boolean" />
-      <arg column="number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reason" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="responsibility" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="source" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="operator" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
@@ -72,15 +74,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, did, old_balance, amount, new_balance, type, number, add_time
+    id, uid, did, orderid, amount, reason, responsibility, source, operator, add_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryRecordExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RefundRecordExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from run_delivery_record
+    from refund_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,50 +93,58 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from run_delivery_record
+    from refund_record
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from run_delivery_record
+    delete from refund_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryRecordExample" >
-    delete from run_delivery_record
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RefundRecordExample" >
+    delete from refund_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    insert into run_delivery_record (id, did, old_balance, 
-      amount, new_balance, type, 
-      number, add_time)
-    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{oldBalance,jdbcType=DOUBLE}, 
-      #{amount,jdbcType=DOUBLE}, #{newBalance,jdbcType=DOUBLE}, #{type,jdbcType=BIT}, 
-      #{number,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.running.business.pojo.RefundRecord" >
+    insert into refund_record (id, uid, did, 
+      orderid, amount, reason, 
+      responsibility, source, operator, 
+      add_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, 
+      #{orderid,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{reason,jdbcType=VARCHAR}, 
+      #{responsibility,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    insert into run_delivery_record
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RefundRecord" >
+    insert into refund_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
+      <if test="uid != null" >
+        uid,
+      </if>
       <if test="did != null" >
         did,
       </if>
-      <if test="oldBalance != null" >
-        old_balance,
+      <if test="orderid != null" >
+        orderid,
       </if>
       <if test="amount != null" >
         amount,
       </if>
-      <if test="newBalance != null" >
-        new_balance,
+      <if test="reason != null" >
+        reason,
       </if>
-      <if test="type != null" >
-        type,
+      <if test="responsibility != null" >
+        responsibility,
       </if>
-      <if test="number != null" >
-        number,
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="operator != null" >
+        operator,
       </if>
       <if test="addTime != null" >
         add_time,
@@ -144,58 +154,70 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
       <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
-      <if test="oldBalance != null" >
-        #{oldBalance,jdbcType=DOUBLE},
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="amount != null" >
         #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="newBalance != null" >
-        #{newBalance,jdbcType=DOUBLE},
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        #{type,jdbcType=BIT},
+      <if test="responsibility != null" >
+        #{responsibility,jdbcType=INTEGER},
       </if>
-      <if test="number != null" >
-        #{number,jdbcType=VARCHAR},
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=INTEGER},
       </if>
       <if test="addTime != null" >
         #{addTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryRecordExample" resultType="java.lang.Integer" >
-    select count(*) from run_delivery_record
+  <select id="countByExample" parameterType="com.running.business.pojo.RefundRecordExample" resultType="java.lang.Integer" >
+    select count(*) from refund_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update run_delivery_record
+    update refund_record
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
       <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
-      <if test="record.oldBalance != null" >
-        old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      <if test="record.orderid != null" >
+        orderid = #{record.orderid,jdbcType=VARCHAR},
       </if>
       <if test="record.amount != null" >
         amount = #{record.amount,jdbcType=DOUBLE},
       </if>
-      <if test="record.newBalance != null" >
-        new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null" >
-        type = #{record.type,jdbcType=BIT},
+      <if test="record.responsibility != null" >
+        responsibility = #{record.responsibility,jdbcType=INTEGER},
       </if>
-      <if test="record.number != null" >
-        number = #{record.number,jdbcType=VARCHAR},
+      <if test="record.source != null" >
+        source = #{record.source,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=INTEGER},
       </if>
       <if test="record.addTime != null" >
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -206,39 +228,47 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update run_delivery_record
+    update refund_record
     set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
       did = #{record.did,jdbcType=INTEGER},
-      old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      orderid = #{record.orderid,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=DOUBLE},
-      new_balance = #{record.newBalance,jdbcType=DOUBLE},
-      type = #{record.type,jdbcType=BIT},
-      number = #{record.number,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      responsibility = #{record.responsibility,jdbcType=INTEGER},
+      source = #{record.source,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
       add_time = #{record.addTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    update run_delivery_record
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RefundRecord" >
+    update refund_record
     <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
       <if test="did != null" >
         did = #{did,jdbcType=INTEGER},
       </if>
-      <if test="oldBalance != null" >
-        old_balance = #{oldBalance,jdbcType=DOUBLE},
+      <if test="orderid != null" >
+        orderid = #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="amount != null" >
         amount = #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="newBalance != null" >
-        new_balance = #{newBalance,jdbcType=DOUBLE},
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=BIT},
+      <if test="responsibility != null" >
+        responsibility = #{responsibility,jdbcType=INTEGER},
       </if>
-      <if test="number != null" >
-        number = #{number,jdbcType=VARCHAR},
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=INTEGER},
       </if>
       <if test="addTime != null" >
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -246,14 +276,16 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryRecord" >
-    update run_delivery_record
-    set did = #{did,jdbcType=INTEGER},
-      old_balance = #{oldBalance,jdbcType=DOUBLE},
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RefundRecord" >
+    update refund_record
+    set uid = #{uid,jdbcType=INTEGER},
+      did = #{did,jdbcType=INTEGER},
+      orderid = #{orderid,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=DOUBLE},
-      new_balance = #{newBalance,jdbcType=DOUBLE},
-      type = #{type,jdbcType=BIT},
-      number = #{number,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      responsibility = #{responsibility,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      operator = #{operator,jdbcType=INTEGER},
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

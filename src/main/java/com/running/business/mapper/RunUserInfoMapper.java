@@ -1,8 +1,9 @@
 package com.running.business.mapper;
 
+import java.util.List;
+
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.pojo.RunUserInfoExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface RunUserInfoMapper {

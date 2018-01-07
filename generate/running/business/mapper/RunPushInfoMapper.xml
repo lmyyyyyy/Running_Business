@@ -1,50 +1,50 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.running.business.mapper.RunPushInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo" >
-    <constructor >
-      <idArg column="pid" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="operator" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="push_title" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="push_photo" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="push_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="push_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.running.business.mapper.RunPushInfoMapper">
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
     </constructor>
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo" >
-    <constructor >
-      <idArg column="pid" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="operator" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="push_title" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="push_photo" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="push_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="push_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
-      <arg column="push_content" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -55,25 +55,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -84,43 +84,43 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
   </sql>
-  <sql id="Blob_Column_List" >
+  <sql id="Blob_Column_List">
     push_content
   </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" >
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from run_push_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunPushInfoExample" >
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from run_push_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
@@ -128,17 +128,17 @@
     from run_push_info
     where pid = #{pid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from run_push_info
     where pid = #{pid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample" >
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
     delete from run_push_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo" >
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
     insert into run_push_info (pid, operator, push_title, 
       push_photo, push_status, push_time, 
       update_time, is_delete, push_content
@@ -148,109 +148,109 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo" >
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
     insert into run_push_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="pid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
         pid,
       </if>
-      <if test="operator != null" >
+      <if test="operator != null">
         operator,
       </if>
-      <if test="pushTitle != null" >
+      <if test="pushTitle != null">
         push_title,
       </if>
-      <if test="pushPhoto != null" >
+      <if test="pushPhoto != null">
         push_photo,
       </if>
-      <if test="pushStatus != null" >
+      <if test="pushStatus != null">
         push_status,
       </if>
-      <if test="pushTime != null" >
+      <if test="pushTime != null">
         push_time,
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time,
       </if>
-      <if test="isDelete != null" >
+      <if test="isDelete != null">
         is_delete,
       </if>
-      <if test="pushContent != null" >
+      <if test="pushContent != null">
         push_content,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="pid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
         #{pid,jdbcType=INTEGER},
       </if>
-      <if test="operator != null" >
+      <if test="operator != null">
         #{operator,jdbcType=INTEGER},
       </if>
-      <if test="pushTitle != null" >
+      <if test="pushTitle != null">
         #{pushTitle,jdbcType=VARCHAR},
       </if>
-      <if test="pushPhoto != null" >
+      <if test="pushPhoto != null">
         #{pushPhoto,jdbcType=VARCHAR},
       </if>
-      <if test="pushStatus != null" >
+      <if test="pushStatus != null">
         #{pushStatus,jdbcType=INTEGER},
       </if>
-      <if test="pushTime != null" >
+      <if test="pushTime != null">
         #{pushTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null" >
+      <if test="isDelete != null">
         #{isDelete,jdbcType=BIT},
       </if>
-      <if test="pushContent != null" >
+      <if test="pushContent != null">
         #{pushContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
     select count(*) from run_push_info
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update run_push_info
-    <set >
-      <if test="record.pid != null" >
+    <set>
+      <if test="record.pid != null">
         pid = #{record.pid,jdbcType=INTEGER},
       </if>
-      <if test="record.operator != null" >
+      <if test="record.operator != null">
         operator = #{record.operator,jdbcType=INTEGER},
       </if>
-      <if test="record.pushTitle != null" >
+      <if test="record.pushTitle != null">
         push_title = #{record.pushTitle,jdbcType=VARCHAR},
       </if>
-      <if test="record.pushPhoto != null" >
+      <if test="record.pushPhoto != null">
         push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
       </if>
-      <if test="record.pushStatus != null" >
+      <if test="record.pushStatus != null">
         push_status = #{record.pushStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.pushTime != null" >
+      <if test="record.pushTime != null">
         push_time = #{record.pushTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null" >
+      <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isDelete != null" >
+      <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=BIT},
       </if>
-      <if test="record.pushContent != null" >
+      <if test="record.pushContent != null">
         push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     update run_push_info
     set pid = #{record.pid,jdbcType=INTEGER},
       operator = #{record.operator,jdbcType=INTEGER},
@@ -261,11 +261,11 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=BIT},
       push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update run_push_info
     set pid = #{record.pid,jdbcType=INTEGER},
       operator = #{record.operator,jdbcType=INTEGER},
@@ -275,41 +275,41 @@
       push_time = #{record.pushTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=BIT}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
     update run_push_info
-    <set >
-      <if test="operator != null" >
+    <set>
+      <if test="operator != null">
         operator = #{operator,jdbcType=INTEGER},
       </if>
-      <if test="pushTitle != null" >
+      <if test="pushTitle != null">
         push_title = #{pushTitle,jdbcType=VARCHAR},
       </if>
-      <if test="pushPhoto != null" >
+      <if test="pushPhoto != null">
         push_photo = #{pushPhoto,jdbcType=VARCHAR},
       </if>
-      <if test="pushStatus != null" >
+      <if test="pushStatus != null">
         push_status = #{pushStatus,jdbcType=INTEGER},
       </if>
-      <if test="pushTime != null" >
+      <if test="pushTime != null">
         push_time = #{pushTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null" >
+      <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=BIT},
       </if>
-      <if test="pushContent != null" >
+      <if test="pushContent != null">
         push_content = #{pushContent,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where pid = #{pid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
     update run_push_info
     set operator = #{operator,jdbcType=INTEGER},
       push_title = #{pushTitle,jdbcType=VARCHAR},
@@ -321,7 +321,2655 @@
       push_content = #{pushContent,jdbcType=LONGVARCHAR}
     where pid = #{pid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.pojo.RunPushInfo">
+    <constructor>
+      <idArg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="operator" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="push_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="push_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="push_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, operator, push_title, push_photo, push_status, push_time, update_time, is_delete
+  </sql>
+  <sql id="Blob_Column_List">
+    push_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_push_info
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunPushInfoExample">
+    delete from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info (pid, operator, push_title, 
+      push_photo, push_status, push_time, 
+      update_time, is_delete, push_content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{operator,jdbcType=INTEGER}, #{pushTitle,jdbcType=VARCHAR}, 
+      #{pushPhoto,jdbcType=VARCHAR}, #{pushStatus,jdbcType=INTEGER}, #{pushTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{pushContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunPushInfo">
+    insert into run_push_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushPhoto != null">
+        push_photo,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunPushInfoExample" resultType="java.lang.Integer">
+    select count(*) from run_push_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_push_info
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPhoto != null">
+        push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT},
+      push_content = #{record.pushContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_push_info
+    set pid = #{record.pid,jdbcType=INTEGER},
+      operator = #{record.operator,jdbcType=INTEGER},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_photo = #{record.pushPhoto,jdbcType=VARCHAR},
+      push_status = #{record.pushStatus,jdbcType=INTEGER},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPhoto != null">
+        push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=INTEGER},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.pojo.RunPushInfo">
+    update run_push_info
+    set operator = #{operator,jdbcType=INTEGER},
+      push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_photo = #{pushPhoto,jdbcType=VARCHAR},
+      push_status = #{pushStatus,jdbcType=INTEGER},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT},
+      push_content = #{pushContent,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunPushInfo">
     update run_push_info
     set operator = #{operator,jdbcType=INTEGER},
       push_title = #{pushTitle,jdbcType=VARCHAR},

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="running.business.mapper.RunAdminMapper" >
+<mapper namespace="com.running.business.mapper.RunAdminMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunAdmin" >
     <constructor >
       <idArg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="admin_username" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="admin_password" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="admin_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="admin_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
@@ -105,7 +105,7 @@
     insert into run_admin (admin_id, admin_username, admin_password, 
       admin_time, update_time)
     values (#{adminId,jdbcType=INTEGER}, #{adminUsername,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
-      #{adminTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{adminTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunAdmin" >
     insert into run_admin
@@ -137,7 +137,7 @@
         #{adminPassword,jdbcType=VARCHAR},
       </if>
       <if test="adminTime != null" >
-        #{adminTime,jdbcType=VARCHAR},
+        #{adminTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
@@ -163,7 +163,7 @@
         admin_password = #{record.adminPassword,jdbcType=VARCHAR},
       </if>
       <if test="record.adminTime != null" >
-        admin_time = #{record.adminTime,jdbcType=VARCHAR},
+        admin_time = #{record.adminTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -178,7 +178,7 @@
     set admin_id = #{record.adminId,jdbcType=INTEGER},
       admin_username = #{record.adminUsername,jdbcType=VARCHAR},
       admin_password = #{record.adminPassword,jdbcType=VARCHAR},
-      admin_time = #{record.adminTime,jdbcType=VARCHAR},
+      admin_time = #{record.adminTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -194,7 +194,7 @@
         admin_password = #{adminPassword,jdbcType=VARCHAR},
       </if>
       <if test="adminTime != null" >
-        admin_time = #{adminTime,jdbcType=VARCHAR},
+        admin_time = #{adminTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -206,7 +206,7 @@
     update run_admin
     set admin_username = #{adminUsername,jdbcType=VARCHAR},
       admin_password = #{adminPassword,jdbcType=VARCHAR},
-      admin_time = #{adminTime,jdbcType=VARCHAR},
+      admin_time = #{adminTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where admin_id = #{adminId,jdbcType=INTEGER}
   </update>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="running.business.mapper.RunOrderPayMapper" >
+<mapper namespace="com.running.business.mapper.RunOrderPayMapper" >
   <resultMap id="BaseResultMap" type="com.running.business.pojo.RunOrderPay" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="orderid" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="order_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="pay_amount" jdbcType="DOUBLE" javaType="java.lang.Double" />
       <arg column="order_tip" jdbcType="DOUBLE" javaType="java.lang.Double" />
       <arg column="order_subtract" jdbcType="DOUBLE" javaType="java.lang.Double" />
       <arg column="order_actual_price" jdbcType="DOUBLE" javaType="java.lang.Double" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, uid, orderid, order_price, order_tip, order_subtract, order_actual_price, pay_type, 
-    pay_time
+    id, uid, orderid, order_price, pay_amount, order_tip, order_subtract, order_actual_price, 
+    pay_type, pay_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunOrderPayExample" >
     select
@@ -108,13 +109,13 @@
   </delete>
   <insert id="insert" parameterType="com.running.business.pojo.RunOrderPay" >
     insert into run_order_pay (id, uid, orderid, 
-      order_price, order_tip, order_subtract, 
-      order_actual_price, pay_type, pay_time
-      )
+      order_price, pay_amount, order_tip, 
+      order_subtract, order_actual_price, pay_type, 
+      pay_time)
     values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, 
-      #{orderPrice,jdbcType=DOUBLE}, #{orderTip,jdbcType=DOUBLE}, #{orderSubtract,jdbcType=DOUBLE}, 
-      #{orderActualPrice,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}
-      )
+      #{orderPrice,jdbcType=DOUBLE}, #{payAmount,jdbcType=DOUBLE}, #{orderTip,jdbcType=DOUBLE}, 
+      #{orderSubtract,jdbcType=DOUBLE}, #{orderActualPrice,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, 
+      #{payTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunOrderPay" >
     insert into run_order_pay
@@ -130,6 +131,9 @@
       </if>
       <if test="orderPrice != null" >
         order_price,
+      </if>
+      <if test="payAmount != null" >
+        pay_amount,
       </if>
       <if test="orderTip != null" >
         order_tip,
@@ -159,6 +163,9 @@
       </if>
       <if test="orderPrice != null" >
         #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="payAmount != null" >
+        #{payAmount,jdbcType=DOUBLE},
       </if>
       <if test="orderTip != null" >
         #{orderTip,jdbcType=DOUBLE},
@@ -198,6 +205,9 @@
       <if test="record.orderPrice != null" >
         order_price = #{record.orderPrice,jdbcType=DOUBLE},
       </if>
+      <if test="record.payAmount != null" >
+        pay_amount = #{record.payAmount,jdbcType=DOUBLE},
+      </if>
       <if test="record.orderTip != null" >
         order_tip = #{record.orderTip,jdbcType=DOUBLE},
       </if>
@@ -224,6 +234,7 @@
       uid = #{record.uid,jdbcType=INTEGER},
       orderid = #{record.orderid,jdbcType=VARCHAR},
       order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      pay_amount = #{record.payAmount,jdbcType=DOUBLE},
       order_tip = #{record.orderTip,jdbcType=DOUBLE},
       order_subtract = #{record.orderSubtract,jdbcType=DOUBLE},
       order_actual_price = #{record.orderActualPrice,jdbcType=DOUBLE},
@@ -244,6 +255,9 @@
       </if>
       <if test="orderPrice != null" >
         order_price = #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="payAmount != null" >
+        pay_amount = #{payAmount,jdbcType=DOUBLE},
       </if>
       <if test="orderTip != null" >
         order_tip = #{orderTip,jdbcType=DOUBLE},
@@ -268,6 +282,7 @@
     set uid = #{uid,jdbcType=INTEGER},
       orderid = #{orderid,jdbcType=VARCHAR},
       order_price = #{orderPrice,jdbcType=DOUBLE},
+      pay_amount = #{payAmount,jdbcType=DOUBLE},
       order_tip = #{orderTip,jdbcType=DOUBLE},
       order_subtract = #{orderSubtract,jdbcType=DOUBLE},
       order_actual_price = #{orderActualPrice,jdbcType=DOUBLE},

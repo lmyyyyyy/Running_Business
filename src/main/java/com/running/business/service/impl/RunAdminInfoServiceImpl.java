@@ -76,6 +76,7 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
 
     /**
      * 根据Id获取管理员信息
+     *
      * @param id
      * @return
      * @throws AppException

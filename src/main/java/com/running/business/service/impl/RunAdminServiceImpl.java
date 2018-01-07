@@ -11,7 +11,6 @@ import com.running.business.service.RunAdminService;
 import com.running.business.util.CookieUtils;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
-import com.running.business.util.TimeUtil;
 import com.running.business.util.ValidateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,7 @@ import java.util.UUID;
 @Service
 public class RunAdminServiceImpl implements RunAdminService {
 
-    @Autowired
-    private RunAdminMapper runAdminMapper;
+    private final ThreadLocal<RunAdminMapper> runAdminMapper = new ThreadLocal<>();
 
     /**
      * 连接redis
@@ -62,9 +60,9 @@ public class RunAdminServiceImpl implements RunAdminService {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
-        admin.setAdminTime(TimeUtil.getCurrDate_yyyy_MM_dd());
+        admin.setAdminTime(new Date());
         admin.setUpdateTime(new Date());
-        Integer adminId = runAdminMapper.insert(admin);
+        Integer adminId = runAdminMapper.get().insert(admin);
         return BaseResult.success(adminId);
     }
 
@@ -82,17 +80,17 @@ public class RunAdminServiceImpl implements RunAdminService {
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
         admin.setUpdateTime(new Date());
-        runAdminMapper.updateByPrimaryKeySelective(admin);
+        runAdminMapper.get().updateByPrimaryKeySelective(admin);
         return BaseResult.success(admin);
     }
 
     @Override
     public BaseResult delRunAdminByID(Integer id) throws AppException {
-        RunAdmin admin = runAdminMapper.selectByPrimaryKey(id);
+        RunAdmin admin = runAdminMapper.get().selectByPrimaryKey(id);
         if (admin == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
-        runAdminMapper.deleteByPrimaryKey(id);
+        runAdminMapper.get().deleteByPrimaryKey(id);
         return BaseResult.success(admin);
     }
 
@@ -105,7 +103,7 @@ public class RunAdminServiceImpl implements RunAdminService {
      */
     @Override
     public BaseResult getRunAdminByID(Integer id) throws AppException {
-        RunAdmin admin = runAdminMapper.selectByPrimaryKey(id);
+        RunAdmin admin = runAdminMapper.get().selectByPrimaryKey(id);
         if (admin == null) {
             throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
         }
@@ -121,7 +119,7 @@ public class RunAdminServiceImpl implements RunAdminService {
     @Override
     public BaseResult getAllRunAdmin() throws AppException {
         RunAdminExample example = new RunAdminExample();
-        List<RunAdmin> list = runAdminMapper.selectByExample(example);
+        List<RunAdmin> list = runAdminMapper.get().selectByExample(example);
         if (list == null) {
             throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
         }
@@ -143,7 +141,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample example = new RunAdminExample();
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminUsernameEqualTo(userName);
-        List<RunAdmin> runAdmins = runAdminMapper.selectByExample(example);
+        List<RunAdmin> runAdmins = runAdminMapper.get().selectByExample(example);
         if (ValidateUtil.isValid(runAdmins)) {
             return BaseResult.fail(ResultEnum.TELTPHONE_USED);
         }
@@ -166,7 +164,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminUsernameEqualTo(username);
         List<RunAdmin> list = null;
-        list = runAdminMapper.selectByExample(example);
+        list = runAdminMapper.get().selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.TELTPHONE_NOT_REG.getCode(), ResultEnum.TELTPHONE_NOT_REG.getMsg());
         }
@@ -174,7 +172,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria1 = example1.createCriteria();
         criteria1.andAdminUsernameEqualTo(username);
         criteria1.andAdminPasswordEqualTo(Run_StringUtil.MD5(password));
-        list = runAdminMapper.selectByExample(example1);
+        list = runAdminMapper.get().selectByExample(example1);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.PWD_ERROR.getCode(), ResultEnum.PWD_ERROR.getMsg());
         }
@@ -251,7 +249,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminPasswordEqualTo(Run_StringUtil.MD5(password));
         criteria.andAdminUsernameEqualTo(username);
-        List<RunAdmin> list = runAdminMapper.selectByExample(example);
+        List<RunAdmin> list = runAdminMapper.get().selectByExample(example);
         if (ValidateUtil.isValid(list)) {
             return true;
         }

@@ -1555,6 +1555,126 @@ public class RunOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayTypeIsNull() {
+            addCriterion("pay_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNotNull() {
+            addCriterion("pay_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeEqualTo(Integer value) {
+            addCriterion("pay_type =", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotEqualTo(Integer value) {
+            addCriterion("pay_type <>", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThan(Integer value) {
+            addCriterion("pay_type >", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pay_type >=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThan(Integer value) {
+            addCriterion("pay_type <", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("pay_type <=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIn(List<Integer> values) {
+            addCriterion("pay_type in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotIn(List<Integer> values) {
+            addCriterion("pay_type not in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeBetween(Integer value1, Integer value2) {
+            addCriterion("pay_type between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("pay_type not between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutIsNull() {
+            addCriterion("pay_amout is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutIsNotNull() {
+            addCriterion("pay_amout is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutEqualTo(Double value) {
+            addCriterion("pay_amout =", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutNotEqualTo(Double value) {
+            addCriterion("pay_amout <>", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutGreaterThan(Double value) {
+            addCriterion("pay_amout >", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutGreaterThanOrEqualTo(Double value) {
+            addCriterion("pay_amout >=", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutLessThan(Double value) {
+            addCriterion("pay_amout <", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutLessThanOrEqualTo(Double value) {
+            addCriterion("pay_amout <=", value, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutIn(List<Double> values) {
+            addCriterion("pay_amout in", values, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutNotIn(List<Double> values) {
+            addCriterion("pay_amout not in", values, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutBetween(Double value1, Double value2) {
+            addCriterion("pay_amout between", value1, value2, "payAmout");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmoutNotBetween(Double value1, Double value2) {
+            addCriterion("pay_amout not between", value1, value2, "payAmout");
+            return (Criteria) this;
+        }
+
         public Criteria andAddTimeIsNull() {
             addCriterion("add_time is null");
             return (Criteria) this;

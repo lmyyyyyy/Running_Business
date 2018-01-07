@@ -1,8 +1,9 @@
 package com.running.business.mapper;
 
+import java.util.List;
+
 import com.running.business.pojo.RunPushInfo;
 import com.running.business.pojo.RunPushInfoExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface RunPushInfoMapper {

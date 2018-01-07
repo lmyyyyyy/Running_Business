@@ -20,5 +20,5 @@ public class UserVO {
 
     private Integer userPoint;
 
-    private String userAddress;
+    private Integer userAddress;
 }

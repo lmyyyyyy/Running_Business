@@ -11,6 +11,8 @@ public class RunOrderPay {
 
     private Double orderPrice;
 
+    private Double payAmount;
+
     private Double orderTip;
 
     private Double orderSubtract;
@@ -21,11 +23,12 @@ public class RunOrderPay {
 
     private Date payTime;
 
-    public RunOrderPay(Integer id, Integer uid, String orderid, Double orderPrice, Double orderTip, Double orderSubtract, Double orderActualPrice, Integer payType, Date payTime) {
+    public RunOrderPay(Integer id, Integer uid, String orderid, Double orderPrice, Double payAmount, Double orderTip, Double orderSubtract, Double orderActualPrice, Integer payType, Date payTime) {
         this.id = id;
         this.uid = uid;
         this.orderid = orderid;
         this.orderPrice = orderPrice;
+        this.payAmount = payAmount;
         this.orderTip = orderTip;
         this.orderSubtract = orderSubtract;
         this.orderActualPrice = orderActualPrice;
@@ -67,6 +70,14 @@ public class RunOrderPay {
 
     public void setOrderPrice(Double orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    public Double getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Double payAmount) {
+        this.payAmount = payAmount;
     }
 
     public Double getOrderTip() {

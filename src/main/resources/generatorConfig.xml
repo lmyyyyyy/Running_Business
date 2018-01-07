@@ -84,7 +84,7 @@
         <table tableName="run_delivery_address" domainObjectName="RunDeliveryAddress" ></table>
 
         <table tableName="run_delivery_balance" domainObjectName="RunDeliveryBalance" ></table>
-        <table tableName="run_delivery_record" domainObjectName="RunDeliveryRecord" ></table>
+        <table tableName="run_delivery_balance_record" domainObjectName="RunDeliveryBalanceRecord" ></table>
         <table tableName="run_order" domainObjectName="RunOrder" ></table>
         <table tableName="run_order_status" domainObjectName="RunOrderStatus" ></table>
         <table tableName="run_order_pay" domainObjectName="RunOrderPay" ></table>
@@ -95,5 +95,8 @@
         <table tableName="run_admin" domainObjectName="RunAdmin" ></table>
         <table tableName="run_admin_info" domainObjectName="RunAdminInfo" ></table>
 
+        <table tableName="refund_record" domainObjectName="RefundRecord"></table>
+        <table tableName="refund_apply" domainObjectName="RefundApply"></table>
+        <table tableName="report_record" domainObjectName="ReportRecord"></table>
     </context>
 </generatorConfiguration>

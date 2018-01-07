@@ -2,7 +2,7 @@ package com.running.business.pojo;
 
 import java.util.Date;
 
-public class RunDeliveryRecord {
+public class RunDeliveryBalanceRecord {
     private Integer id;
 
     private Integer did;
@@ -19,7 +19,7 @@ public class RunDeliveryRecord {
 
     private Date addTime;
 
-    public RunDeliveryRecord(Integer id, Integer did, Double oldBalance, Double amount, Double newBalance, Boolean type, String number, Date addTime) {
+    public RunDeliveryBalanceRecord(Integer id, Integer did, Double oldBalance, Double amount, Double newBalance, Boolean type, String number, Date addTime) {
         this.id = id;
         this.did = did;
         this.oldBalance = oldBalance;
@@ -30,7 +30,7 @@ public class RunDeliveryRecord {
         this.addTime = addTime;
     }
 
-    public RunDeliveryRecord() {
+    public RunDeliveryBalanceRecord() {
         super();
     }
 
