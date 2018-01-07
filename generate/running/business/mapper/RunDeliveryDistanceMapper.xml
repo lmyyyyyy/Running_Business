@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.running.business.mapper.RunDeliveryDistanceMapper">
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.running.business.mapper.RunDeliveryDistanceMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance" >
+    <constructor >
+      <idArg column="did" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="send_distance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="delivery_distance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="view_order_distance" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -39,25 +39,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -68,1813 +68,141 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     did, send_distance, delivery_distance, view_order_distance, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
     from run_delivery_distance
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from run_delivery_distance
     where did = #{did,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from run_delivery_distance
     where did = #{did,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" >
     delete from run_delivery_distance
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance" >
     insert into run_delivery_distance (did, send_distance, delivery_distance, 
       view_order_distance, update_time)
     values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
       #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance" >
     insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
         did,
       </if>
-      <if test="sendDistance != null">
+      <if test="sendDistance != null" >
         send_distance,
       </if>
-      <if test="deliveryDistance != null">
+      <if test="deliveryDistance != null" >
         delivery_distance,
       </if>
-      <if test="viewOrderDistance != null">
+      <if test="viewOrderDistance != null" >
         view_order_distance,
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         update_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="did != null" >
         #{did,jdbcType=INTEGER},
       </if>
-      <if test="sendDistance != null">
+      <if test="sendDistance != null" >
         #{sendDistance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryDistance != null">
+      <if test="deliveryDistance != null" >
         #{deliveryDistance,jdbcType=DOUBLE},
       </if>
-      <if test="viewOrderDistance != null">
+      <if test="viewOrderDistance != null" >
         #{viewOrderDistance,jdbcType=DOUBLE},
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer" >
     select count(*) from run_delivery_distance
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update run_delivery_distance
-    <set>
-      <if test="record.did != null">
+    <set >
+      <if test="record.did != null" >
         did = #{record.did,jdbcType=INTEGER},
       </if>
-      <if test="record.sendDistance != null">
+      <if test="record.sendDistance != null" >
         send_distance = #{record.sendDistance,jdbcType=DOUBLE},
       </if>
-      <if test="record.deliveryDistance != null">
+      <if test="record.deliveryDistance != null" >
         delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
       </if>
-      <if test="record.viewOrderDistance != null">
+      <if test="record.viewOrderDistance != null" >
         view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
       </if>
-      <if test="record.updateTime != null">
+      <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update run_delivery_distance
     set did = #{record.did,jdbcType=INTEGER},
       send_distance = #{record.sendDistance,jdbcType=DOUBLE},
       delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
       view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance" >
     update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
+    <set >
+      <if test="sendDistance != null" >
         send_distance = #{sendDistance,jdbcType=DOUBLE},
       </if>
-      <if test="deliveryDistance != null">
+      <if test="deliveryDistance != null" >
         delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
       </if>
-      <if test="viewOrderDistance != null">
+      <if test="viewOrderDistance != null" >
         view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where did = #{did,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    set send_distance = #{sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryDistance">
-    <constructor>
-      <idArg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="send_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="delivery_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="view_order_distance" javaType="java.lang.Double" jdbcType="DOUBLE" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    did, send_distance, delivery_distance, view_order_distance, update_time
-  </sql>
-  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from run_delivery_distance
-    where did = #{did,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample">
-    delete from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance (did, send_distance, delivery_distance, 
-      view_order_distance, update_time)
-    values (#{did,jdbcType=INTEGER}, #{sendDistance,jdbcType=DOUBLE}, #{deliveryDistance,jdbcType=DOUBLE}, 
-      #{viewOrderDistance,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    insert into run_delivery_distance
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        did,
-      </if>
-      <if test="sendDistance != null">
-        send_distance,
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance,
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="did != null">
-        #{did,jdbcType=INTEGER},
-      </if>
-      <if test="sendDistance != null">
-        #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryDistanceExample" resultType="java.lang.Integer">
-    select count(*) from run_delivery_distance
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update run_delivery_distance
-    <set>
-      <if test="record.did != null">
-        did = #{record.did,jdbcType=INTEGER},
-      </if>
-      <if test="record.sendDistance != null">
-        send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.deliveryDistance != null">
-        delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.viewOrderDistance != null">
-        view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update run_delivery_distance
-    set did = #{record.did,jdbcType=INTEGER},
-      send_distance = #{record.sendDistance,jdbcType=DOUBLE},
-      delivery_distance = #{record.deliveryDistance,jdbcType=DOUBLE},
-      view_order_distance = #{record.viewOrderDistance,jdbcType=DOUBLE},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryDistance">
-    update run_delivery_distance
-    <set>
-      <if test="sendDistance != null">
-        send_distance = #{sendDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="deliveryDistance != null">
-        delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="viewOrderDistance != null">
-        view_order_distance = #{viewOrderDistance,jdbcType=DOUBLE},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where did = #{did,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance">
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryDistance" >
     update run_delivery_distance
     set send_distance = #{sendDistance,jdbcType=DOUBLE},
       delivery_distance = #{deliveryDistance,jdbcType=DOUBLE},

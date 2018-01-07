@@ -1,5 +1,6 @@
 package com.running.business.service;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunUser;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface RunUserService {
 
-    BaseResult addUser(RunUser user) throws AppException;
+    BaseResult insertUser(RunUser user) throws AppException;
 
     BaseResult delUser(Integer uid) throws AppException;
 
@@ -34,7 +35,7 @@ public interface RunUserService {
      * @return
      * @throws AppException
      */
-    BaseResult pageAllRunUser(Integer page, Integer size, String orderType) throws AppException;
+    PageInfo<RunUser> pageAllRunUser(Integer page, Integer size, String orderType) throws AppException;
 
     BaseResult getUserByToken(String token) throws AppException;
 

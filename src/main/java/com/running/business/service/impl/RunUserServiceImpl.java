@@ -109,7 +109,7 @@ public class RunUserServiceImpl implements RunUserService {
      * @return <p>添加成功返回状态码"200"</p>
      */
     @Override
-    public BaseResult addUser(RunUser user) throws AppException {
+    public BaseResult insertUser(RunUser user) throws AppException {
         if (user == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
@@ -186,7 +186,8 @@ public class RunUserServiceImpl implements RunUserService {
         RunUserExample example = new RunUserExample();
         Criteria criteria = example.createCriteria();
         criteria.andUserphoneEqualTo(username);
-        List<RunUser> list = null;
+        criteria.andIsDeleteEqualTo(false);
+        List<RunUser> list;
         list = runUserMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.TELTPHONE_NOT_REG.getCode(), ResultEnum.TELTPHONE_NOT_REG.getMsg());
@@ -200,6 +201,11 @@ public class RunUserServiceImpl implements RunUserService {
             throw new AppException(ResultEnum.PWD_ERROR.getCode(), ResultEnum.PWD_ERROR.getMsg());
         }
         RunUser user = list.get(0);
+        if (user == null) {
+            throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
+        }
+        user.setUserStatus(true);
+        runUserMapper.updateByPrimaryKeySelective(user);
         //生成token
         String token = "RU" + UUID.randomUUID().toString();
         //保存用户之前，将用户对象中的密码清空
@@ -221,7 +227,7 @@ public class RunUserServiceImpl implements RunUserService {
      * 如果成功返回所有符合条件的信息
      */
     @Override
-    public BaseResult pageAllRunUser(Integer page, Integer size, String orderType) throws AppException {
+    public PageInfo<RunUser> pageAllRunUser(Integer page, Integer size, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
@@ -240,7 +246,7 @@ public class RunUserServiceImpl implements RunUserService {
         list = runUserMapper.selectByExample(example);
         PageInfo<RunUser> pageInfo = new PageInfo<>(list);
 
-        return BaseResult.success(pageInfo);
+        return pageInfo;
     }
 
     /**
@@ -279,6 +285,12 @@ public class RunUserServiceImpl implements RunUserService {
         }
         //更新生命周期
         jedisClient.del(REDIS_USER_SESSION_KEY + ":" + token);
-        return BaseResult.success(JsonUtils.jsonToPojo(json, RunUser.class));
+        RunUser user = JsonUtils.jsonToPojo(json, RunUser.class);
+        if (user == null) {
+            throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
+        }
+        user.setUserStatus(false);
+        runUserMapper.updateByPrimaryKeySelective(user);
+        return BaseResult.success(user);
     }
 }

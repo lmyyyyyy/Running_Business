@@ -1,5 +1,6 @@
 package com.running.business.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
@@ -7,6 +8,7 @@ import com.running.business.exception.AppException;
 import com.running.business.interceptor.PermissionInterceptor;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
+import com.running.business.pojo.RunUser;
 import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunAdminService;
 import com.running.business.service.RunUserAddressService;
@@ -458,13 +460,13 @@ public class RunAdminController extends BaseController {
             logger.error("{} 当前用户没有权限进行操作 operator = {}", LOG_PREFIX, operator);
             return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
         }
-        BaseResult result;
+        PageInfo<RunUser> pageInfo;
         try {
-            result = runUserService.pageAllRunUser(page, size, orderType);
+            pageInfo = runUserService.pageAllRunUser(page, size, orderType);
         } catch (AppException ae) {
             logger.error("{} 分页获取用户列表失败 operator = {}, error = {}", LOG_PREFIX, operator, ae);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        return result;
+        return BaseResult.success(pageInfo);
     }
 }

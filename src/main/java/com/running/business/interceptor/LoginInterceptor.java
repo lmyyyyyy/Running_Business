@@ -42,7 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String str = getToken(httpServletRequest);
         if (str == null || str.equals("")) {
-            LOGGER.info("还没登录，调到登录界面",o);
+            LOGGER.info("还没登录，调到登录界面", o);
             httpServletResponse.sendRedirect("/tologin");
             return false;
         }
