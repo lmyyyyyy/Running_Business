@@ -7,7 +7,7 @@ package com.running.business.common;
 public enum ResultEnum {
 
     SUCCESS("200", "成功"),
-
+    PERMISSION_ERROR("403", "您没有权限进行操作～"),
     ERROR("500", "服务器异常"),
 
     // 用户相关异常
@@ -30,6 +30,7 @@ public enum ResultEnum {
     INNER_ERROR("99980001", "系统异常"),
     TOKEN_IS_ILLICIT("99980002", "Token验证非法"),
     SESSION_IS_OUT_TIME("99980003", "会话超时"),
+    COOKIE_IS_OUT_TIME("99980005", "cookie失效"),
     Number_THAN_BIG("99980004", "系统数据量过大");
 
     private String code;

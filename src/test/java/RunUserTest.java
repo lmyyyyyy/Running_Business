@@ -65,7 +65,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	public void getAllUser(){
 		int currpage = 1;
 		PageHelper.startPage(currpage, 10);
-		BaseResult result = runUserService.getAllRunUser();
+		BaseResult result = runUserService.pageAllRunUser(1, 20, "desc");
 		List<RunUser> list = (List<RunUser>) result.getData();
 		PageInfo<RunUser> page = new PageInfo<RunUser>(list);
 		System.out.println(page.getPages());

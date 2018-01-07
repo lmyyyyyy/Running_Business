@@ -1,5 +1,7 @@
 package com.running.business.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
@@ -213,24 +215,32 @@ public class RunUserServiceImpl implements RunUserService {
     }
 
     /**
-     * 获取所有用户信息
+     * 分页获取所有未被删除的用户列表
      *
      * @return 如果没有数据，返回错误码"1",错误码1001008，错误信息"我也是有底线的"
      * 如果成功返回所有符合条件的信息
      */
     @Override
-    public BaseResult getAllRunUser() throws AppException {
-        RunUserExample example = null;
-        List<RunUser> list = null;
-        example = new RunUserExample();
-        example.setOrderByClause("user_date DESC");
+    public BaseResult pageAllRunUser(Integer page, Integer size, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        RunUserExample example = new RunUserExample();
+        List<RunUser> list;
+        example.setOrderByClause("add_time " + orderType);
         Criteria criteria = example.createCriteria();
         criteria.andIsDeleteEqualTo(false);
+        PageHelper.startPage(page, size);
         list = runUserMapper.selectByExample(example);
-        /*if (!ValidateUtil.isValid(list)) {
-            throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
-        }*/
-        return BaseResult.success(list);
+        PageInfo<RunUser> pageInfo = new PageInfo<>(list);
+
+        return BaseResult.success(pageInfo);
     }
 
     /**

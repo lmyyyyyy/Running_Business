@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
 
 /**
  * @author liumingyu
@@ -91,5 +92,31 @@ public class RequestUtil {
             throw new AppException(ResultEnum.SESSION_IS_OUT_TIME);
         }
         return admin.getAdminId();
+    }
+
+    /**
+     * 获取token字符串
+     *
+     * @param req
+     * @return
+     */
+    public static String getTokenStr(HttpServletRequest req) throws AppException{
+        LOGGER.info("TokenStr");
+
+        String token = "";
+        Cookie[] cookie = req.getCookies();
+        if (cookie == null) {
+            throw new AppException(ResultEnum.COOKIE_IS_OUT_TIME);
+        }
+        for (int i = 0; i < cookie.length; i++) {
+            Cookie cook = cookie[i];
+            if (cook.getName().equals("RUN_TOKEN")) {
+                token = cook.getValue().toString();
+            }
+        }
+        if (token == null || "".equals(token)) {
+            throw new AppException(ResultEnum.COOKIE_IS_OUT_TIME);
+        }
+        return token;
     }
 }
