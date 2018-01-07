@@ -2305,4 +2305,516 @@
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryBalanceRecord">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="old_balance" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="amount" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="new_balance" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="type" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="add_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, did, old_balance, amount, new_balance, type, number, add_time
+  </sql>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from run_delivery_balance_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_delivery_balance_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample">
+    delete from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    insert into run_delivery_balance_record (id, did, old_balance, 
+      amount, new_balance, type, 
+      number, add_time)
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{oldBalance,jdbcType=DOUBLE}, 
+      #{amount,jdbcType=DOUBLE}, #{newBalance,jdbcType=DOUBLE}, #{type,jdbcType=BIT}, 
+      #{number,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    insert into run_delivery_balance_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="did != null">
+        did,
+      </if>
+      <if test="oldBalance != null">
+        old_balance,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="newBalance != null">
+        new_balance,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="oldBalance != null">
+        #{oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="newBalance != null">
+        #{newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample" resultType="java.lang.Integer">
+    select count(*) from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_delivery_balance_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.did != null">
+        did = #{record.did,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldBalance != null">
+        old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.newBalance != null">
+        new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=BIT},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_delivery_balance_record
+    set id = #{record.id,jdbcType=INTEGER},
+      did = #{record.did,jdbcType=INTEGER},
+      old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      amount = #{record.amount,jdbcType=DOUBLE},
+      new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      type = #{record.type,jdbcType=BIT},
+      number = #{record.number,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    update run_delivery_balance_record
+    <set>
+      <if test="did != null">
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="oldBalance != null">
+        old_balance = #{oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="newBalance != null">
+        new_balance = #{newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=BIT},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    update run_delivery_balance_record
+    set did = #{did,jdbcType=INTEGER},
+      old_balance = #{oldBalance,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DOUBLE},
+      new_balance = #{newBalance,jdbcType=DOUBLE},
+      type = #{type,jdbcType=BIT},
+      number = #{number,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.running.business.pojo.RunDeliveryBalanceRecord">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="did" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="old_balance" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="amount" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="new_balance" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="type" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="add_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, did, old_balance, amount, new_balance, type, number, add_time
+  </sql>
+  <select id="selectByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from run_delivery_balance_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from run_delivery_balance_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample">
+    delete from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    insert into run_delivery_balance_record (id, did, old_balance, 
+      amount, new_balance, type, 
+      number, add_time)
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{oldBalance,jdbcType=DOUBLE}, 
+      #{amount,jdbcType=DOUBLE}, #{newBalance,jdbcType=DOUBLE}, #{type,jdbcType=BIT}, 
+      #{number,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    insert into run_delivery_balance_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="did != null">
+        did,
+      </if>
+      <if test="oldBalance != null">
+        old_balance,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="newBalance != null">
+        new_balance,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="oldBalance != null">
+        #{oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="newBalance != null">
+        #{newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.pojo.RunDeliveryBalanceRecordExample" resultType="java.lang.Integer">
+    select count(*) from run_delivery_balance_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update run_delivery_balance_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.did != null">
+        did = #{record.did,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldBalance != null">
+        old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.newBalance != null">
+        new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=BIT},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update run_delivery_balance_record
+    set id = #{record.id,jdbcType=INTEGER},
+      did = #{record.did,jdbcType=INTEGER},
+      old_balance = #{record.oldBalance,jdbcType=DOUBLE},
+      amount = #{record.amount,jdbcType=DOUBLE},
+      new_balance = #{record.newBalance,jdbcType=DOUBLE},
+      type = #{record.type,jdbcType=BIT},
+      number = #{record.number,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    update run_delivery_balance_record
+    <set>
+      <if test="did != null">
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="oldBalance != null">
+        old_balance = #{oldBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="newBalance != null">
+        new_balance = #{newBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=BIT},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryBalanceRecord">
+    update run_delivery_balance_record
+    set did = #{did,jdbcType=INTEGER},
+      old_balance = #{oldBalance,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DOUBLE},
+      new_balance = #{newBalance,jdbcType=DOUBLE},
+      type = #{type,jdbcType=BIT},
+      number = #{number,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>
