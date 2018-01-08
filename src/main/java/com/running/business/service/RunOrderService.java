@@ -13,6 +13,8 @@ public interface RunOrderService {
 
 	BaseResult getRunOrderByOID(String oid);
 	BaseResult getAllRunOrderByUID(Integer uid);
+	BaseResult getAllRunOrderByUID(Integer uid, Integer currentPage);
 	BaseResult getAllRunOrderByDID(Integer did);
+	BaseResult getAllRunOrderByDID(Integer did, Integer currentPage);
 	BaseResult getAllRunOrder();
 }

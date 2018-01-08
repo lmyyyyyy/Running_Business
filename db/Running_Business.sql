@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema Running_Business
+-- Schema running_business
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema Running_Business
+-- Schema running_business
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `Running_Business` DEFAULT CHARACTER SET utf8 ;
-USE `Running_Business` ;
+CREATE SCHEMA IF NOT EXISTS `running_business` DEFAULT CHARACTER SET utf8 ;
+USE `running_business` ;
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user`
+-- Table `running_business`.`run_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user` (
   `uid` INT NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `userphone` VARCHAR(45) NOT NULL COMMENT '用户账号(手机号)',
   `password` VARCHAR(45) NOT NULL COMMENT '用户密码',
@@ -34,9 +34,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_info`
+-- Table `running_business`.`run_user_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_info` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_info` (
   `uid` INT NOT NULL COMMENT '用户id',
   `user_photo` VARCHAR(100) NULL COMMENT '头像地址',
   `user_name` VARCHAR(45) NULL COMMENT '用户姓名',
@@ -50,9 +50,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_balance`
+-- Table `running_business`.`run_user_balance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_balance` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_balance` (
   `uid` INT NOT NULL COMMENT '用户id',
   `user_balance` DOUBLE NOT NULL DEFAULT 0 COMMENT '用户余额',
   `update_time` DATETIME NOT NULL COMMENT '更新时间',
@@ -61,9 +61,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_coupon`
+-- Table `running_business`.`run_user_coupon`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_coupon` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_coupon` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '优惠卷id',
   `uid` INT NOT NULL COMMENT '用户id',
   `title` VARCHAR(45) NULL COMMENT '标题',
@@ -79,9 +79,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_address`
+-- Table `running_business`.`run_user_address`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_address` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_address` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '地址id',
   `uid` INT NOT NULL COMMENT '用户id',
   `user_address` VARCHAR(100) NOT NULL COMMENT '地址',
@@ -95,9 +95,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_balance_record`
+-- Table `running_business`.`run_user_balance_record`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_balance_record` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_balance_record` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '用户交易记录id',
   `uid` INT NOT NULL COMMENT '用户id',
   `old_balance` DOUBLE NOT NULL COMMENT '老余额',
@@ -111,9 +111,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_user_preference`
+-- Table `running_business`.`run_user_preference`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_user_preference` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_user_preference` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '用户偏好id',
   `uid` INT NOT NULL COMMENT '用户id',
   `user_goodstype` VARCHAR(45) NULL COMMENT '喜好类型',
@@ -124,9 +124,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_deliveryuser`
+-- Table `running_business`.`run_deliveryuser`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_deliveryuser` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_deliveryuser` (
   `did` INT NOT NULL COMMENT '配送员id',
   `userphone` VARCHAR(45) NOT NULL COMMENT '账号',
   `password` VARCHAR(45) NOT NULL COMMENT '密码',
@@ -142,9 +142,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_delivery_info`
+-- Table `running_business`.`run_delivery_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_delivery_info` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_info` (
   `did` INT NOT NULL COMMENT '配送员id',
   `photo` VARCHAR(100) NULL COMMENT '头像',
   `name` VARCHAR(45) NOT NULL COMMENT '姓名',
@@ -160,9 +160,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_delivery_address`
+-- Table `running_business`.`run_delivery_address`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_delivery_address` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_address` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '配送员地址id',
   `did` INT NOT NULL COMMENT '配送员id',
   `delivery_address` VARCHAR(45) NOT NULL COMMENT '配送员地址',
@@ -176,9 +176,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_delivery_balance`
+-- Table `running_business`.`run_delivery_balance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_delivery_balance` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_balance` (
   `did` INT NOT NULL COMMENT '配送员id',
   `delivery_balance` DOUBLE NOT NULL DEFAULT 0 COMMENT '配送员余额',
   `update_time` DATETIME NOT NULL COMMENT '更新时间',
@@ -187,9 +187,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_delivery_balance_record`
+-- Table `running_business`.`run_delivery_balance_record`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_delivery_balance_record` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_balance_record` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '配送员交易流水号',
   `did` INT NOT NULL COMMENT '配送员id',
   `old_balance` DOUBLE NOT NULL COMMENT '老余额',
@@ -203,9 +203,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_order`
+-- Table `running_business`.`run_order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_order` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_order` (
   `orderid` VARCHAR(45) NOT NULL COMMENT '订单号',
   `uid` INT NOT NULL COMMENT '用户id',
   `did` INT NULL COMMENT '配送员id',
@@ -240,9 +240,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_order_status`
+-- Table `running_business`.`run_order_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_order_status` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_order_status` (
   `orderid` VARCHAR(45) NOT NULL COMMENT '已废弃表',
   `uid` INT NOT NULL,
   `did` INT NULL,
@@ -258,9 +258,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_order_pay`
+-- Table `running_business`.`run_order_pay`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_order_pay` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_order_pay` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '用户支付订单记录',
   `uid` INT NOT NULL COMMENT '用户id',
   `orderid` VARCHAR(45) NOT NULL COMMENT '订单号',
@@ -276,9 +276,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_delivery_distance`
+-- Table `running_business`.`run_delivery_distance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_delivery_distance` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_distance` (
   `did` INT NOT NULL COMMENT '配送员id',
   `send_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '从源地址到目标地址的距离长度（配送员可选择最大配送长度）',
   `delivery_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '可配送距离范围（里或公里都可）',
@@ -289,9 +289,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_push_info`
+-- Table `running_business`.`run_push_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_push_info` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_push_info` (
   `pid` INT NOT NULL AUTO_INCREMENT COMMENT '推送信息id',
   `operator` INT NULL COMMENT '操作人id',
   `push_title` VARCHAR(100) NULL COMMENT '推送标题',
@@ -306,9 +306,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_info`
+-- Table `running_business`.`run_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_info` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_info` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '轮播消息id',
   `content` VARCHAR(100) NULL COMMENT '轮播消息内容',
   `info_time` DATETIME NULL COMMENT '消息时间',
@@ -318,9 +318,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_admin`
+-- Table `running_business`.`run_admin`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_admin` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_admin` (
   `admin_id` INT NOT NULL AUTO_INCREMENT COMMENT '管理员id',
   `admin_username` VARCHAR(45) NOT NULL COMMENT '账号',
   `admin_password` VARCHAR(45) NOT NULL COMMENT '密码',
@@ -331,9 +331,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`run_admin_info`
+-- Table `running_business`.`run_admin_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`run_admin_info` (
+CREATE TABLE IF NOT EXISTS `running_business`.`run_admin_info` (
   `admin_id` INT NOT NULL COMMENT '管理员id',
   `admin_name` VARCHAR(45) NULL COMMENT '姓名',
   `admin_phone` VARCHAR(45) NULL COMMENT '电话',
@@ -342,9 +342,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`refund_record`
+-- Table `running_business`.`refund_record`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`refund_record` (
+CREATE TABLE IF NOT EXISTS `running_business`.`refund_record` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '退款记录id',
   `uid` INT NOT NULL COMMENT '用户id',
   `did` INT NULL COMMENT '配送员id',
@@ -360,9 +360,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`refund_apply`
+-- Table `running_business`.`refund_apply`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`refund_apply` (
+CREATE TABLE IF NOT EXISTS `running_business`.`refund_apply` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '退款申请id',
   `uid` INT NOT NULL COMMENT '用户id',
   `orderid` VARCHAR(45) NOT NULL COMMENT '订单id',
@@ -377,9 +377,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Running_Business`.`report_record`
+-- Table `running_business`.`report_record`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Running_Business`.`report_record` (
+CREATE TABLE IF NOT EXISTS `running_business`.`report_record` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '举报记录id',
   `uid` INT NOT NULL,
   `did` INT NOT NULL,

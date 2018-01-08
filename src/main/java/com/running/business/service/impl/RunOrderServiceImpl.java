@@ -1,5 +1,7 @@
 package com.running.business.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.mapper.RunOrderMapper;
@@ -95,6 +97,20 @@ public class RunOrderServiceImpl implements RunOrderService{
 	}
 
 	@Override
+	public BaseResult getAllRunOrderByUID(Integer uid, Integer currentPage) {
+		RunOrderExample example = new RunOrderExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUidEqualTo(uid);
+		PageHelper.startPage(currentPage, 20);
+		List<RunOrder> list = runOrderMapper.selectByExample(example);
+		PageInfo<RunOrder> pageInfo=new PageInfo<RunOrder>(list);
+		if (!ValidateUtil.isValid(list)) {
+			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+		}
+		return BaseResult.success(pageInfo);
+	}
+
+	@Override
 	public BaseResult getAllRunOrderByDID(Integer did) {
 		RunOrderExample example = new RunOrderExample();
 		Criteria criteria = example.createCriteria();
@@ -104,6 +120,20 @@ public class RunOrderServiceImpl implements RunOrderService{
 			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
+	}
+
+	@Override
+	public BaseResult getAllRunOrderByDID(Integer did, Integer currentPage) {
+		RunOrderExample example = new RunOrderExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andDidEqualTo(did);
+		PageHelper.startPage(currentPage, 20);
+		List<RunOrder> list = runOrderMapper.selectByExample(example);
+		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
+		if (!ValidateUtil.isValid(list)) {
+			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+		}
+		return BaseResult.success(pageInfo);
 	}
 
 	@Override
