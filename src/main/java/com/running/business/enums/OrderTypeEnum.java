@@ -8,18 +8,25 @@ package com.running.business.enums;
  */
 public enum OrderTypeEnum {
 
-    HELP_BUY(0, "帮我买"),
-    HELP_SEND(1, "帮我送"),
-    HELP_GET(2, "帮我取"),
-    HELP_QUEUE(3, "代排队");
+    HELP_BUY(0, "帮我买", "com.running.business.service.RunOrderService", "helpBuyOrder"),
+    HELP_SEND(1, "帮我送", "com.running.business.service.RunOrderService", "helpSendOrder"),
+    HELP_GET(2, "帮我取", "com.running.business.service.RunOrderService", "helpGetOrder"),
+    HELP_QUEUE(3, "代排队", "com.running.business.service.RunOrderService", "helpQueueOrder");
+
 
     private Integer code;
 
     private String desc;
 
-    OrderTypeEnum(Integer code, String desc) {
+    private String className;
+
+    private String methodName;
+
+    OrderTypeEnum(Integer code, String desc, String className, String methodName) {
         this.code = code;
         this.desc = desc;
+        this.className = className;
+        this.methodName = methodName;
     }
 
     public Integer getCode() {
@@ -30,13 +37,28 @@ public enum OrderTypeEnum {
         this.code = code;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
     public void setDesc(String desc) {
         this.desc = desc;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getClassName() {
+        return className;
+    }
 
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 
     /**
@@ -52,7 +74,7 @@ public enum OrderTypeEnum {
         }
         OrderTypeEnum returnEnum = null;
         for (OrderTypeEnum orderTypeEnum : OrderTypeEnum.values()) {
-            if (code.equals(orderTypeEnum.getDesc())) {
+            if (code.equals(orderTypeEnum.getCode())) {
                 returnEnum = orderTypeEnum;
                 break;
             }
