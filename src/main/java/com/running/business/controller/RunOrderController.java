@@ -86,4 +86,26 @@ public class RunOrderController extends BaseController {
         return result;
    }
 
+    /**
+     * 根据用户id和订单状态查询用户各种状态订单（分页）
+     * @param id 用户id
+     * @param currentPage 当前页数
+     * @param status 订单状态
+     * @return
+     */
+   @RequestMapping(value = "/queryOrderByStatus/{id}/{status}/{currentPage}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+   @ApiOperation(value = "根据用户id和订单状态查询用户各种状态订单/分页(孙晓东)", notes = "根据用户id和订单状态查询用户各种状态订单（分页）", response = BaseResult.class)
+   public BaseResult getOrderByStatus(@PathVariable int id, @PathVariable int status, @PathVariable int currentPage) {
+        BaseResult result = null;
+        try {
+            result = runOrderService.getOrderByUIDAndStatus(id, status, currentPage);
+        } catch (AppException e) {
+            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:"+id+",currentPage:"+currentPage+"},异常信息：{}", e);
+            return BaseResult.fail(e.getErrorCode(), e.getMessage());
+        }
+        return result;
+   }
+
+
+
 }

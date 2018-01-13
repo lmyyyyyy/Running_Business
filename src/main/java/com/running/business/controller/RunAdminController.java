@@ -137,7 +137,7 @@ public class RunAdminController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunAdmin admin, HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.info("管理员登录：" + admin.getAdminUsername());
