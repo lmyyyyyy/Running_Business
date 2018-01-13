@@ -96,6 +96,12 @@ public class RunOrderServiceImpl implements RunOrderService{
 		return BaseResult.success(list);
 	}
 
+	/**
+	 * 根据用户ID查询订单
+	 * @param uid 用户ID
+	 * @param currentPage 当前页
+	 * @return
+	 */
 	@Override
 	public BaseResult getAllRunOrderByUID(Integer uid, Integer currentPage) {
 		RunOrderExample example = new RunOrderExample();
@@ -103,10 +109,10 @@ public class RunOrderServiceImpl implements RunOrderService{
 		criteria.andUidEqualTo(uid);
 		PageHelper.startPage(currentPage, 20);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
-		PageInfo<RunOrder> pageInfo=new PageInfo<RunOrder>(list);
 		if (!ValidateUtil.isValid(list)) {
 			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
+		PageInfo<RunOrder> pageInfo=new PageInfo<RunOrder>(list);
 		return BaseResult.success(pageInfo);
 	}
 
@@ -122,6 +128,12 @@ public class RunOrderServiceImpl implements RunOrderService{
 		return BaseResult.success(list);
 	}
 
+	/**
+	 * 根据配送员ID查询订单
+	 * @param did 配送员ID
+	 * @param currentPage 当前页
+	 * @return
+	 */
 	@Override
 	public BaseResult getAllRunOrderByDID(Integer did, Integer currentPage) {
 		RunOrderExample example = new RunOrderExample();
@@ -129,10 +141,10 @@ public class RunOrderServiceImpl implements RunOrderService{
 		criteria.andDidEqualTo(did);
 		PageHelper.startPage(currentPage, 20);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
-		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
 		if (!ValidateUtil.isValid(list)) {
 			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
+		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
 		return BaseResult.success(pageInfo);
 	}
 
@@ -145,4 +157,28 @@ public class RunOrderServiceImpl implements RunOrderService{
 		}
 		return BaseResult.success(list);
 	}
+
+	/**
+	 * 根据用户ID，订单状态查询订单。
+	 * @param id 用户ID
+	 * @param status 订单状态
+	 * @param currentPage 当前页
+	 * @return
+	 */
+	@Override
+	public BaseResult getOrderByUIDAndStatus(int id, int status, int currentPage) {
+		RunOrderExample example = new RunOrderExample();
+		example.setOrderByClause("add_time " + "DESC");
+		Criteria criteria = example.createCriteria();
+		criteria.andUidEqualTo(id);
+		criteria.andStatusEqualTo(status);
+		PageHelper.startPage(currentPage, 20);
+		List<RunOrder> list = runOrderMapper.selectByExample(example);
+		if (!ValidateUtil.isValid(list)) {
+			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+		}
+		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
+		return BaseResult.success(pageInfo);
+	}
+
 }
