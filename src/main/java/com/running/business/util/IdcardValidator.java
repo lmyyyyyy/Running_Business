@@ -440,7 +440,7 @@ public class IdcardValidator {
     public static void main(String[] args) throws Exception {  
           
         String idcard15 = "370283790911703";//15位  
-        String idcard18 = "610425199604021317X";//18位
+        String idcard18 = "23032119950819171X";//18位
         IdcardValidator iv = new IdcardValidator();  
         System.out.println(iv.isValidatedAllIdcard(idcard15));  
         System.out.println(iv.isValidatedAllIdcard(idcard18));  

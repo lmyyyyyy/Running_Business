@@ -20,7 +20,7 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 	private RunUserAddressMapper runUserAddressMapper;
 	
 	@Override
-	public BaseResult addRunUserAddress(RunUserAddress userAddress) {
+	public BaseResult saveRunUserAddress(RunUserAddress userAddress) {
 		int id = runUserAddressMapper.insert(userAddress);
 		System.out.println(id);
 		return BaseResult.success();
@@ -34,7 +34,7 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 	}
 
 	@Override
-	public BaseResult delRunUserAddressByID(Integer id) {
+	public BaseResult deleteRunUserAddressByID(Integer id) {
 		RunUserAddress userAddress = runUserAddressMapper.selectByPrimaryKey(id);
 		if (userAddress == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -70,7 +70,7 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 	}
 
 	@Override
-	public BaseResult delAllRunUserAddressByUID(Integer uid) {
+	public BaseResult deleteAllRunUserAddressByUID(Integer uid) {
 		RunUserAddressExample example = new RunUserAddressExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);

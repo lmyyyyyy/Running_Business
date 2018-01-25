@@ -27,7 +27,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 	 * @throws AppException
 	 */
 	@Override
-	public BaseResult addRunUserInfo(RunUserInfo userInfo) throws AppException {
+	public BaseResult saveRunUserInfo(RunUserInfo userInfo) throws AppException {
 		runUserInfoMapper.insert(userInfo);
 		return BaseResult.success();
 	}
@@ -48,7 +48,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 	}
 
 	@Override
-	public BaseResult delRunUserInfo(Integer uid) throws AppException {
+	public BaseResult deleteRunUserInfo(Integer uid) throws AppException {
 		runUserInfoMapper.deleteByPrimaryKey(uid);
 		return BaseResult.success();
 	}

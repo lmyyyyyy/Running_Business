@@ -44,7 +44,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		user.setUserphone("111113");
 		user.setPassword("123456");
 		user.setAddTime(new Date());
-		runUserService.insertUser(user);
+		runUserService.saveUser(user);
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	@Test
 	public void delUser() {
-		BaseResult result = runUserService.delUser(2);
+		BaseResult result = runUserService.deleteUser(2);
 		System.out.println(result.getCode());
 	}
 	
@@ -91,13 +91,15 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Test
 	public void getToken() {
-		String token = "REDIS_USER_SESSION:0047fbbc-ba02-4c8b-b09c-2e01036946f3";
+		String token = "REDIS_USER_SESSION:RUedd7e80f-8d62-48d7-be4f-0889b0cfd565";
 		String UserLoginSessionStr = jedisClient.get(token);
-
-        if (UserLoginSessionStr == null || UserLoginSessionStr.equals("")) {
+		System.out.println(UserLoginSessionStr);
+		if (UserLoginSessionStr == null || UserLoginSessionStr.equals("")) {
             System.out.println("token已失效");
         } else {
             System.out.println("允许登录");
         }
     }
+
+
 }

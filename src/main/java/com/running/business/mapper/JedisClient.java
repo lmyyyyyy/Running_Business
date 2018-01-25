@@ -1,30 +1,38 @@
 package com.running.business.mapper;
 
 
+import java.util.Set;
+
 public interface JedisClient {
-	public String get(String key);
+    String get(String key);
 
-	public String set(String key, String value);
+    String set(String key, String value);
 
-	public String hget(String hkey, String key);
+    String hget(String hkey, String key);
 
-	public long hset(String hkey, String key, String value);
+    long hset(String hkey, String key, String value);
 
-	public long incr(String key);
+    long incr(String key);
 
-	public long expire(String key, int second);
+    long expire(String key, int second);
 
-	public long ttl(String key);
+    long ttl(String key);
 
-	public long del(String key) ;
+    long del(String key);
 
-	public long hdel(String hkey, String key);
-	
-	public boolean sismember(String key, String value);
-	
-	public long srem(String key, String value);
-	
-	public long scard(String key);
-	
-	public long sadd(String key, String value);
+    long hdel(String hkey, String key);
+
+    boolean sismember(String key, String value);
+
+    Set<String> smembers(String key);
+
+    long srem(String key, String value);
+
+    long srems(String key, String[] values);
+
+    long scard(String key);
+
+    long sadd(String key, String value);
+
+    long sadds(String key, String[] values);
 }

@@ -1,16 +1,22 @@
 package com.running.business.service.impl;
 
 import com.running.business.common.BaseResult;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.dto.UserDTO;
+import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
 import com.running.business.mapper.RunAdminMapper;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminExample;
+import com.running.business.pojo.RunAdminInfo;
+import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunAdminService;
 import com.running.business.util.CookieUtils;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
+import com.running.business.util.UserUtil;
 import com.running.business.util.ValidateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +25,12 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 管理员Service
@@ -29,13 +38,17 @@ import java.util.UUID;
 @Service
 public class RunAdminServiceImpl implements RunAdminService {
 
-    private final ThreadLocal<RunAdminMapper> runAdminMapper = new ThreadLocal<>();
+    @Autowired
+    private RunAdminMapper runAdminMapper;
 
     /**
      * 连接redis
      */
     @Autowired
     private JedisClient jedisClient;
+
+    @Autowired
+    private RunAdminInfoService runAdminInfoService;
     /**
      * 用户token键
      */
@@ -55,14 +68,16 @@ public class RunAdminServiceImpl implements RunAdminService {
      * @throws AppException
      */
     @Override
-    public BaseResult insertRunAdmin(RunAdmin admin) throws AppException {
+    public BaseResult saveRunAdmin(RunAdmin admin) throws AppException {
         if (admin == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
         admin.setAdminTime(new Date());
         admin.setUpdateTime(new Date());
-        Integer adminId = runAdminMapper.get().insert(admin);
+        admin.setStatus(false);
+        admin.setIsDelete(false);
+        Integer adminId = runAdminMapper.insert(admin);
         return BaseResult.success(adminId);
     }
 
@@ -74,23 +89,55 @@ public class RunAdminServiceImpl implements RunAdminService {
      * @throws AppException
      */
     @Override
-    public BaseResult updateRunAdmin(RunAdmin admin) throws AppException {
+    public void updateRunAdminPassword(RunAdmin admin) throws AppException {
         if (admin == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
         admin.setUpdateTime(new Date());
-        runAdminMapper.get().updateByPrimaryKeySelective(admin);
-        return BaseResult.success(admin);
+        runAdminMapper.updateByPrimaryKeySelective(admin);
     }
 
     @Override
-    public BaseResult delRunAdminByID(Integer id) throws AppException {
-        RunAdmin admin = runAdminMapper.get().selectByPrimaryKey(id);
+    public void updateRunAdmin(RunAdmin admin) throws AppException {
+        if (admin == null) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        admin.setAdminPassword(Run_StringUtil.MD5(admin.getAdminPassword()));
+        admin.setUpdateTime(new Date());
+        runAdminMapper.updateByPrimaryKeySelective(admin);
+    }
+
+    /**
+     * 根据用户id集合更新管理员登录状态
+     *
+     * @param userIds
+     * @throws AppException
+     */
+    @Override
+    public void updateAdminListStatus(Set<Integer> userIds) throws AppException {
+        if (userIds == null || userIds.size() == 0) {
+            return;
+        }
+        for (Integer userId : userIds) {
+            RunAdmin user = new RunAdmin();
+            user.setAdminId(userId);
+            user.setUpdateTime(new Date());
+            user.setStatus(false);
+            runAdminMapper.updateByPrimaryKeySelective(user);
+        }
+
+    }
+
+    @Override
+    public BaseResult deleteRunAdminByID(Integer id) throws AppException {
+        RunAdmin admin = runAdminMapper.selectByPrimaryKey(id);
         if (admin == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
-        runAdminMapper.get().deleteByPrimaryKey(id);
+        admin.setIsDelete(true);
+        admin.setUpdateTime(new Date());
+        runAdminMapper.updateByPrimaryKeySelective(admin);
         return BaseResult.success(admin);
     }
 
@@ -103,7 +150,7 @@ public class RunAdminServiceImpl implements RunAdminService {
      */
     @Override
     public BaseResult getRunAdminByID(Integer id) throws AppException {
-        RunAdmin admin = runAdminMapper.get().selectByPrimaryKey(id);
+        RunAdmin admin = runAdminMapper.selectByPrimaryKey(id);
         if (admin == null) {
             throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
         }
@@ -119,7 +166,7 @@ public class RunAdminServiceImpl implements RunAdminService {
     @Override
     public BaseResult getAllRunAdmin() throws AppException {
         RunAdminExample example = new RunAdminExample();
-        List<RunAdmin> list = runAdminMapper.get().selectByExample(example);
+        List<RunAdmin> list = runAdminMapper.selectByExample(example);
         if (list == null) {
             throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
         }
@@ -141,7 +188,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample example = new RunAdminExample();
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminUsernameEqualTo(userName);
-        List<RunAdmin> runAdmins = runAdminMapper.get().selectByExample(example);
+        List<RunAdmin> runAdmins = runAdminMapper.selectByExample(example);
         if (ValidateUtil.isValid(runAdmins)) {
             return BaseResult.fail(ResultEnum.TELTPHONE_USED);
         }
@@ -164,7 +211,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminUsernameEqualTo(username);
         List<RunAdmin> list = null;
-        list = runAdminMapper.get().selectByExample(example);
+        list = runAdminMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.TELTPHONE_NOT_REG.getCode(), ResultEnum.TELTPHONE_NOT_REG.getMsg());
         }
@@ -172,11 +219,15 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria1 = example1.createCriteria();
         criteria1.andAdminUsernameEqualTo(username);
         criteria1.andAdminPasswordEqualTo(Run_StringUtil.MD5(password));
-        list = runAdminMapper.get().selectByExample(example1);
+        list = runAdminMapper.selectByExample(example1);
         if (!ValidateUtil.isValid(list)) {
             throw new AppException(ResultEnum.PWD_ERROR.getCode(), ResultEnum.PWD_ERROR.getMsg());
         }
         RunAdmin admin = list.get(0);
+        if (admin == null) {
+            throw new AppException(ResultEnum.ADMIN_INFO_IS_EMPTY);
+        }
+
         //生成token
         String token = "RA" + UUID.randomUUID().toString();
         //保存用户之前，将用户对象中的密码清空
@@ -187,6 +238,22 @@ public class RunAdminServiceImpl implements RunAdminService {
         jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token, SSO_SESSION_EXPIRE);
         //添加cookie
         CookieUtils.setCookie(request, response, "RUN_TOKEN", token);
+
+        admin.setUpdateTime(new Date());
+        admin.setStatus(true);
+        runAdminMapper.updateByPrimaryKeySelective(admin);
+
+        RunAdminInfo adminInfo = (RunAdminInfo) runAdminInfoService.getRunAdminInfoByID(admin.getAdminId()).getData();
+        if (adminInfo == null) {
+            throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
+        }
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(admin.getAdminId());
+        userDTO.setName(adminInfo.getAdminName());
+        userDTO.setPhone(admin.getAdminUsername());
+        userDTO.setStatus(admin.getStatus());
+        userDTO.setUserType(UserTypeEnum.DELIVERY.getCode());
+        UserUtil.bind(userDTO);
         //返回token
         return BaseResult.success(token);
     }
@@ -229,7 +296,16 @@ public class RunAdminServiceImpl implements RunAdminService {
         }
         //更新生命周期
         jedisClient.del(REDIS_USER_SESSION_KEY + ":" + token);
-        return BaseResult.success(JsonUtils.jsonToPojo(json, RunAdmin.class));
+        RunAdmin admin = JsonUtils.jsonToPojo(json, RunAdmin.class);
+        if (admin == null) {
+            throw new AppException(ResultEnum.ADMIN_INFO_IS_EMPTY);
+        }
+        //登录人员列表中去除当前正常退出人员
+        jedisClient.srem(Config.LOGIN_ADMIN_IDS_KEY, String.valueOf(admin.getAdminId()));
+        admin.setStatus(false);
+        admin.setUpdateTime(new Date());
+        runAdminMapper.updateByPrimaryKeySelective(admin);
+        return BaseResult.success(json);
     }
 
     /**
@@ -249,11 +325,32 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminPasswordEqualTo(Run_StringUtil.MD5(password));
         criteria.andAdminUsernameEqualTo(username);
-        List<RunAdmin> list = runAdminMapper.get().selectByExample(example);
+        List<RunAdmin> list = runAdminMapper.selectByExample(example);
         if (ValidateUtil.isValid(list)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 根据id集合查询当前在线的管理员集合
+     *
+     * @param ids
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Set<Integer> queryAdminsByIds(Set<Integer> ids) throws AppException {
+        if (ids.isEmpty()) {
+            return null;
+        }
+        RunAdminExample example = new RunAdminExample();
+        RunAdminExample.Criteria criteria = example.createCriteria();
+        criteria.andAdminIdIn(new ArrayList<>(ids));
+        criteria.andStatusEqualTo(true);
+        example.setOrderByClause(" update_time desc");
+        List<RunAdmin> list = runAdminMapper.selectByExample(example);
+        return list.stream().map(user ->user.getAdminId()).collect(Collectors.toSet());
     }
 
 }

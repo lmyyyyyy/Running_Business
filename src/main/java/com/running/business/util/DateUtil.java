@@ -1,5 +1,6 @@
 package com.running.business.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -119,5 +120,21 @@ public class DateUtil {
 
     public static String dateToStr(Date date) {
         return dateToStr(date, "yyyy/MM/dd");
+    }
+
+    public static Date ms2Date(Long ms) {
+	    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String date = format.format(ms);
+	    Date d = null;
+        try {
+            d = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public static Long date2MS(Date date) {
+        return date.getTime();
     }
 }

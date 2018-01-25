@@ -6,11 +6,11 @@ import com.running.business.pojo.RunUserBalance;
 
 public interface RunUserBalanceService {
 
-    BaseResult addRunUserBalance(RunUserBalance runUserBalance) throws AppException;
+    BaseResult saveRunUserBalance(RunUserBalance runUserBalance) throws AppException;
 
     BaseResult updateRunUserBalance(RunUserBalance runUserBalance) throws AppException;
 
-    BaseResult delRunUserBalance(Integer id) throws AppException;
+    BaseResult deleteRunUserBalance(Integer id) throws AppException;
 
     BaseResult getRunUserBalanceByUID(Integer uid) throws AppException;
 

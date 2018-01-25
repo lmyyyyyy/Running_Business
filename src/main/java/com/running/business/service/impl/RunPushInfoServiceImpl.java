@@ -19,7 +19,7 @@ public class RunPushInfoServiceImpl implements RunPushInfoService{
 	private RunPushInfoMapper runPushInfoMapper;
 
 	@Override
-	public BaseResult addRunPushInfo(RunPushInfo pushInfo) {
+	public BaseResult saveRunPushInfo(RunPushInfo pushInfo) {
 		runPushInfoMapper.insert(pushInfo);
 		return BaseResult.success();
 	}
@@ -31,7 +31,7 @@ public class RunPushInfoServiceImpl implements RunPushInfoService{
 	}
 
 	@Override
-	public BaseResult delPushInfoByID(Integer id) {
+	public BaseResult deletePushInfoByID(Integer id) {
 		RunPushInfo pushInfo = runPushInfoMapper.selectByPrimaryKey(id);
 		if (pushInfo == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());

@@ -18,7 +18,7 @@ public class RunInfoServiceImpl implements RunInfoService{
 	private RunInfoMapper runInfoMapper;
 
 	@Override
-	public BaseResult addRunInfo(RunInfo runInfo) {
+	public BaseResult saveRunInfo(RunInfo runInfo) {
 		runInfoMapper.insert(runInfo);
 		return BaseResult.success();
 	}
@@ -30,7 +30,7 @@ public class RunInfoServiceImpl implements RunInfoService{
 	}
 
 	@Override
-	public BaseResult delRunInfoByID(Integer id) {
+	public BaseResult deleteRunInfoByID(Integer id) {
 		RunInfo runInfo = runInfoMapper.selectByPrimaryKey(id);
 		if (runInfo == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -40,7 +40,7 @@ public class RunInfoServiceImpl implements RunInfoService{
 	}
 
 	@Override
-	public BaseResult delAllRunInfo() {
+	public BaseResult deleteAllRunInfo() {
 		RunInfoExample example = new RunInfoExample();
 		runInfoMapper.deleteByExample(example);
 		return BaseResult.success();

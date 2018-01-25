@@ -15,7 +15,7 @@ public class RunDeliveryDistanceServiceImpl implements RunDeliveryDistanceServic
 	private RunDeliveryDistanceMapper runDeliveryDistanceMapper;
 
 	@Override
-	public BaseResult addRunDeliveryDistance(
+	public BaseResult saveRunDeliveryDistance(
 			RunDeliveryDistance distance) {
 		runDeliveryDistanceMapper.insert(distance);
 		return BaseResult.success();
@@ -29,7 +29,7 @@ public class RunDeliveryDistanceServiceImpl implements RunDeliveryDistanceServic
 	}
 
 	@Override
-	public BaseResult delRunDeliveryDistanceByDID(Integer did) {
+	public BaseResult deleteRunDeliveryDistanceByDID(Integer did) {
 		RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
 		if (distance == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());

@@ -33,7 +33,7 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
      * @throws AppException
      */
     @Override
-    public BaseResult insertRunAdminInfo(RunAdminInfo adminInfo) throws AppException {
+    public BaseResult saveRunAdminInfo(RunAdminInfo adminInfo) throws AppException {
         if (adminInfo == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
@@ -65,7 +65,7 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
      * @throws AppException
      */
     @Override
-    public BaseResult delRunAdminInfoByID(Integer id) throws AppException {
+    public BaseResult deleteRunAdminInfoByID(Integer id) throws AppException {
         RunAdminInfo adminInfo = runAdminInfoMapper.selectByPrimaryKey(id);
         if (adminInfo == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());

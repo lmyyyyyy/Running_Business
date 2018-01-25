@@ -20,7 +20,7 @@ public class RunOrderStatusServiceImpl implements RunOrderStatusService{
 	private RunOrderStatusMapper runOrderStatusMapper;
 
 	@Override
-	public BaseResult addRunOrderStatus(RunOrderStatus order) {
+	public BaseResult saveRunOrderStatus(RunOrderStatus order) {
 		runOrderStatusMapper.insert(order);
 		return BaseResult.success();
 	}
@@ -32,7 +32,7 @@ public class RunOrderStatusServiceImpl implements RunOrderStatusService{
 	}
 
 	@Override
-	public BaseResult delRunOrderStatusByOID(String oid) {
+	public BaseResult deleteRunOrderStatusByOID(String oid) {
 		RunOrderStatus order = runOrderStatusMapper.selectByPrimaryKey(oid);
 		if (order == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -42,7 +42,7 @@ public class RunOrderStatusServiceImpl implements RunOrderStatusService{
 	}
 
 	@Override
-	public BaseResult delAllRunOrderStatusByUID(Integer uid) {
+	public BaseResult deleteAllRunOrderStatusByUID(Integer uid) {
 		RunOrderStatusExample example = new RunOrderStatusExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
@@ -58,7 +58,7 @@ public class RunOrderStatusServiceImpl implements RunOrderStatusService{
 	}
 
 	@Override
-	public BaseResult delAllRunOrderStatusByDID(Integer did) {
+	public BaseResult deleteAllRunOrderStatusByDID(Integer did) {
 		RunOrderStatusExample example = new RunOrderStatusExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andDidEqualTo(did);

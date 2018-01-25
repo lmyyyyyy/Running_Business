@@ -7,6 +7,8 @@ import com.running.business.pojo.RunDeliveryuser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Set;
 
 public interface RunDeliveryuserService {
 
@@ -16,7 +18,7 @@ public interface RunDeliveryuserService {
      * @param user
      * @return
      */
-    Integer insertRunDeliveryuser(RunDeliveryuser user) throws AppException;
+    Integer saveRunDeliveryuser(RunDeliveryuser user) throws AppException;
 
     /**
      * 根据id删除配送员
@@ -24,7 +26,7 @@ public interface RunDeliveryuserService {
      * @param uid
      * @throws AppException
      */
-    void delRunDeliveryuser(Integer uid) throws AppException;
+    void deleteRunDeliveryuser(Integer uid) throws AppException;
 
     /**
      * 修改配送员密码
@@ -32,7 +34,7 @@ public interface RunDeliveryuserService {
      * @param user
      * @throws AppException
      */
-    void modifyRunDeliveryuserPassword(RunDeliveryuser user) throws AppException;
+    void updateRunDeliveryuserPassword(RunDeliveryuser user) throws AppException;
 
     /**
      * 更新配送员信息
@@ -41,6 +43,14 @@ public interface RunDeliveryuserService {
      * @throws AppException
      */
     void updateRunDeliveryuser(RunDeliveryuser runDeliveryuser) throws AppException;
+
+    /**
+     * 根据用户id集合更新配送员登录状态
+     *
+     * @param userIds
+     * @throws AppException
+     */
+    void updateDeliveryListStatus(Set<Integer> userIds) throws AppException;
 
     /**
      * 检查账号是否被注册 true:可用／没注册过 false:不可用／注册过
@@ -108,4 +118,22 @@ public interface RunDeliveryuserService {
      * @return 如果token为空，说明会话超时，否则将该token删除，返回用户实体
      */
     BaseResult logout(String token) throws AppException;
+
+    /**
+     * 根据配送员状态获取所有未被删除未被禁用的配送员
+     *
+     * @param status
+     * @return
+     * @throws AppException
+     */
+    List<RunDeliveryuser> getRunDeliveryuserByStatus(boolean status) throws AppException;
+
+    /**
+     * 根据id集合查询当前在线的配送员集合
+     *
+     * @param ids
+     * @return
+     * @throws AppException
+     */
+    Set<Integer> queryDeliverysByIds(Set<Integer> ids) throws AppException;
 }

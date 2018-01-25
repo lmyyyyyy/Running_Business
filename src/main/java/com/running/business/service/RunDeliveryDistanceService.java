@@ -5,9 +5,9 @@ import com.running.business.pojo.RunDeliveryDistance;
 
 public interface RunDeliveryDistanceService {
 
-	BaseResult addRunDeliveryDistance(RunDeliveryDistance distance);
+	BaseResult saveRunDeliveryDistance(RunDeliveryDistance distance);
 	BaseResult updateRunDeliveryDistance(RunDeliveryDistance distance);
-	BaseResult delRunDeliveryDistanceByDID(Integer did);
+	BaseResult deleteRunDeliveryDistanceByDID(Integer did);
 	
 	BaseResult getRunDeliveryDistanceByDID(Integer did);
 	

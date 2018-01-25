@@ -5,10 +5,10 @@ import com.running.business.pojo.RunUserPreference;
 
 public interface RunUserPreferenceService {
 	
-	BaseResult addRunUserPreference(RunUserPreference userpre);
+	BaseResult saveRunUserPreference(RunUserPreference userpre);
 	BaseResult updateRunUserPreference(RunUserPreference userpre);
-	BaseResult delRunUserPreferenceByID(Integer id);
-	BaseResult delAllRunUserPreferenceByUID(Integer uid);
+	BaseResult deleteRunUserPreferenceByID(Integer id);
+	BaseResult deleteAllRunUserPreferenceByUID(Integer uid);
 	
 	BaseResult getRunUserPreferenceByID(Integer id);
 	BaseResult getAllUserPreferenceByUID(Integer uid);
