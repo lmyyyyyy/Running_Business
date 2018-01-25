@@ -22,7 +22,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 	private RunOrderMapper runOrderMapper;
 
 	@Override
-	public BaseResult addRunOrder(RunOrder order) {
+	public BaseResult saveRunOrder(RunOrder order) {
 		runOrderMapper.insert(order);
 		return BaseResult.success();
 	}
@@ -34,7 +34,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 	}
 
 	@Override
-	public BaseResult delRunOrderByOID(String oid) {
+	public BaseResult deleteRunOrderByOID(String oid) {
 		RunOrder order = runOrderMapper.selectByPrimaryKey(oid);
 		if (order == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -44,7 +44,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 	}
 
 	@Override
-	public BaseResult delAllRunOrderByUID(Integer uid) {
+	public BaseResult deleteAllRunOrderByUID(Integer uid) {
 		RunOrderExample example = new RunOrderExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
@@ -60,7 +60,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 	}
 
 	@Override
-	public BaseResult delAllRunOrderByDID(Integer did) {
+	public BaseResult deleteAllRunOrderByDID(Integer did) {
 		RunOrderExample example = new RunOrderExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andDidEqualTo(did);

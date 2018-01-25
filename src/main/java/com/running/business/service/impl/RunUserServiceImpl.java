@@ -3,17 +3,25 @@ package com.running.business.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.dto.UserDTO;
+import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
 import com.running.business.mapper.RunUserMapper;
 import com.running.business.pojo.RunUser;
 import com.running.business.pojo.RunUserExample;
 import com.running.business.pojo.RunUserExample.Criteria;
+import com.running.business.pojo.RunUserInfo;
+import com.running.business.service.HeartBeatService;
+import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserService;
+import com.running.business.service.SSOService;
 import com.running.business.util.CookieUtils;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
+import com.running.business.util.UserUtil;
 import com.running.business.util.ValidateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +30,15 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
- * show 用户业务逻辑类
- * <p>Description: asdfasdf </p>
+ * 用户业务逻辑类
  *
  * @author 刘明宇
  * @version 1.0.0
@@ -41,6 +51,14 @@ public class RunUserServiceImpl implements RunUserService {
      */
     @Autowired
     private RunUserMapper runUserMapper;
+    @Autowired
+    private SSOService ssoService;
+
+    @Autowired
+    private RunUserInfoService runUserInfoService;
+
+    @Autowired
+    private HeartBeatService heartBeatService;
     /**
      * 连接redis
      */
@@ -109,7 +127,7 @@ public class RunUserServiceImpl implements RunUserService {
      * @return <p>添加成功返回状态码"200"</p>
      */
     @Override
-    public BaseResult insertUser(RunUser user) throws AppException {
+    public BaseResult saveUser(RunUser user) throws AppException {
         if (user == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
@@ -129,7 +147,7 @@ public class RunUserServiceImpl implements RunUserService {
      * @return 删除成功返回状态码"200"
      */
     @Override
-    public BaseResult delUser(Integer uid) throws AppException {
+    public BaseResult deleteUser(Integer uid) throws AppException {
         RunUser user = runUserMapper.selectByPrimaryKey(uid);
         if (user == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -155,6 +173,26 @@ public class RunUserServiceImpl implements RunUserService {
         user.setUpdateTime(new Date());
         runUserMapper.updateByPrimaryKeySelective(user);
         return BaseResult.success();
+    }
+
+    /**
+     * 根据用户id集合更新用户登录状态
+     *
+     * @param userIds
+     * @throws AppException
+     */
+    @Override
+    public void updateUserListStatus(Set<Integer> userIds) throws AppException {
+        if (userIds == null || userIds.size() == 0) {
+            return;
+        }
+        for (Integer userId : userIds) {
+            RunUser user = new RunUser();
+            user.setUid(userId);
+            user.setUpdateTime(new Date());
+            user.setUserStatus(false);
+            runUserMapper.updateByPrimaryKeySelective(user);
+        }
     }
 
     /**
@@ -216,6 +254,17 @@ public class RunUserServiceImpl implements RunUserService {
         jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token, SSO_SESSION_EXPIRE);
         //添加cookie
         CookieUtils.setCookie(request, response, "RUN_TOKEN", token);
+        RunUserInfo runuserInfo = runUserInfoService.getRunUserInfoById(user.getUid());
+        if (runuserInfo == null) {
+            throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
+        }
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getUid());
+        userDTO.setName(runuserInfo.getUserName());
+        userDTO.setPhone(user.getUserphone());
+        userDTO.setStatus(user.getUserStatus());
+        userDTO.setUserType(UserTypeEnum.USER.getCode());
+        UserUtil.bind(userDTO);
         //返回token
         return BaseResult.success(token);
     }
@@ -239,7 +288,7 @@ public class RunUserServiceImpl implements RunUserService {
         }
         RunUserExample example = new RunUserExample();
         List<RunUser> list;
-        example.setOrderByClause("add_time " + orderType);
+        example.setOrderByClause("update_time " + orderType);
         Criteria criteria = example.createCriteria();
         criteria.andIsDeleteEqualTo(false);
         PageHelper.startPage(page, size);
@@ -289,8 +338,50 @@ public class RunUserServiceImpl implements RunUserService {
         if (user == null) {
             throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
         }
+        //登录人员列表中去除当前正常退出人员
+        jedisClient.srem(Config.LOGIN_USER_IDS_KEY, String.valueOf(user.getUid()));
         user.setUserStatus(false);
         runUserMapper.updateByPrimaryKeySelective(user);
+        UserUtil.unbindUser();
         return BaseResult.success(user);
+    }
+
+    /**
+     * 根据用户状态获取所有未被删除的用户
+     *
+     * @param status
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunUser> getUsersByStatus(boolean status) throws AppException {
+        RunUserExample example = new RunUserExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(false);
+        criteria.andUserStatusEqualTo(status);
+        example.setOrderByClause(" update_time desc");
+        List<RunUser> runUsers = runUserMapper.selectByExample(example);
+        return runUsers;
+    }
+
+    /**
+     * 根据id集合查询用户集合（去除正常退出的用户）
+     *
+     * @param ids
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Set<Integer> queryUsersByIds(Set<Integer> ids) throws AppException {
+        if (ids.isEmpty()) {
+            return null;
+        }
+        RunUserExample example = new RunUserExample();
+        RunUserExample.Criteria criteria = example.createCriteria();
+        criteria.andUidIn(new ArrayList<>(ids));
+        criteria.andUserStatusEqualTo(true);
+        example.setOrderByClause(" update_time desc");
+        List<RunUser> list = runUserMapper.selectByExample(example);
+        return list.stream().map(user ->user.getUid()).collect(Collectors.toSet());
     }
 }

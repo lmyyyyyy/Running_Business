@@ -19,10 +19,10 @@ import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RandomUtil;
-import com.running.business.util.RegexUtils;
 import com.running.business.util.RequestUtil;
 import com.running.business.vo.AdminVO;
 import com.running.business.vo.UserVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -45,9 +45,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping(value = "/admins")
+@Api(value = "管理员模块", tags = {"管理员模块"})
 public class RunAdminController extends BaseController {
 
-    private Logger logger = LoggerFactory.getLogger(RunUserController.class);
+    private Logger logger = LoggerFactory.getLogger(RunAdminController.class);
 
     private static final String LOG_PREFIX = "【管理员模块】 ";
 
@@ -75,6 +76,12 @@ public class RunAdminController extends BaseController {
     @Autowired
     private RunUserPreferenceService runUserPreferenceService;
 
+    @Autowired
+    private RequestUtil requestUtil;
+
+    @Autowired
+    private PermissionInterceptor permissionInterceptor;
+
     /**
      * 添加管理员
      *
@@ -86,27 +93,28 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "添加管理员(刘明宇)", notes = "添加管理员", response = BaseResult.class)
     public BaseResult insertAdmin(@RequestBody RunAdmin admin, HttpServletRequest request) throws Exception {
-        Integer adminId = RequestUtil.getAdminId(request);
+        if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
+                || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
+            return BaseResult.fail(ResultEnum.INPUT_ERROR);
+        }
+        /*if (admin.getAdminPassword().length() < 6 || admin.getAdminPassword().length() > 18) {
+            return BaseResult.fail(ResultEnum.USER_PASSWORD_LEN);
+        }
+        if (!RegexUtils.checkMobile(admin.getAdminUsername())) {
+            return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
+        }*/
+        //Integer adminId = requestUtil.getAdminId(request);
+        Integer adminId = -1;
         logger.info("{}添加管理员，账号为：{}", new Object[]{adminId, admin.getAdminUsername()});
         BaseResult result = null;
         try {
-            if (!RegexUtils.checkMobile(admin.getAdminUsername())) {
-                return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
-            }
-            if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
-                    || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
-                return BaseResult.fail(ResultEnum.INPUT_ERROR);
-            }
-            if (admin.getAdminPassword().length() < 6 || admin.getAdminPassword().length() > 18) {
-                return BaseResult.fail(ResultEnum.USER_PASSWORD_LEN);
-            }
             result = runAdminService.checkAdmin(admin.getAdminUsername());
             if (!result.getCode().equals("200")) {
                 return result;
             }
-            result = runAdminService.insertRunAdmin(admin);
+            result = runAdminService.saveRunAdmin(admin);
             if (result.getCode().equals("200")) {
-                Integer id = (Integer) result.getData();
+                Integer id = admin.getAdminId();
                 RunAdminInfo adminInfo = new RunAdminInfo();
                 adminInfo.setAdminId(id);
                 adminInfo.setAdminPhone(admin.getAdminUsername());
@@ -120,13 +128,13 @@ public class RunAdminController extends BaseController {
                     count++;
                 }
                 adminInfo.setAdminName("管理员_" + name);
-                runAdminInfoService.insertRunAdminInfo(adminInfo);
+                runAdminInfoService.saveRunAdminInfo(adminInfo);
             }
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "添加管理员失败 operationId = {},error = {}", new Object[]{adminId, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        return result;
+        return BaseResult.success(admin);
     }
 
     /**
@@ -140,16 +148,13 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunAdmin admin, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
+                || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
+            return BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
+        }
         logger.info("管理员登录：" + admin.getAdminUsername());
-        System.out.println("用户名" + admin.getAdminUsername());
-        System.out.println("密码" + admin.getAdminPassword());
         BaseResult result = null;
         try {
-            if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
-                    || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
-                result = BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
-                return result;
-            }
             result = runAdminService.login(admin.getAdminUsername(), admin.getAdminPassword(), request, response);
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "登录失败- admin = {}, error = {}" + new Object[]{admin, ae});
@@ -168,6 +173,9 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/token/{token}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "根据token获取管理员信息(刘明宇)", notes = "根据token获取管理员信息", response = BaseResult.class)
     public Object getUserByToken(@PathVariable String token, String callback) throws Exception {
+        if (token == null || "".equals(token)) {
+            return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
+        }
         logger.info("根据token获取管理员信息：", token);
         BaseResult result = null;
         try {
@@ -197,6 +205,9 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/logout/{token}", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "管理员注销(刘明宇)", notes = "管理员注销", response = BaseResult.class)
     public BaseResult logout(@PathVariable String token, HttpServletResponse response) throws Exception {
+        if (token == null || "".equals(token)) {
+            return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
+        }
         logger.info("管理员注销", token);
         String callback = "http://localhost:8080";
         BaseResult result = null;
@@ -225,8 +236,11 @@ public class RunAdminController extends BaseController {
     @ApiOperation(value = "检查旧密码是否匹配(刘明宇)", notes = "检查旧密码是否匹配", response = BaseResult.class)
     public BaseResult checkOldPwd(@RequestParam("oldPassword") String oldPassword,
                                   HttpServletRequest request) throws Exception {
+        if (oldPassword == null || "".equals(oldPassword)) {
+            return BaseResult.fail(ResultEnum.ADMIN_PASSWORD_REGEX_ERROR);
+        }
         logger.info("异步检查旧密码是否匹配", oldPassword);
-        String jsonStr = RequestUtil.getToken(request);
+        String jsonStr = requestUtil.getToken(request);
 
         if (jsonStr == null) {
             return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
@@ -259,27 +273,32 @@ public class RunAdminController extends BaseController {
     public BaseResult modifyPwd(@RequestParam("oldPassword") String oldPassword,
                                 @RequestParam("newPassword") String newPassword,
                                 HttpServletRequest request) throws Exception {
+        if (oldPassword == null || "".equals(oldPassword) || newPassword == null || "".equals(newPassword)) {
+            return BaseResult.fail(ResultEnum.ADMIN_PASSWORD_REGEX_ERROR);
+        }
+        if (oldPassword.equals(newPassword)) {
+            return BaseResult.fail(ResultEnum.ADMIN_PASSWORD_NEW_AND_OLD_IS_SAME);
+        }
         logger.info("修改管理员密码", newPassword);
-        String jsonStr = RequestUtil.getToken(request);
+        String jsonStr = requestUtil.getToken(request);
 
         if (jsonStr == null) {
             return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
         }
         RunAdmin admin = JsonUtils.jsonToPojo(jsonStr, RunAdmin.class);
         boolean flag;
-        BaseResult result = null;
         try {
             flag = runAdminService.checkPwd(admin.getAdminUsername(), oldPassword);
             if (!flag) {
                 return BaseResult.fail(ResultEnum.PWD_ERROR);
             }
             admin.setAdminPassword(newPassword);
-            result = runAdminService.updateRunAdmin(admin);
+            runAdminService.updateRunAdminPassword(admin);
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "update pwd is error username = {}, newPassword = {}, error = {}", new Object[]{admin.getAdminUsername(), newPassword, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        return result;
+        return BaseResult.success();
     }
 
     /**
@@ -294,18 +313,12 @@ public class RunAdminController extends BaseController {
     public BaseResult getUserInfo(HttpServletRequest request) throws Exception {
         logger.info("获取管理员基本信息");
         AdminVO adminVO;
-        Integer uid = null;
+        Integer aid = null;
         try {
-            String jsonStr = RequestUtil.getToken(request);
-
-            if (jsonStr == null) {
-                return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
-            }
-            RunAdmin admin = JsonUtils.jsonToPojo(jsonStr, RunAdmin.class);
-            uid = admin.getAdminId();
-            adminVO = runAdminInfoService.getAdminVOById(uid);
+            aid = requestUtil.getAdminId(request);
+            adminVO = runAdminInfoService.getAdminVOById(aid);
         } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "获取管理员基本信息失败 uid = {}, error = {}", new Object[]{uid, ae});
+            logger.error(LOG_PREFIX + "获取管理员基本信息失败 uid = {}, error = {}", new Object[]{aid, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return BaseResult.success(adminVO);
@@ -321,7 +334,11 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/admin/{id}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "获取管理员信息(刘明宇)", notes = "获取管理员信息", response = BaseResult.class)
     public BaseResult getAdminInfoById(@PathVariable Integer id, HttpServletRequest request) throws Exception {
-        Integer operator = RequestUtil.getAdminId(request);
+        Integer operator = requestUtil.getAdminId(request);
+        if (operator == null) {
+            logger.info("获取用户信息失败");
+            return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
+        }
         logger.info("{} 根据id获取管理员基本信息 id = {}", new Object[]{operator, id});
         AdminVO adminVO;
         try {
@@ -343,7 +360,7 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "根据id获取用户信息(刘明宇)", notes = "根据id获取用户信息", response = BaseResult.class)
     public BaseResult getUserInfoById(@PathVariable Integer id, HttpServletRequest request) throws Exception {
-        Integer operator = RequestUtil.getAdminId(request);
+        Integer operator = requestUtil.getAdminId(request);
         logger.info("{} 根据id获取用户信息 id = {}", new Object[]{operator, id});
         UserVO userVO;
         try {
@@ -372,7 +389,7 @@ public class RunAdminController extends BaseController {
             if (userAdminfo == null) {
                 return BaseResult.fail(ResultEnum.USER_INFO_ISEMPTY);
             }
-            uid = RequestUtil.getUserId(request);
+            uid = requestUtil.getAdminId(request);
             userAdminfo.setAdminId(uid);
             result = runAdminInfoService.updateRunAdminInfo(userAdminfo);
         } catch (AppException ae) {
@@ -393,13 +410,13 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "admin/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "根据id删除管理员(刘明宇)", notes = "根据id删除管理员", response = BaseResult.class)
     public BaseResult delAdmin(@PathVariable Integer id, HttpServletRequest request) throws Exception {
-        Integer operator = RequestUtil.getAdminId(request);
+        Integer operator = requestUtil.getAdminId(request);
         logger.info("{} 删除管理员 id = {}", new Object[]{operator, id});
         BaseResult result;
         try {
-            result = runAdminService.delRunAdminByID(id);
+            result = runAdminService.deleteRunAdminByID(id);
             if (result.getCode().equals("200")) {
-                runAdminInfoService.delRunAdminInfoByID(id);
+                runAdminInfoService.deleteRunAdminInfoByID(id);
             }
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "删除管理员失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
@@ -419,17 +436,17 @@ public class RunAdminController extends BaseController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "根据id删除用户(刘明宇)", notes = "根据id删除用户", response = BaseResult.class)
     public BaseResult delUser(@PathVariable Integer id, HttpServletRequest request) throws Exception {
-        Integer operator = RequestUtil.getAdminId(request);
+        Integer operator = requestUtil.getAdminId(request);
         logger.info("{} 删除用户 id = {}", new Object[]{operator, id});
         BaseResult result;
         try {
-            result = runUserService.delUser(id);
+            result = runUserService.deleteUser(id);
             if (result.getCode().equals("200")) {
-                runUserInfoService.delRunUserInfo(id);
-                runUserAddressService.delAllRunUserAddressByUID(id);
-                runUserPreferenceService.delAllRunUserPreferenceByUID(id);
-                runUserCouponService.delAllRunUserCoupon(id);
-                runUserBalanceService.delRunUserBalance(id);
+                runUserInfoService.deleteRunUserInfo(id);
+                runUserAddressService.deleteAllRunUserAddressByUID(id);
+                runUserPreferenceService.deleteAllRunUserPreferenceByUID(id);
+                runUserCouponService.deleteAllRunUserCoupon(id);
+                runUserBalanceService.deleteRunUserBalance(id);
             }
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "删除用户失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
@@ -454,9 +471,9 @@ public class RunAdminController extends BaseController {
                                 @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                 @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                 HttpServletRequest request) throws Exception {
-        Integer operator = RequestUtil.getAdminId(request);
+        Integer operator = requestUtil.getAdminId(request);
         logger.info("{} 分页获取所有未被删除的用户列表 operator = {}", new Object[]{LOG_PREFIX, operator});
-        if (!PermissionInterceptor.isInvoke(request)) {
+        if (!permissionInterceptor.isInvoke(request)) {
             logger.error("{} 当前用户没有权限进行操作 operator = {}", LOG_PREFIX, operator);
             return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
         }

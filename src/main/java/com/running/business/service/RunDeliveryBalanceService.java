@@ -5,9 +5,9 @@ import com.running.business.pojo.RunDeliveryBalance;
 
 public interface RunDeliveryBalanceService {
 
-	BaseResult addRunDeliveryBalance(RunDeliveryBalance balance);
+	BaseResult saveRunDeliveryBalance(RunDeliveryBalance balance);
 	BaseResult updateRunDeliveryBalance(RunDeliveryBalance balance);
-	BaseResult delRunDeliveryBalanceByDID(Integer did);
+	BaseResult deleteRunDeliveryBalanceByDID(Integer did);
 	
 	BaseResult getRunDeliveryBalanceByDID(Integer did);
 	BaseResult getAllRunDeliveryBalance();

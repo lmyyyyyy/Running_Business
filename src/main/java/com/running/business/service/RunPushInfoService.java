@@ -5,9 +5,9 @@ import com.running.business.pojo.RunPushInfo;
 
 public interface RunPushInfoService {
 	
-	BaseResult addRunPushInfo(RunPushInfo pushInfo);
+	BaseResult saveRunPushInfo(RunPushInfo pushInfo);
 	BaseResult updatePushInfo(RunPushInfo pushInfo);
-	BaseResult delPushInfoByID(Integer id);
+	BaseResult deletePushInfoByID(Integer id);
 	
 	BaseResult getRunPushInfoByID(Integer id);
 	BaseResult getAllRunPushInfo();

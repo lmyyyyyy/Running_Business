@@ -57,11 +57,11 @@ public class RunOrder {
 
     private Date recvTime;
 
-    private String targetTime;
+    private Date targetTime;
 
     private Date finishTime;
 
-    public RunOrder(String orderid, Integer uid, Integer did, Integer type, String goods, String sourceAddress, String sourceRemarkAddress, String sourcePhone, String targetAddress, String targetRemarkAddress, String targetPhone, String remark, Date requireTime, Long timeLong, Double amount, Double fee, Double distance, String sourceLongitude, String sourceLatitude, String recvLongitude, String recvLatitude, Integer status, Integer payType, Double payAmout, Date addTime, Date updateTime, Date recvTime, String targetTime, Date finishTime) {
+    public RunOrder(String orderid, Integer uid, Integer did, Integer type, String goods, String sourceAddress, String sourceRemarkAddress, String sourcePhone, String targetAddress, String targetRemarkAddress, String targetPhone, String remark, Date requireTime, Long timeLong, Double amount, Double fee, Double distance, String sourceLongitude, String sourceLatitude, String recvLongitude, String recvLatitude, Integer status, Integer payType, Double payAmout, Date addTime, Date updateTime, Date recvTime, Date targetTime, Date finishTime) {
         this.orderid = orderid;
         this.uid = uid;
         this.did = did;
@@ -313,12 +313,12 @@ public class RunOrder {
         this.recvTime = recvTime;
     }
 
-    public String getTargetTime() {
+    public Date getTargetTime() {
         return targetTime;
     }
 
-    public void setTargetTime(String targetTime) {
-        this.targetTime = targetTime == null ? null : targetTime.trim();
+    public void setTargetTime(Date targetTime) {
+        this.targetTime = targetTime;
     }
 
     public Date getFinishTime() {

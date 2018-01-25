@@ -13,6 +13,9 @@ public class RunUser {
 
     private Date updateTime;
 
+    /**
+     * 0：false，1：true
+     */
     private Boolean userStatus;
 
     private Boolean isDelete;

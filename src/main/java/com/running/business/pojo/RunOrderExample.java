@@ -1865,62 +1865,52 @@ public class RunOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeEqualTo(String value) {
+        public Criteria andTargetTimeEqualTo(Date value) {
             addCriterion("target_time =", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeNotEqualTo(String value) {
+        public Criteria andTargetTimeNotEqualTo(Date value) {
             addCriterion("target_time <>", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeGreaterThan(String value) {
+        public Criteria andTargetTimeGreaterThan(Date value) {
             addCriterion("target_time >", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andTargetTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("target_time >=", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeLessThan(String value) {
+        public Criteria andTargetTimeLessThan(Date value) {
             addCriterion("target_time <", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeLessThanOrEqualTo(String value) {
+        public Criteria andTargetTimeLessThanOrEqualTo(Date value) {
             addCriterion("target_time <=", value, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeLike(String value) {
-            addCriterion("target_time like", value, "targetTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetTimeNotLike(String value) {
-            addCriterion("target_time not like", value, "targetTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetTimeIn(List<String> values) {
+        public Criteria andTargetTimeIn(List<Date> values) {
             addCriterion("target_time in", values, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeNotIn(List<String> values) {
+        public Criteria andTargetTimeNotIn(List<Date> values) {
             addCriterion("target_time not in", values, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeBetween(String value1, String value2) {
+        public Criteria andTargetTimeBetween(Date value1, Date value2) {
             addCriterion("target_time between", value1, value2, "targetTime");
             return (Criteria) this;
         }
 
-        public Criteria andTargetTimeNotBetween(String value1, String value2) {
+        public Criteria andTargetTimeNotBetween(Date value1, Date value2) {
             addCriterion("target_time not between", value1, value2, "targetTime");
             return (Criteria) this;
         }

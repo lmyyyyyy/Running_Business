@@ -5,11 +5,11 @@ import com.running.business.pojo.RunOrderPay;
 
 public interface RunOrderPayService {
 	
-	BaseResult addRunOrderPay(RunOrderPay pay);
+	BaseResult saveRunOrderPay(RunOrderPay pay);
 	BaseResult updateRunOrderPay(RunOrderPay pay);
-	BaseResult delRunOrderPayByID(Integer id);
-	BaseResult delRunOrderPayByOID(String oid);
-	BaseResult delAllRunOrderByUID(Integer uid);
+	BaseResult deleteRunOrderPayByID(Integer id);
+	BaseResult deleteRunOrderPayByOID(String oid);
+	BaseResult deleteAllRunOrderByUID(Integer uid);
 	
 	BaseResult getRunOrderPayByID(Integer id);
 	BaseResult getRunOrderPayByOID(String oid);
