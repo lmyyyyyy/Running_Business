@@ -20,7 +20,7 @@ public class RunUserBalanceRecordServiceImpl implements RunUserBalanceRecordServ
 	private RunUserBalanceRecordMapper runUserBalanceRecordMapper;
 
 	@Override
-	public BaseResult addRunUserBalanceRecord(
+	public BaseResult saveRunUserBalanceRecord(
 			RunUserBalanceRecord record) {
 		runUserBalanceRecordMapper.insert(record);
 		return BaseResult.success();
@@ -34,7 +34,7 @@ public class RunUserBalanceRecordServiceImpl implements RunUserBalanceRecordServ
 	}
 
 	@Override
-	public BaseResult delRunUserBalanceRecordByID(Integer id) {
+	public BaseResult deleteRunUserBalanceRecordByID(Integer id) {
 		RunUserBalanceRecord record = runUserBalanceRecordMapper.selectByPrimaryKey(id);
 		if (record == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -44,7 +44,7 @@ public class RunUserBalanceRecordServiceImpl implements RunUserBalanceRecordServ
 	}
 
 	@Override
-	public BaseResult delAllRunUserBalanceRecordByUID(Integer uid) {
+	public BaseResult deleteAllRunUserBalanceRecordByUID(Integer uid) {
 		RunUserBalanceRecordExample example = new RunUserBalanceRecordExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);

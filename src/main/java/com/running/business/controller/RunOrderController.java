@@ -2,6 +2,18 @@ package com.running.business.controller;
 
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
+
+import com.running.business.common.ResultEnum;
+import com.running.business.enums.OrderTypeEnum;
+import com.running.business.exception.AppException;
+import com.running.business.pojo.RunOrder;
+import com.running.business.sdk.BizFetcher;
+import com.running.business.sdk.OrderServiceRegistry;
+import com.running.business.sdk.OrderServiceStrategy;
+import com.running.business.service.RunOrderService;
+import com.running.business.service.RunUserService;
+import com.running.business.util.RequestUtil;
+import io.swagger.annotations.Api;
 import com.running.business.exception.AppException;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserService;
@@ -10,15 +22,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by sunxiaodong3 on 2018/1/7.
  */
 @RestController
 @RequestMapping("/order")
+@Api(value = "订单模块", tags = {"订单模块"})
 public class RunOrderController extends BaseController {
     private static Logger LOGGER = LoggerFactory.getLogger(RunOrderController.class);
 
@@ -29,6 +46,37 @@ public class RunOrderController extends BaseController {
 
     @Autowired
     RunOrderService runOrderService;
+
+
+    @Autowired
+    OrderServiceRegistry orderServiceRegistry;
+
+    @Autowired
+    RequestUtil requestUtil;
+
+
+    @RequestMapping(value = "/{bizId}", method = RequestMethod.POST)
+    @ApiOperation(value = "用户下单(刘明宇)", notes = "用户下单", response = BaseResult.class)
+    public BaseResult order(@PathVariable Integer bizId, @RequestBody RunOrder order, HttpServletRequest request) throws Exception {
+        Integer uid = requestUtil.getUserId(request);
+        if (uid == null ){
+            LOGGER.error("{} 用户session失效");
+            return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
+        }
+        LOGGER.info("{} 用户{}下单 业务线为{}", LOG_PREFIX, uid, bizId);
+
+        OrderTypeEnum orderTypeEnum = OrderTypeEnum.getOrderTypeEnum(bizId);
+        if (orderTypeEnum == null) {
+            LOGGER.error("{} 未知的订单类型, bizId = {}", LOG_PREFIX, bizId);
+            return BaseResult.fail(ResultEnum.NOT_HAVE_THIS_BIZID);
+        }
+        OrderServiceStrategy orderServiceStrategy = orderServiceRegistry.getOrderServiceStrategy(bizId);
+        if (orderServiceStrategy == null) {
+            LOGGER.error("{} 没有该条业务线, bizId = {}", LOG_PREFIX, bizId);
+            return BaseResult.fail(ResultEnum.NOT_HAVE_THIS_BIZID);
+        }
+        return BaseResult.success(BizFetcher.fetchMap(bizId, orderTypeEnum, order, uid));
+    }
 
     /**
      * 根据订单ID获取订单信息

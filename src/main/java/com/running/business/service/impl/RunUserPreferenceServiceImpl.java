@@ -19,7 +19,7 @@ public class RunUserPreferenceServiceImpl implements RunUserPreferenceService{
 	private RunUserPreferenceMapper runUserPreferenceMapper;
 
 	@Override
-	public BaseResult addRunUserPreference(RunUserPreference userpre) {
+	public BaseResult saveRunUserPreference(RunUserPreference userpre) {
 		runUserPreferenceMapper.insert(userpre);
 		return BaseResult.success();
 	}
@@ -31,7 +31,7 @@ public class RunUserPreferenceServiceImpl implements RunUserPreferenceService{
 	}
 
 	@Override
-	public BaseResult delRunUserPreferenceByID(Integer id) {
+	public BaseResult deleteRunUserPreferenceByID(Integer id) {
 		RunUserPreference userpre = runUserPreferenceMapper.selectByPrimaryKey(id);
 		if (userpre == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -41,7 +41,7 @@ public class RunUserPreferenceServiceImpl implements RunUserPreferenceService{
 	}
 
 	@Override
-	public BaseResult delAllRunUserPreferenceByUID(Integer uid) {
+	public BaseResult deleteAllRunUserPreferenceByUID(Integer uid) {
 		RunUserPreferenceExample example = new RunUserPreferenceExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);

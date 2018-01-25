@@ -16,7 +16,7 @@ public class RunUserBalanceServiceImpl implements RunUserBalanceService {
     private RunUserBalanceMapper runUserBalanceMapper;
 
     @Override
-    public BaseResult addRunUserBalance(RunUserBalance runUserBalance) throws AppException {
+    public BaseResult saveRunUserBalance(RunUserBalance runUserBalance) throws AppException {
         runUserBalanceMapper.insert(runUserBalance);
         return BaseResult.success();
     }
@@ -28,7 +28,7 @@ public class RunUserBalanceServiceImpl implements RunUserBalanceService {
     }
 
     @Override
-    public BaseResult delRunUserBalance(Integer id) throws AppException {
+    public BaseResult deleteRunUserBalance(Integer id) throws AppException {
         RunUserBalance balance = runUserBalanceMapper.selectByPrimaryKey(id);
         if (balance == null) {
             throw new AppException(ResultEnum.QUERY_ERROR);

@@ -6,6 +6,7 @@ import com.running.business.pojo.RunAdmin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * 管理员Service接口
@@ -19,9 +20,31 @@ public interface RunAdminService {
      * @return
      * @throws AppException
      */
-    BaseResult insertRunAdmin(RunAdmin admin) throws AppException;
+    BaseResult saveRunAdmin(RunAdmin admin) throws AppException;
 
-    BaseResult updateRunAdmin(RunAdmin admin) throws AppException;
+    /**
+     * 更新管理员
+     *
+     * @param admin
+     * @throws AppException
+     */
+    void updateRunAdmin(RunAdmin admin) throws AppException;
+
+    /**
+     * 根据用户id集合更新管理员登录状态
+     *
+     * @param userIds
+     * @throws AppException
+     */
+    void updateAdminListStatus(Set<Integer> userIds) throws AppException;
+
+    /**
+     * 修改管理员密码
+     *
+     * @param admin
+     * @throws AppException
+     */
+    void updateRunAdminPassword(RunAdmin admin) throws AppException;
 
     /**
      * 删除管理员
@@ -30,7 +53,7 @@ public interface RunAdminService {
      * @return
      * @throws AppException
      */
-    BaseResult delRunAdminByID(Integer id) throws AppException;
+    BaseResult deleteRunAdminByID(Integer id) throws AppException;
 
     /**
      * 根据id获取管理员
@@ -98,4 +121,13 @@ public interface RunAdminService {
      * @throws AppException
      */
     boolean checkPwd(String username, String password) throws AppException;
+
+    /**
+     * 根据id集合查询当前在线的管理员集合
+     *
+     * @param ids
+     * @return
+     * @throws AppException
+     */
+    Set<Integer> queryAdminsByIds(Set<Integer> ids) throws AppException;
 }

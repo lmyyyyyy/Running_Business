@@ -8,10 +8,10 @@ package com.running.business.enums;
  */
 public enum OrderTypeEnum {
 
-    HELP_BUY(0, "帮我买", "com.running.business.service.RunOrderService", "helpBuyOrder"),
-    HELP_SEND(1, "帮我送", "com.running.business.service.RunOrderService", "helpSendOrder"),
-    HELP_GET(2, "帮我取", "com.running.business.service.RunOrderService", "helpGetOrder"),
-    HELP_QUEUE(3, "代排队", "com.running.business.service.RunOrderService", "helpQueueOrder");
+    HELP_BUY(1, "帮我买", "HelpBuyOrderService", "saveHelpBuyOrder"),
+    HELP_SEND(2, "帮我送", "HelpSendOrderService", "saveHelpSendOrder"),
+    HELP_GET(3, "帮我取", "HelpGetOrderService", "saveHelpGetOrder"),
+    HELP_QUEUE(4, "代排队", "HelpQueueOrderService", "saveHelpQueueOrder");
 
 
     private Integer code;

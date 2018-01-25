@@ -20,7 +20,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	private RunOrderPayMapper runOrderPayMapper;
 
 	@Override
-	public BaseResult addRunOrderPay(RunOrderPay pay) {
+	public BaseResult saveRunOrderPay(RunOrderPay pay) {
 		runOrderPayMapper.insert(pay);
 		return BaseResult.success();
 	}
@@ -32,7 +32,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult delRunOrderPayByID(Integer id) {
+	public BaseResult deleteRunOrderPayByID(Integer id) {
 		RunOrderPay pay = runOrderPayMapper.selectByPrimaryKey(id);
 		if (pay == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -42,7 +42,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult delRunOrderPayByOID(String oid) {
+	public BaseResult deleteRunOrderPayByOID(String oid) {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(oid);
@@ -58,7 +58,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult delAllRunOrderByUID(Integer uid) {
+	public BaseResult deleteAllRunOrderByUID(Integer uid) {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);

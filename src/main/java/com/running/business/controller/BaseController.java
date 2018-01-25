@@ -21,7 +21,7 @@ public class BaseController {
         if (e instanceof AppException) {
             return new BaseResult(((AppException) e).getErrorCode(), e.getMessage());
         } else {
-            LOGGER.error("BaseController "+e.getMessage());
+            LOGGER.error("BaseController " + e.getMessage());
             return BaseResult.fail(ResultEnum.INNER_ERROR.getCode(), ResultEnum.INNER_ERROR.getMsg());
         }
     }

@@ -36,9 +36,8 @@
 		<constructor-arg name="port" value="6379"></constructor-arg>
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
 	</bean>
-	<bean id="jedisClient" class="com.running.business.mapper.impl.JedisClientSingle"/> 
-	
-	
+	<bean id="jedisClient" class="com.running.business.mapper.impl.JedisClientSingle"/>
+
 	<!-- jedis集群版配置 -->
 	<!-- <bean id="redisClient" class="redis.clients.jedis.JedisCluster">
 		<constructor-arg name="nodes">

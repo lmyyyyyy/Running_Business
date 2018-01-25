@@ -5,10 +5,10 @@ import com.running.business.pojo.RunInfo;
 
 public interface RunInfoService {
 
-	BaseResult addRunInfo(RunInfo runInfo);
+	BaseResult saveRunInfo(RunInfo runInfo);
 	BaseResult updateRunInfo(RunInfo runInfo);
-	BaseResult delRunInfoByID(Integer id);
-	BaseResult delAllRunInfo();
+	BaseResult deleteRunInfoByID(Integer id);
+	BaseResult deleteAllRunInfo();
 	
 	BaseResult getRunInfoByID(Integer id);
 	BaseResult getAllRunInfo();

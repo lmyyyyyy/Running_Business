@@ -19,7 +19,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService{
 	private RunUserCouponMapper runUserCouponMapper;
 
 	@Override
-	public BaseResult addRunUserCoupon(RunUserCoupon runUserCoupon) {
+	public BaseResult saveRunUserCoupon(RunUserCoupon runUserCoupon) {
 		runUserCouponMapper.insert(runUserCoupon);
 		return BaseResult.success();
 	}
@@ -31,7 +31,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService{
 	}
 
 	@Override
-	public BaseResult delRunUserCouponByID(Integer id) {
+	public BaseResult deleteRunUserCouponByID(Integer id) {
 		RunUserCoupon userCoupon = runUserCouponMapper.selectByPrimaryKey(id);
 		if (userCoupon == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -41,7 +41,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService{
 	}
 
 	@Override
-	public BaseResult delAllRunUserCoupon(Integer uid) {
+	public BaseResult deleteAllRunUserCoupon(Integer uid) {
 		RunUserCouponExample example = new RunUserCouponExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);

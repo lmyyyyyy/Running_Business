@@ -19,7 +19,7 @@ public class RunDeliveryBalanceRecordServiceImpl implements RunDeliveryBalanceRe
 	private RunDeliveryBalanceRecordMapper runDeliveryRecordMapper;
 
 	@Override
-	public BaseResult addRunDeliveryRecord(RunDeliveryBalanceRecord record) {
+	public BaseResult saveRunDeliveryRecord(RunDeliveryBalanceRecord record) {
 		runDeliveryRecordMapper.insert(record);
 		return BaseResult.success();
 	}
@@ -31,7 +31,7 @@ public class RunDeliveryBalanceRecordServiceImpl implements RunDeliveryBalanceRe
 	}
 
 	@Override
-	public BaseResult delRunDeliveryRecordByID(Integer id) {
+	public BaseResult deleteRunDeliveryRecordByID(Integer id) {
 		RunDeliveryBalanceRecord record = runDeliveryRecordMapper.selectByPrimaryKey(id);
 		if (record == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -41,7 +41,7 @@ public class RunDeliveryBalanceRecordServiceImpl implements RunDeliveryBalanceRe
 	}
 
 	@Override
-	public BaseResult delAllRunDeliveryRecordByDID(Integer did) {
+	public BaseResult deleteAllRunDeliveryRecordByDID(Integer did) {
 		RunDeliveryBalanceRecordExample example = new RunDeliveryBalanceRecordExample();
 		RunDeliveryBalanceRecordExample.Criteria criteria = example.createCriteria();
 		criteria.andDidEqualTo(did);

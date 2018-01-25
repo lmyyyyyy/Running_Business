@@ -107,7 +107,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" >
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
     insert into run_deliveryuser (did, userphone, password, 
       add_time, update_time, status, 
       available, is_delete, credits, 
@@ -190,7 +190,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map" keyColumn="did" keyProperty="record.did">
     update run_deliveryuser
     <set >
       <if test="record.did != null" >
@@ -228,7 +228,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map" keyProperty="did" keyColumn="did">
     update run_deliveryuser
     set did = #{record.did,jdbcType=INTEGER},
       userphone = #{record.userphone,jdbcType=VARCHAR},
@@ -244,7 +244,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryuser" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryuser" keyProperty="did" keyColumn="did">
     update run_deliveryuser
     <set >
       <if test="userphone != null" >
@@ -277,7 +277,7 @@
     </set>
     where did = #{did,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryuser" >
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryuser" keyProperty="did" keyColumn="did">
     update run_deliveryuser
     set userphone = #{userphone,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},

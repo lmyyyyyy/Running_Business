@@ -5,11 +5,11 @@ import com.running.business.pojo.RunOrderStatus;
 
 public interface RunOrderStatusService {
 
-	BaseResult addRunOrderStatus(RunOrderStatus order);
+	BaseResult saveRunOrderStatus(RunOrderStatus order);
 	BaseResult updateRunOrderStatus(RunOrderStatus order);
-	BaseResult delRunOrderStatusByOID(String oid);
-	BaseResult delAllRunOrderStatusByUID(Integer uid);
-	BaseResult delAllRunOrderStatusByDID(Integer did);
+	BaseResult deleteRunOrderStatusByOID(String oid);
+	BaseResult deleteAllRunOrderStatusByUID(Integer uid);
+	BaseResult deleteAllRunOrderStatusByDID(Integer did);
 
 	BaseResult getRunOrderStatusByOID(String oid);
 	BaseResult getAllRunOrderStatusByUID(Integer uid);

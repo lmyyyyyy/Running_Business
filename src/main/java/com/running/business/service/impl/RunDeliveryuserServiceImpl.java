@@ -3,17 +3,23 @@ package com.running.business.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.dto.UserDTO;
+import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
 import com.running.business.mapper.RunDeliveryuserMapper;
+import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunDeliveryuserExample;
 import com.running.business.pojo.RunDeliveryuserExample.Criteria;
+import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
 import com.running.business.util.CookieUtils;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
+import com.running.business.util.UserUtil;
 import com.running.business.util.ValidateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +28,21 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
 
     @Autowired
     private RunDeliveryuserMapper runDeliveryuserMapper;
+
+    @Autowired
+    private RunDeliveryInfoService runDeliveryInfoService;
 
     /**
      * 连接redis
@@ -55,7 +67,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
      * @return
      */
     @Override
-    public Integer insertRunDeliveryuser(RunDeliveryuser user) throws AppException {
+    public Integer saveRunDeliveryuser(RunDeliveryuser user) throws AppException {
         if (user == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
@@ -79,7 +91,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
      * @throws AppException
      */
     @Override
-    public void delRunDeliveryuser(Integer uid) throws AppException {
+    public void deleteRunDeliveryuser(Integer uid) throws AppException {
         RunDeliveryuser user = runDeliveryuserMapper.selectByPrimaryKey(uid);
         if (user == null) {
             throw new AppException(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
@@ -97,7 +109,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
      * @throws AppException
      */
     @Override
-    public void modifyRunDeliveryuserPassword(RunDeliveryuser user) throws AppException {
+    public void updateRunDeliveryuserPassword(RunDeliveryuser user) throws AppException {
         if (user == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
@@ -119,6 +131,27 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         }
         runDeliveryuser.setUpdateTime(new Date());
         runDeliveryuserMapper.updateByPrimaryKeySelective(runDeliveryuser);
+    }
+
+    /**
+     * 根据用户id集合更新管理员登录状态
+     *
+     * @param userIds
+     * @throws AppException
+     */
+    @Override
+    public void updateDeliveryListStatus(Set<Integer> userIds) throws AppException {
+        if (userIds == null || userIds.size() == 0) {
+            return;
+        }
+        for (Integer userId : userIds) {
+            RunDeliveryuser user = new RunDeliveryuser();
+            user.setDid(userId);
+            user.setUpdateTime(new Date());
+            user.setStatus(false);
+            runDeliveryuserMapper.updateByPrimaryKeySelective(user);
+        }
+
     }
 
     /**
@@ -210,6 +243,17 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token, SSO_SESSION_EXPIRE);
         //添加cookie
         CookieUtils.setCookie(request, response, "RUN_TOKEN", token);
+        RunDeliveryInfo deliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(deliveryuser.getDid());
+        if (deliveryInfo == null) {
+            throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
+        }
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(deliveryuser.getDid());
+        userDTO.setName(deliveryInfo.getName());
+        userDTO.setPhone(deliveryuser.getUserphone());
+        userDTO.setStatus(deliveryuser.getStatus());
+        userDTO.setUserType(UserTypeEnum.DELIVERY.getCode());
+        UserUtil.bind(userDTO);
         return token;
     }
 
@@ -307,8 +351,50 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         if (deliveryuser == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
+        //登录人员列表中去除当前正常退出人员
+        jedisClient.srem(Config.LOGIN_DELIVERY_IDS_KEY, String.valueOf(deliveryuser.getDid()));
+        deliveryuser.setUpdateTime(new Date());
         deliveryuser.setStatus(false);
         runDeliveryuserMapper.updateByPrimaryKeySelective(deliveryuser);
         return BaseResult.success(deliveryuser);
+    }
+
+    /**
+     * 根据状态获取所有未被删除未被禁用的配送员
+     *
+     * @param status
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunDeliveryuser> getRunDeliveryuserByStatus(boolean status) throws AppException {
+        RunDeliveryuserExample example = new RunDeliveryuserExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andAvailableEqualTo(true);
+        criteria.andIsDeleteEqualTo(false);
+        criteria.andStatusEqualTo(status);
+        List<RunDeliveryuser> deliveryusers = runDeliveryuserMapper.selectByExample(example);
+        return deliveryusers;
+    }
+
+    /**
+     * 根据id集合查询当前在线的配送员集合
+     *
+     * @param ids
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Set<Integer> queryDeliverysByIds(Set<Integer> ids) throws AppException {
+        if (ids.isEmpty()) {
+            return null;
+        }
+        RunDeliveryuserExample example = new RunDeliveryuserExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andDidIn(new ArrayList<>(ids));
+        criteria.andStatusEqualTo(true);
+        example.setOrderByClause(" update_time desc");
+        List<RunDeliveryuser> list = runDeliveryuserMapper.selectByExample(example);
+        return list.stream().map(user ->user.getDid()).collect(Collectors.toSet());
     }
 }
