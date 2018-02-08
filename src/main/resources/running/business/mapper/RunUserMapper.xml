@@ -103,7 +103,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunUser" >
+  <insert id="insert" parameterType="com.running.business.pojo.RunUser" useGeneratedKeys="true" keyProperty="uid" keyColumn="uid">
     insert into run_user (uid, userphone, password, 
       add_time, update_time, user_status, 
       is_delete)

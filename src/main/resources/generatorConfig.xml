@@ -70,8 +70,11 @@
                              targetProject="generate" type="XMLMAPPER">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
+        <!--<table tableName="heart_beat" domainObjectName="HeartBeat"></table>
+        <table tableName="run_service_log" domainObjectName="RunServiceLog"></table>
+        <table tableName="run_mapper_log" domainObjectName="RunMapperLog"></table>-->
 
-        <table tableName="run_user" domainObjectName="RunUser" ></table>
+        <!--<table tableName="run_user" domainObjectName="RunUser" ></table>
         <table tableName="run_user_info" domainObjectName="RunUserInfo" ></table>
         <table tableName="run_user_balance" domainObjectName="RunUserBalance" ></table>
         <table tableName="run_user_coupon" domainObjectName="RunUserCoupon" ></table>
@@ -97,6 +100,6 @@
 
         <table tableName="refund_record" domainObjectName="RefundRecord"></table>
         <table tableName="refund_apply" domainObjectName="RefundApply"></table>
-        <table tableName="report_record" domainObjectName="ReportRecord"></table>
+        <table tableName="report_record" domainObjectName="ReportRecord"></table>-->
     </context>
 </generatorConfiguration>

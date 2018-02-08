@@ -5,11 +5,11 @@ import com.running.business.pojo.RunUserAddress;
 
 public interface RunUserAddressService {
 
-    BaseResult addRunUserAddress(RunUserAddress userAddress);
+    BaseResult saveRunUserAddress(RunUserAddress userAddress);
 
     BaseResult updateRunUserAddress(RunUserAddress userAddress);
 
-    BaseResult delRunUserAddressByID(Integer id);
+    BaseResult deleteRunUserAddressByID(Integer id);
 
     /**
      * 根据用户id删除所有地址
@@ -17,7 +17,7 @@ public interface RunUserAddressService {
      * @param uid
      * @return
      */
-    BaseResult delAllRunUserAddressByUID(Integer uid);
+    BaseResult deleteAllRunUserAddressByUID(Integer uid);
 
     /**
      * 根据id获取地址

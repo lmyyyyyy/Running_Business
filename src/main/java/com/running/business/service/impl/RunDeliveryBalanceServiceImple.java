@@ -19,7 +19,7 @@ public class RunDeliveryBalanceServiceImple implements RunDeliveryBalanceService
 	private RunDeliveryBalanceMapper runDeliveryBalanceMapper;
 
 	@Override
-	public BaseResult addRunDeliveryBalance(RunDeliveryBalance balance) {
+	public BaseResult saveRunDeliveryBalance(RunDeliveryBalance balance) {
 		runDeliveryBalanceMapper.insert(balance);
 		return BaseResult.success();
 	}
@@ -32,7 +32,7 @@ public class RunDeliveryBalanceServiceImple implements RunDeliveryBalanceService
 	}
 
 	@Override
-	public BaseResult delRunDeliveryBalanceByDID(Integer did) {
+	public BaseResult deleteRunDeliveryBalanceByDID(Integer did) {
 		RunDeliveryBalance balance = runDeliveryBalanceMapper.selectByPrimaryKey(did);
 		if (balance == null) {
 			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());

@@ -5,10 +5,10 @@ import com.running.business.pojo.RunUserCoupon;
 
 public interface RunUserCouponService {
 
-	BaseResult addRunUserCoupon(RunUserCoupon runUserCoupon);
+	BaseResult saveRunUserCoupon(RunUserCoupon runUserCoupon);
 	BaseResult updateRunUserCoupon(RunUserCoupon runUserCoupon);
-	BaseResult delRunUserCouponByID(Integer id);
-	BaseResult delAllRunUserCoupon(Integer uid);
+	BaseResult deleteRunUserCouponByID(Integer id);
+	BaseResult deleteAllRunUserCoupon(Integer uid);
 	
 	BaseResult getRunUserCouponByID(Integer id);
 	BaseResult getAllRunUserCouponByUID(Integer uid);

@@ -9,16 +9,22 @@ public class RunAdmin {
 
     private String adminPassword;
 
+    private Boolean status;
+
     private Date adminTime;
 
     private Date updateTime;
 
-    public RunAdmin(Integer adminId, String adminUsername, String adminPassword, Date adminTime, Date updateTime) {
+    private Boolean isDelete;
+
+    public RunAdmin(Integer adminId, String adminUsername, String adminPassword, Boolean status, Date adminTime, Date updateTime, Boolean isDelete) {
         this.adminId = adminId;
         this.adminUsername = adminUsername;
         this.adminPassword = adminPassword;
+        this.status = status;
         this.adminTime = adminTime;
         this.updateTime = updateTime;
+        this.isDelete = isDelete;
     }
 
     public RunAdmin() {
@@ -49,6 +55,14 @@ public class RunAdmin {
         this.adminPassword = adminPassword == null ? null : adminPassword.trim();
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public Date getAdminTime() {
         return adminTime;
     }
@@ -63,5 +77,13 @@ public class RunAdmin {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 }

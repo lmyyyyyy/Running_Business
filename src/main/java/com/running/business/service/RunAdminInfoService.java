@@ -14,7 +14,7 @@ public interface RunAdminInfoService {
      * @return
      * @throws AppException
      */
-    BaseResult insertRunAdminInfo(RunAdminInfo adminInfo) throws AppException;
+    BaseResult saveRunAdminInfo(RunAdminInfo adminInfo) throws AppException;
 
     /**
      * 更新管理员信息
@@ -32,7 +32,7 @@ public interface RunAdminInfoService {
      * @return
      * @throws AppException
      */
-    BaseResult delRunAdminInfoByID(Integer id) throws AppException;
+    BaseResult deleteRunAdminInfoByID(Integer id) throws AppException;
 
     /**
      * 根据id获取管理员信息

@@ -5,11 +5,11 @@ import com.running.business.pojo.RunOrder;
 
 public interface RunOrderService {
 
-	BaseResult addRunOrder(RunOrder order);
+	BaseResult saveRunOrder(RunOrder order);
 	BaseResult updateRunOrder(RunOrder order);
-	BaseResult delRunOrderByOID(String oid);
-	BaseResult delAllRunOrderByUID(Integer uid);
-	BaseResult delAllRunOrderByDID(Integer did);
+	BaseResult deleteRunOrderByOID(String oid);
+	BaseResult deleteAllRunOrderByUID(Integer uid);
+	BaseResult deleteAllRunOrderByDID(Integer did);
 
 	BaseResult getRunOrderByOID(String oid);
 	BaseResult getAllRunOrderByUID(Integer uid);

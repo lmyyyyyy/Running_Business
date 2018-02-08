@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.running.business.monitor.mapper.RunServiceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.running.business.monitor.pojo.RunServiceLog" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="class_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="method_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="time_cost" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="operator_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="operator_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="invoke_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="class_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="method_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="time_cost" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="operator_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="operator_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="invoke_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="method_param" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+      <arg column="return_value" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+      <arg column="error_message" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, class_name, method_name, time_cost, operator_id, operator_name, invoke_status, 
+    add_time, update_time, parent_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    method_param, return_value, error_message
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.running.business.monitor.pojo.RunServiceLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_service_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.running.business.monitor.pojo.RunServiceLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from run_service_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from run_service_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from run_service_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.running.business.monitor.pojo.RunServiceLogExample" >
+    delete from run_service_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    insert into run_service_log (id, class_name, method_name, 
+      time_cost, operator_id, operator_name, 
+      invoke_status, add_time, update_time, 
+      parent_id, method_param, return_value, 
+      error_message)
+    values (#{id,jdbcType=INTEGER}, #{className,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{timeCost,jdbcType=BIGINT}, #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, 
+      #{invokeStatus,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{parentId,jdbcType=INTEGER}, #{methodParam,jdbcType=LONGVARCHAR}, #{returnValue,jdbcType=LONGVARCHAR}, 
+      #{errorMessage,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    insert into run_service_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="className != null" >
+        class_name,
+      </if>
+      <if test="methodName != null" >
+        method_name,
+      </if>
+      <if test="timeCost != null" >
+        time_cost,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="operatorName != null" >
+        operator_name,
+      </if>
+      <if test="invokeStatus != null" >
+        invoke_status,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="methodParam != null" >
+        method_param,
+      </if>
+      <if test="returnValue != null" >
+        return_value,
+      </if>
+      <if test="errorMessage != null" >
+        error_message,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="className != null" >
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeCost != null" >
+        #{timeCost,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorName != null" >
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeStatus != null" >
+        #{invokeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="methodParam != null" >
+        #{methodParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="returnValue != null" >
+        #{returnValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.running.business.monitor.pojo.RunServiceLogExample" resultType="java.lang.Integer" >
+    select count(*) from run_service_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update run_service_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.className != null" >
+        class_name = #{record.className,jdbcType=VARCHAR},
+      </if>
+      <if test="record.methodName != null" >
+        method_name = #{record.methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timeCost != null" >
+        time_cost = #{record.timeCost,jdbcType=BIGINT},
+      </if>
+      <if test="record.operatorId != null" >
+        operator_id = #{record.operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.operatorName != null" >
+        operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invokeStatus != null" >
+        invoke_status = #{record.invokeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.methodParam != null" >
+        method_param = #{record.methodParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.returnValue != null" >
+        return_value = #{record.returnValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.errorMessage != null" >
+        error_message = #{record.errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update run_service_log
+    set id = #{record.id,jdbcType=INTEGER},
+      class_name = #{record.className,jdbcType=VARCHAR},
+      method_name = #{record.methodName,jdbcType=VARCHAR},
+      time_cost = #{record.timeCost,jdbcType=BIGINT},
+      operator_id = #{record.operatorId,jdbcType=INTEGER},
+      operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      invoke_status = #{record.invokeStatus,jdbcType=INTEGER},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      method_param = #{record.methodParam,jdbcType=LONGVARCHAR},
+      return_value = #{record.returnValue,jdbcType=LONGVARCHAR},
+      error_message = #{record.errorMessage,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update run_service_log
+    set id = #{record.id,jdbcType=INTEGER},
+      class_name = #{record.className,jdbcType=VARCHAR},
+      method_name = #{record.methodName,jdbcType=VARCHAR},
+      time_cost = #{record.timeCost,jdbcType=BIGINT},
+      operator_id = #{record.operatorId,jdbcType=INTEGER},
+      operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      invoke_status = #{record.invokeStatus,jdbcType=INTEGER},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      parent_id = #{record.parentId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    update run_service_log
+    <set >
+      <if test="className != null" >
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeCost != null" >
+        time_cost = #{timeCost,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorName != null" >
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeStatus != null" >
+        invoke_status = #{invokeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="methodParam != null" >
+        method_param = #{methodParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="returnValue != null" >
+        return_value = #{returnValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    update run_service_log
+    set class_name = #{className,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      time_cost = #{timeCost,jdbcType=BIGINT},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      invoke_status = #{invokeStatus,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      method_param = #{methodParam,jdbcType=LONGVARCHAR},
+      return_value = #{returnValue,jdbcType=LONGVARCHAR},
+      error_message = #{errorMessage,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.running.business.monitor.pojo.RunServiceLog" >
+    update run_service_log
+    set class_name = #{className,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      time_cost = #{timeCost,jdbcType=BIGINT},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      invoke_status = #{invokeStatus,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+    insert into run_service_log (class_name, method_name,
+    time_cost, operator_id, operator_name,
+    invoke_status, add_time, update_time,
+    method_param, return_value, error_message,parent_id
+    )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.className,jdbcType=VARCHAR}, #{item.methodName,jdbcType=VARCHAR},
+      #{item.timeCost,jdbcType=BIGINT}, #{item.operatorId,jdbcType=BIGINT}, #{item.operatorName,jdbcType=VARCHAR},
+      #{item.invokeStatus,jdbcType=INTEGER}, #{item.addTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
+      #{item.methodParam,jdbcType=LONGVARCHAR}, #{item.returnValue,jdbcType=LONGVARCHAR}, #{item.errorMessage,jdbcType=LONGVARCHAR},
+      #{item.parentId,jdbcType=INTEGER}
+      )
+    </foreach>
+  </insert>
+
+  <update id="batchUpdateParentId">
+    UPDATE run_service_log
+    SET parent_id = CASE id
+    <foreach collection="items" item="item">
+      <if test="item.parent != null and item.parent.id != null">
+        WHEN #{item.id} THEN #{item.parent.id}
+      </if>
+      <if test="item.parent == null or item.parent.id == null">
+        WHEN #{item.id} THEN 0
+      </if>
+    </foreach>
+    END
+    WHERE id IN
+    <foreach collection="items" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
+  </update>
+</mapper>
