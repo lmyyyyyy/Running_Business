@@ -19,4 +19,5 @@ public interface RunOrderService {
 	BaseResult getAllRunOrder();
 
 	BaseResult getOrderByUIDAndStatus(int id, int status, int currentPage);
+	BaseResult updateRunOrderStatusByOrder(RunOrder order);
 }

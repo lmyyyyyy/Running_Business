@@ -1,8 +1,11 @@
 package com.running.business.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.mapper.RunUserCouponMapper;
+import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunUserCoupon;
 import com.running.business.pojo.RunUserCouponExample;
 import com.running.business.pojo.RunUserCouponExample.Criteria;
@@ -68,5 +71,34 @@ public class RunUserCouponServiceImpl implements RunUserCouponService{
 			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
+	}
+
+	@Override
+	public BaseResult getAllRunUserCouponByUID(Integer uid, Integer currentPage) {
+		RunUserCouponExample example = new RunUserCouponExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUidEqualTo(uid);
+		PageHelper.startPage(currentPage, 20);
+		List<RunUserCoupon> list = runUserCouponMapper.selectByExample(example);
+		if (list == null || list.size() == 0) {
+			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+		}
+		PageInfo<RunUserCoupon> pageInfo = new PageInfo<>(list);
+		return BaseResult.success(list);
+	}
+
+	@Override
+	public BaseResult queryCouponByUidAndStatus(int uid, int status, int currentPage) {
+		RunUserCouponExample example = new RunUserCouponExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUidEqualTo(uid);
+		criteria.andStatusEqualTo(status);
+		PageHelper.startPage(currentPage, 20);
+		List<RunUserCoupon> list = runUserCouponMapper.selectByExample(example);
+		if (list == null || list.size() == 0) {
+			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+		}
+		PageInfo<RunUserCoupon> pageInfo = new PageInfo<>(list);
+		return BaseResult.success(pageInfo);
 	}
 }

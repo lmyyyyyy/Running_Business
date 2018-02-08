@@ -54,6 +54,7 @@ public class RestApiConfig extends WebMvcConfigurationSupport {
                 .title("跑商swagger测试")
                 .termsOfServiceUrl("http://lblogg.cn")
                 .contact("刘明宇")
+                .description("所有分页默认为每页20条数据")
                 .version("1.1")
                 .build();
     }

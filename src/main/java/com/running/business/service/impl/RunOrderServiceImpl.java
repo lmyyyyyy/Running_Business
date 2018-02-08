@@ -91,7 +91,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 		criteria.andUidEqualTo(uid);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -110,7 +110,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 		PageHelper.startPage(currentPage, 20);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		PageInfo<RunOrder> pageInfo=new PageInfo<RunOrder>(list);
 		return BaseResult.success(pageInfo);
@@ -123,7 +123,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 		criteria.andDidEqualTo(did);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -142,7 +142,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 		PageHelper.startPage(currentPage, 20);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
 		return BaseResult.success(pageInfo);
@@ -153,7 +153,7 @@ public class RunOrderServiceImpl implements RunOrderService{
 		RunOrderExample example = new RunOrderExample();
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -175,10 +175,19 @@ public class RunOrderServiceImpl implements RunOrderService{
 		PageHelper.startPage(currentPage, 20);
 		List<RunOrder> list = runOrderMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
 		}
 		PageInfo<RunOrder> pageInfo = new PageInfo<>(list);
 		return BaseResult.success(pageInfo);
+	}
+
+	@Override
+	public BaseResult updateRunOrderStatusByOrder(RunOrder order) {
+		int count = runOrderMapper.updateByPrimaryKeySelective(order);
+		if (count != 1) {
+			return BaseResult.fail(ResultEnum.DATA_ERROR.getCode(), ResultEnum.DATA_ERROR.getMsg());
+		}
+		return BaseResult.success();
 	}
 
 }

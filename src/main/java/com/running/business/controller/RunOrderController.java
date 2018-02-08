@@ -3,6 +3,7 @@ package com.running.business.controller;
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.exception.AppException;
+import com.running.business.pojo.RunOrder;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserService;
 import io.swagger.annotations.ApiOperation;
@@ -100,12 +101,33 @@ public class RunOrderController extends BaseController {
         try {
             result = runOrderService.getOrderByUIDAndStatus(id, status, currentPage);
         } catch (AppException e) {
-            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:"+id+",currentPage:"+currentPage+"},异常信息：{}", e);
+            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:{}, status: {},currentPage:{},异常信息：{}", id, status, currentPage, e);
             return BaseResult.fail(e.getErrorCode(), e.getMessage());
         }
         return result;
    }
 
+    /**
+     * 根据订单ID更新订单状态
+     * @param oid 订单ID
+     * @param status 订单状态
+     * @return
+     */
+   @RequestMapping(value = "/updateOrderStatus/{oid}/{status}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+   @ApiOperation(value = "根据订单ID更新订单状态(孙晓东)", notes = "根据订单ID更新订单状态", response = BaseResult.class)
+   public BaseResult updateOrderStatus(@PathVariable String oid, @PathVariable int status) {
+        BaseResult result = null;
+        try {
+            RunOrder runOrder = new RunOrder();
+            runOrder.setOrderid(oid);
+            runOrder.setStatus(status);
+            result = runOrderService.updateRunOrderStatusByOrder(runOrder);
+        } catch (AppException e) {
+           LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:{},status:{},异常信息：{}", oid, status, e);
+           return BaseResult.fail(e.getErrorCode(), e.getMessage());
+       }
+        return result;
+   }
 
-
+   
 }

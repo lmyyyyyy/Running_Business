@@ -12,4 +12,7 @@ public interface RunUserCouponService {
 	
 	BaseResult getRunUserCouponByID(Integer id);
 	BaseResult getAllRunUserCouponByUID(Integer uid);
+	BaseResult getAllRunUserCouponByUID(Integer uid, Integer currentPage);
+
+    BaseResult queryCouponByUidAndStatus(int uid, int status, int currentPage);
 }
