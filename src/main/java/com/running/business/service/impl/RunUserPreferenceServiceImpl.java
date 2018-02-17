@@ -1,7 +1,7 @@
 package com.running.business.service.impl;
 
-import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
+import com.running.business.exception.AppException;
 import com.running.business.mapper.RunUserPreferenceMapper;
 import com.running.business.pojo.RunUserPreference;
 import com.running.business.pojo.RunUserPreferenceExample;
@@ -13,75 +13,116 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RunUserPreferenceServiceImpl implements RunUserPreferenceService{
-	
-	@Autowired
-	private RunUserPreferenceMapper runUserPreferenceMapper;
+public class RunUserPreferenceServiceImpl implements RunUserPreferenceService {
 
-	@Override
-	public BaseResult saveRunUserPreference(RunUserPreference userpre) {
-		runUserPreferenceMapper.insert(userpre);
-		return BaseResult.success();
-	}
+    @Autowired
+    private RunUserPreferenceMapper runUserPreferenceMapper;
 
-	@Override
-	public BaseResult updateRunUserPreference(RunUserPreference userpre) {
-		runUserPreferenceMapper.updateByPrimaryKey(userpre);
-		return BaseResult.success(userpre);
-	}
+    /**
+     * 保存用户偏好
+     *
+     * @param userpre
+     * @throws AppException
+     */
+    @Override
+    public void saveRunUserPreference(RunUserPreference userpre) throws AppException {
+        if (userpre == null) {
+            throw new AppException(ResultEnum.USER_PREFERENCE_INFO_EMTPY);
+        }
+        runUserPreferenceMapper.insert(userpre);
+    }
 
-	@Override
-	public BaseResult deleteRunUserPreferenceByID(Integer id) {
-		RunUserPreference userpre = runUserPreferenceMapper.selectByPrimaryKey(id);
-		if (userpre == null) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
-		}
-		runUserPreferenceMapper.deleteByPrimaryKey(id);
-		return BaseResult.success();
-	}
+    /**
+     * 更新用户偏好
+     *
+     * @param userpre
+     * @throws AppException
+     */
+    @Override
+    public void updateRunUserPreference(RunUserPreference userpre) throws AppException {
+        if (userpre == null) {
+            throw new AppException(ResultEnum.USER_PREFERENCE_INFO_EMTPY);
+        }
+        runUserPreferenceMapper.updateByPrimaryKeySelective(userpre);
+    }
 
-	@Override
-	public BaseResult deleteAllRunUserPreferenceByUID(Integer uid) {
-		RunUserPreferenceExample example = new RunUserPreferenceExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andUidEqualTo(uid);
-		runUserPreferenceMapper.deleteByExample(example);
-		return BaseResult.success();
-	}
+    /**
+     * 根据id删除偏好
+     *
+     * @param id
+     * @throws AppException
+     */
+    @Override
+    public void deleteRunUserPreferenceByID(Integer id) throws AppException {
+        RunUserPreference userpre = runUserPreferenceMapper.selectByPrimaryKey(id);
+        if (userpre == null) {
+            throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+        }
+        runUserPreferenceMapper.deleteByPrimaryKey(id);
+    }
 
-	@Override
-	public BaseResult getRunUserPreferenceByID(Integer id) {
-		RunUserPreference userpre = runUserPreferenceMapper.selectByPrimaryKey(id);
-		if (userpre == null) {
-			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(),ResultEnum.QUERY_ERROR.getMsg());
-		}
-		return BaseResult.success(userpre);
-	}
+    /**
+     * 根据用户id删除偏好
+     *
+     * @param uid
+     * @throws AppException
+     */
+    @Override
+    public void deleteAllRunUserPreferenceByUID(Integer uid) throws AppException {
+        RunUserPreferenceExample example = new RunUserPreferenceExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        runUserPreferenceMapper.deleteByExample(example);
+    }
 
-	@Override
-	public BaseResult getAllUserPreferenceByUID(Integer uid) {
-		RunUserPreferenceExample example = new RunUserPreferenceExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andUidEqualTo(uid);
-		List<RunUserPreference> list = runUserPreferenceMapper.selectByExample(example);
-		if (list == null || list.size() == 0) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
-		}
-		return BaseResult.success(list);
-	}
+    /**
+     * 根据id获取偏好
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public RunUserPreference getRunUserPreferenceByID(Integer id) throws AppException {
+        RunUserPreference userpre = runUserPreferenceMapper.selectByPrimaryKey(id);
+        if (userpre == null) {
+            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
+        }
+        return userpre;
+    }
 
-	@Override
-	public BaseResult getAllUserPreferenceByUIDAndType(Integer uid,
-			String type) {
-		RunUserPreferenceExample example = new RunUserPreferenceExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andUidEqualTo(uid);
-		criteria.andUserGoodstypeEqualTo(type);
-		List<RunUserPreference> list = runUserPreferenceMapper.selectByExample(example);
-		if (list == null || list.size() == 0) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
-		}
-		return BaseResult.success(list);
-	}
+    /**
+     * 根据用户id获取所有偏好
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunUserPreference> getAllUserPreferenceByUID(Integer uid) throws AppException {
+        RunUserPreferenceExample example = new RunUserPreferenceExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        List<RunUserPreference> list = runUserPreferenceMapper.selectByExample(example);
+        return list;
+    }
+
+    /**
+     * 根据用户id和类型获取所有偏好
+     *
+     * @param uid
+     * @param type
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunUserPreference> getAllUserPreferenceByUIDAndType(Integer uid, String type) throws AppException {
+        RunUserPreferenceExample example = new RunUserPreferenceExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        criteria.andUserGoodstypeEqualTo(type);
+        List<RunUserPreference> list = runUserPreferenceMapper.selectByExample(example);
+        return list;
+    }
 
 }

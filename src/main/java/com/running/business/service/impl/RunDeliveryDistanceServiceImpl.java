@@ -1,49 +1,78 @@
 package com.running.business.service.impl;
 
-import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
+import com.running.business.exception.AppException;
 import com.running.business.mapper.RunDeliveryDistanceMapper;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.service.RunDeliveryDistanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
-public class RunDeliveryDistanceServiceImpl implements RunDeliveryDistanceService{
+public class RunDeliveryDistanceServiceImpl implements RunDeliveryDistanceService {
 
-	@Autowired
-	private RunDeliveryDistanceMapper runDeliveryDistanceMapper;
+    @Autowired
+    private RunDeliveryDistanceMapper runDeliveryDistanceMapper;
 
-	@Override
-	public BaseResult saveRunDeliveryDistance(
-			RunDeliveryDistance distance) {
-		runDeliveryDistanceMapper.insert(distance);
-		return BaseResult.success();
-	}
+    /**
+     * 保存配送距离
+     *
+     * @param distance
+     * @throws AppException
+     */
+    @Override
+    public void saveRunDeliveryDistance(RunDeliveryDistance distance) throws AppException {
+        if (distance == null) {
+            throw new AppException(ResultEnum.DELIVERY_DISTANCE_INFO_EMPTY);
+        }
+        runDeliveryDistanceMapper.insert(distance);
+    }
 
-	@Override
-	public BaseResult updateRunDeliveryDistance(
-			RunDeliveryDistance distance) {
-		runDeliveryDistanceMapper.updateByPrimaryKey(distance);
-		return BaseResult.success(distance);
-	}
+    /**
+     * 更新配送距离
+     *
+     * @param distance
+     * @throws AppException
+     */
+    @Override
+    public void updateRunDeliveryDistance(RunDeliveryDistance distance) throws AppException {
+        if (distance == null) {
+            throw new AppException(ResultEnum.DELIVERY_DISTANCE_INFO_EMPTY);
+        }
+        distance.setUpdateTime(new Date());
+        runDeliveryDistanceMapper.updateByPrimaryKeySelective(distance);
+    }
 
-	@Override
-	public BaseResult deleteRunDeliveryDistanceByDID(Integer did) {
-		RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
-		if (distance == null) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
-		}
-		runDeliveryDistanceMapper.deleteByPrimaryKey(did);
-		return BaseResult.success(distance);
-	}
+    /**
+     * 根据配送员id删除配送距离
+     *
+     * @param did
+     * @throws AppException
+     */
+    @Override
+    public void deleteRunDeliveryDistanceByDID(Integer did) throws AppException {
+        RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
+        if (distance == null) {
+            throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+        }
+        runDeliveryDistanceMapper.deleteByPrimaryKey(did);
+    }
 
-	@Override
-	public BaseResult getRunDeliveryDistanceByDID(Integer did) {
-		RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
-		if (distance == null) {
-			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-		}
-		return BaseResult.success(distance);
-	}
+    /**
+     * 根据配送员id获取配送距离
+     *
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public RunDeliveryDistance getRunDeliveryDistanceByDID(Integer did) throws AppException {
+        RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
+        if (distance == null) {
+            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
+        }
+        return distance;
+    }
 }

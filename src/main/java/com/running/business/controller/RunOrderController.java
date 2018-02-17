@@ -1,17 +1,21 @@
 package com.running.business.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
-import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
 import com.running.business.enums.OrderTypeEnum;
 import com.running.business.exception.AppException;
+import com.running.business.pojo.RefundApply;
 import com.running.business.pojo.RunOrder;
 import com.running.business.sdk.BizFetcher;
 import com.running.business.sdk.OrderServiceRegistry;
 import com.running.business.sdk.OrderServiceStrategy;
+import com.running.business.service.RefundApplyService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.RequestUtil;
+import com.running.business.vo.OrderVO;
+import com.running.business.vo.RefundApplyVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,12 +53,23 @@ public class RunOrderController extends BaseController {
     @Autowired
     RequestUtil requestUtil;
 
+    @Autowired
+    RefundApplyService refundApplyService;
 
+    /**
+     * 用户下单
+     *
+     * @param bizId
+     * @param order
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/{bizId}", method = RequestMethod.POST)
     @ApiOperation(value = "用户下单(刘明宇)", notes = "用户下单", response = BaseResult.class)
     public BaseResult order(@PathVariable Integer bizId, @RequestBody RunOrder order, HttpServletRequest request) throws Exception {
         Integer uid = requestUtil.getUserId(request);
-        if (uid == null ){
+        if (uid == null) {
             LOGGER.error("{} 用户session失效");
             return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
         }
@@ -73,81 +89,229 @@ public class RunOrderController extends BaseController {
     }
 
     /**
+     * 修改订单状态
+     *
+     * @param orderId
+     * @param status
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/status", method = RequestMethod.PUT)
+    @ApiOperation(value = "修改订单状态(刘明宇)", notes = "修改订单状态", response = BaseResult.class)
+    public BaseResult updateOStatus(@PathVariable("orderId") String orderId,
+                                    @RequestParam(value = "status", required = true) Integer status,
+                                    HttpServletRequest request) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return BaseResult.fail(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        if (status == null || status < 0) {
+            return BaseResult.fail(ResultEnum.ORDER_STATUS_IS_ERROR);
+        }
+        LOGGER.info("{} 修改订单状态 orderId = {}, status = {}");
+        runOrderService.updateOrderStatus(orderId, status);
+        return BaseResult.success();
+    }
+
+
+    /**
      * 根据订单ID获取订单信息
+     *
      * @param id
      * @return
      */
-    @RequestMapping(value = "/queryOrder/{id}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据订单ID获取订单信息(孙晓东)", notes = "根据订单ID获取订单信息", response = BaseResult.class)
-    public BaseResult getOrderInfoByUserToken(@PathVariable String id) {
-        BaseResult result = null;
+    public BaseResult queryOrderInfoByOID(@PathVariable String id) {
+        OrderVO orderVO;
         try {
-            result = runOrderService.getRunOrderByOID(id);
+            orderVO = runOrderService.getRunOrderByOID(id);
         } catch (AppException e) {
-            LOGGER.error(LOG_PREFIX+"，getOrderInfoByUserToken方法异常：入参：{id:"+id+"},异常信息：{}", e);
+            LOGGER.error(LOG_PREFIX + "，getOrderInfoByID方法异常：入参：{id:" + id + "},异常信息：{}", e);
             return BaseResult.fail(e.getErrorCode(), e.getMessage());
         }
-        return result;
+        return BaseResult.success(orderVO);
     }
 
     /**
-     * 根据用户id获取用户订单（分页）
-     * @param id
-     * @param currentPage
+     * 模糊分页 根据状态查询订单(配送员自己操作)
+     *
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @param request
      * @return
+     * @throws AppException
      */
-    @RequestMapping(value = "/queryAllOrderByUId/{id}/{currentPage}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "根据用户id获取用户订单/分页(孙晓东)", notes = "根据用户id获取用户订单（分页）", response = BaseResult.class)
-    public BaseResult getAllOrderByUserId (@PathVariable int id, @PathVariable int currentPage) {
-        BaseResult result = null;
-        try {
-            result = runOrderService.getAllRunOrderByUID(id);
-        } catch (AppException e) {
-            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:"+id+",currentPage:"+currentPage+"},异常信息：{}", e);
-            return BaseResult.fail(e.getErrorCode(), e.getMessage());
-        }
-        return result;
-   }
+    @RequestMapping(value = "/delivery", method = RequestMethod.GET)
+    @ApiOperation(value = "根据配送状态模糊查询订单(刘明宇)", notes = "根据配送员ID和配送状态模糊查询订单", response = BaseResult.class)
+    public BaseResult pageOrdersByKeywordAndStatus(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                   @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                                   @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                                   @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                                   @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                                   HttpServletRequest request) throws AppException {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 根据配送状态模糊查询订单 did = {}, status = {}, keyword = {}, page = {}, size = {}", LOG_PREFIX, did, status, keyword, page, size);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByDIDAndStatus(did, status, keyword, page, size, orderType);
+        return BaseResult.success(pageInfo);
+    }
 
     /**
-     * 根据配送员ID获取订单信息（分页）
-     * @param id
-     * @param currentPage
+     * 模糊分页 根据配送员id和状态查询订单(管理员操作)
+     *
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @param request
      * @return
+     * @throws AppException
      */
-   @RequestMapping(value = "/queryAllOrderByDId/{id}/{currentPage}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
-   @ApiOperation(value = "根据配送员ID获取订单信息/分页(孙晓东)", notes = "根据配送员ID获取订单信息（分页）", response = BaseResult.class)
-   public  BaseResult getAllOrderByDID(@PathVariable int id, @PathVariable int currentPage) {
-        BaseResult result = null;
-        try {
-            result = runOrderService.getAllRunOrderByDID(id, currentPage);
-        } catch (AppException e) {
-            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:"+id+",currentPage:"+currentPage+"},异常信息：{}", e);
-            return BaseResult.fail(e.getErrorCode(), e.getMessage());
-        }
-        return result;
-   }
+    @RequestMapping(value = "/delivery/{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据配送员ID和配送状态模糊查询订单(刘明宇)", notes = "根据配送员ID和配送状态模糊查询订单", response = BaseResult.class)
+    public BaseResult pageOrdersByDidAndStatus(@PathVariable(value = "id") Integer id,
+                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                               @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                               @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                               @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                               HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 根据配送员ID和配送状态模糊查询订单 did = {}, status = {}, keyword = {}, page = {}, size = {}", LOG_PREFIX, id, status, keyword, page, size);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByDIDAndStatus(id, status, keyword, page, size, orderType);
+        return BaseResult.success(pageInfo);
+    }
 
     /**
-     * 根据用户id和订单状态查询用户各种状态订单（分页）
-     * @param id 用户id
-     * @param currentPage 当前页数
+     * 根据用户id和订单状态查询用户各种状态订单（分页）(用户自己操作)
+     *
      * @param status 订单状态
      * @return
      */
-   @RequestMapping(value = "/queryOrderByStatus/{id}/{status}/{currentPage}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
-   @ApiOperation(value = "根据用户id和订单状态查询用户各种状态订单/分页(孙晓东)", notes = "根据用户id和订单状态查询用户各种状态订单（分页）", response = BaseResult.class)
-   public BaseResult getOrderByStatus(@PathVariable int id, @PathVariable int status, @PathVariable int currentPage) {
-        BaseResult result = null;
-        try {
-            result = runOrderService.getOrderByUIDAndStatus(id, status, currentPage);
-        } catch (AppException e) {
-            LOGGER.error(LOG_PREFIX+"，getAllOrderByUserId方法异常：入参：{id:"+id+",currentPage:"+currentPage+"},异常信息：{}", e);
-            return BaseResult.fail(e.getErrorCode(), e.getMessage());
-        }
-        return result;
-   }
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ApiOperation(value = "根据用户id和订单状态查询用户各种状态订单/分页(用户自己操作)(孙晓东)", notes = "根据用户id和订单状态查询用户各种状态订单（分页）", response = BaseResult.class)
+    public BaseResult pageOrdersByKeyAndStatus(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                               @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                               @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                               @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                               HttpServletRequest request) {
+        Integer id = requestUtil.getUserId(request);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageOrderByUIDAndStatus(keyword, id, status, page, size, orderType);
+        return BaseResult.success(pageInfo);
+    }
 
+    /**
+     * 根据用户id和订单状态查询用户各种状态订单（分页）(管理员操作)
+     *
+     * @param status 订单状态
+     * @return
+     */
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据用户id和订单状态查询用户各种状态订单(管理员操作)/分页(孙晓东)", notes = "根据用户id和订单状态查询用户各种状态订单（分页）", response = BaseResult.class)
+    public BaseResult pageOrdersByUIDAndStatus(@PathVariable Integer id,
+                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                               @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                               @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                               @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                               HttpServletRequest request) {
+        PageInfo<OrderVO> pageInfo = runOrderService.pageOrderByUIDAndStatus(keyword, id, status, page, size, orderType);
+        return BaseResult.success(pageInfo);
+    }
+
+
+    //-----------------------------------退款begin--------------------------
+
+    /**
+     * 创建退款申请
+     *
+     * @param apply
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @ApiOperation(value = "创建退款申请(刘明宇)", notes = "创建退款申请", response = BaseResult.class)
+    public BaseResult saveRefundApply(@RequestBody RefundApply apply, HttpServletRequest request) throws AppException {
+        if (apply == null) {
+            return BaseResult.fail(ResultEnum.REFUND_INFO_IS_EMTPY);
+        }
+        Integer uid = requestUtil.getUserId(request);
+        LOGGER.info("{} 创建退款申请 uid = {}, apply = {}", LOG_PREFIX, uid, apply);
+        try {
+            apply.setUid(uid);
+            refundApplyService.saveRefundApply(apply);
+        } catch (AppException ae) {
+            LOGGER.error("{} 创建退款申请失败 uid = {}, apply = {}, error = {}", LOG_PREFIX, uid, apply, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 根据订单号查询退款信息（用户查询）
+     *
+     * @param orderId
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refund", method = RequestMethod.GET)
+    @ApiOperation(value = "根据订单号查询退款信息（用户查询）(刘明宇)", notes = "根据订单号查询退款信息", response = BaseResult.class)
+    public BaseResult queryRefundByOrderId(@RequestParam(value = "orderId", required = true) String orderId, HttpServletRequest request) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return BaseResult.fail(ResultEnum.REFUND_ORDERID_IS_ERROR);
+        }
+        Integer uid = requestUtil.getUserId(request);
+        LOGGER.info("{} 根据订单号查询退款信息 orderId = {}, uid = {}", LOG_PREFIX, orderId, uid);
+        RefundApplyVO vo;
+        try {
+            vo = refundApplyService.queryApplyByOrderID(orderId, uid);
+        } catch (AppException ae) {
+            LOGGER.error("{} 根据订单号查询退款信息失败 uid = {}, orderId = {}, error = {}", LOG_PREFIX, uid, orderId, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(vo);
+    }
+
+    /**
+     * 根据订单状态分页查询退款申请（用户查询）
+     *
+     * @param status
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refunds", method = RequestMethod.GET)
+    @ApiOperation(value = "根据订单状态分页查询退款申请（用户查询）(刘明宇)", notes = "根据订单状态分页查询退款申请", response = BaseResult.class)
+    public BaseResult pageRefundApply(@RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                      @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                      @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                      @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                      @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                      HttpServletRequest request) throws AppException {
+        Integer uid = requestUtil.getUserId(request);
+        LOGGER.info("{} 根据订单状态分页查询退款申请 uid = {}", LOG_PREFIX, uid);
+        PageInfo<RefundApplyVO> applyVOs;
+        try {
+            applyVOs = refundApplyService.pageApplysByUID(uid, status, page, size, orderField, orderType);
+        } catch (AppException ae) {
+            LOGGER.error("{} 根据订单状态分页查询退款申请失败 uid = {}, error = {}", LOG_PREFIX, uid, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(applyVOs);
+    }
+
+
+
+
+    //-----------------------------------退款end--------------------------
 
 
 }

@@ -1,5 +1,8 @@
 package com.running.business.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 帮买物品类型枚举
  *
@@ -62,5 +65,20 @@ public enum HelpBuyGoodsEnum {
             }
         }
         return returnEnum;
+    }
+
+    /**
+     * 取所有desc
+     *
+     * @return
+     */
+    public static List<String> getAllGoods() {
+        List<String> list = new ArrayList<>();
+        for (HelpBuyGoodsEnum helpBuyGoodsEnum : HelpBuyGoodsEnum.values()) {
+            if (!"".equals(helpBuyGoodsEnum.getDesc())) {
+                list.add(helpBuyGoodsEnum.getDesc());
+            }
+        }
+        return list;
     }
 }

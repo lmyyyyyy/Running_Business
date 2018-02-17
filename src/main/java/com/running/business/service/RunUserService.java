@@ -13,10 +13,31 @@ import java.util.Set;
 
 public interface RunUserService {
 
+    /**
+     * 保存用户
+     *
+     * @param user
+     * @return
+     * @throws AppException
+     */
     BaseResult saveUser(RunUser user) throws AppException;
 
+    /**
+     * 根据id删除用户
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
     BaseResult deleteUser(Integer uid) throws AppException;
 
+    /**
+     * 更新用户
+     *
+     * @param user
+     * @return
+     * @throws AppException
+     */
     BaseResult updateUser(RunUser user) throws AppException;
 
     /**
@@ -27,10 +48,32 @@ public interface RunUserService {
      */
     void updateUserListStatus(Set<Integer> userIds) throws AppException;
 
+    /**
+     * 检查用户名是否存在
+     *
+     * @param username
+     * @return
+     * @throws AppException
+     */
     BaseResult checkUser(String username) throws AppException;
 
+    /**
+     * 验证用户名和密码是否匹配
+     *
+     * @param username
+     * @param password
+     * @return
+     * @throws AppException
+     */
     boolean checkPwd(String username, String password) throws AppException;
 
+    /**
+     * 根据id获取用户
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
     BaseResult getRunUser(Integer id) throws AppException;
 
     /**

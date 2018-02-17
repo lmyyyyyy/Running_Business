@@ -1,6 +1,5 @@
 package com.running.business.service;
 
-import com.running.business.common.BaseResult;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.vo.DeliveryVO;
 

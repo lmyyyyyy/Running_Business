@@ -2,6 +2,7 @@ package com.running.business.service.impl;
 
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
+import com.running.business.exception.AppException;
 import com.running.business.mapper.RunOrderPayMapper;
 import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunOrderPayExample;
@@ -20,57 +21,52 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	private RunOrderPayMapper runOrderPayMapper;
 
 	@Override
-	public BaseResult saveRunOrderPay(RunOrderPay pay) {
+	public void saveRunOrderPay(RunOrderPay pay) {
 		runOrderPayMapper.insert(pay);
-		return BaseResult.success();
 	}
 
 	@Override
-	public BaseResult updateRunOrderPay(RunOrderPay pay) {
+	public void updateRunOrderPay(RunOrderPay pay) {
 		runOrderPayMapper.updateByPrimaryKey(pay);
-		return BaseResult.success(pay);
 	}
 
 	@Override
-	public BaseResult deleteRunOrderPayByID(Integer id) {
+	public void deleteRunOrderPayByID(Integer id) {
 		RunOrderPay pay = runOrderPayMapper.selectByPrimaryKey(id);
 		if (pay == null) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+			throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
 		}
 		runOrderPayMapper.deleteByPrimaryKey(id);
-		return BaseResult.success(pay);
 	}
 
 	@Override
-	public BaseResult deleteRunOrderPayByOID(String oid) {
+	public void deleteRunOrderPayByOID(String oid) {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(oid);
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+			throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
 		}
 		RunOrderPayExample example1 = new RunOrderPayExample();
 		Criteria criteria1 = example1.createCriteria();
 		criteria1.andOrderidEqualTo(oid);
 		runOrderPayMapper.deleteByExample(example1);
-		return BaseResult.success();
 	}
 
 	@Override
-	public BaseResult deleteAllRunOrderByUID(Integer uid) {
+	public void deleteAllRunOrderByUID(Integer uid) {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+			throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
 		}
 		RunOrderPayExample example1 = new RunOrderPayExample();
 		Criteria criteria1 = example1.createCriteria();
 		criteria1.andUidEqualTo(uid);
 		runOrderPayMapper.deleteByExample(example1);
-		return BaseResult.success();
 	}
 
 	@Override
@@ -114,5 +110,29 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
+	}
+
+	/**
+	 * 根据订单号和用户id获取支付信息
+	 *
+	 * @param orderId
+	 * @param uid
+	 * @return
+	 * @throws AppException
+	 */
+	@Override
+	public RunOrderPay queryPayByOIDAndUID(String orderId, Integer uid) throws AppException {
+		if (orderId == null || "".equals(orderId)) {
+			throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+		}
+		RunOrderPayExample example = new RunOrderPayExample();
+		RunOrderPayExample.Criteria criteria = example.createCriteria();
+		criteria.andOrderidEqualTo(orderId);
+		criteria.andUidEqualTo(uid);
+		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
+		if (list == null || list.isEmpty()) {
+			return null;
+		}
+		return list.get(0);
 	}
 }
