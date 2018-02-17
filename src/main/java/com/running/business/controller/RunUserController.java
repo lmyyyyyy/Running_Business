@@ -1,20 +1,26 @@
 package com.running.business.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.RefundApplyStatusEnum;
+import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
+import com.running.business.pojo.RefundApply;
+import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunUser;
-import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserInfo;
+import com.running.business.service.RefundApplyService;
+import com.running.business.service.RefundRecordService;
+import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunUserAddressService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.JsonUtils;
-import com.running.business.util.RandomUtil;
-import com.running.business.util.RegexUtils;
 import com.running.business.util.RequestUtil;
+import com.running.business.vo.RefundRecordVO;
 import com.running.business.vo.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,12 +29,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -54,6 +64,15 @@ public class RunUserController extends BaseController {
     @Autowired
     private RequestUtil requestUtil;
 
+    @Autowired
+    private ReportRecordService reportRecordService;
+
+    @Autowired
+    private RefundApplyService refundApplyService;
+
+    @Autowired
+    private RefundRecordService refundRecordService;
+
 
     /**
      * 验证账号是否可用
@@ -61,7 +80,7 @@ public class RunUserController extends BaseController {
      * @param username 用户名
      * @param callback 回调
      * @return
-     */
+     *//*
     @RequestMapping(value = "/check/{username}", method = RequestMethod.GET)
     @ApiOperation(value = "验证账号是否可用(刘明宇)", notes = "验证账号是否可用", response = Object.class)
     public Object checkData(@PathVariable String username, String callback) throws Exception {
@@ -95,12 +114,12 @@ public class RunUserController extends BaseController {
         }
     }
 
-    /**
+    *//**
      * 添加用户
      *
      * @param user 用户实体
      * @return
-     */
+     *//*
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
         public BaseResult register(@RequestBody RunUser user) throws Exception {
@@ -154,14 +173,14 @@ public class RunUserController extends BaseController {
         return result;
     }
 
-    /**
+    *//**
      * 用户登录
      *
      * @param user     用户实体
      * @param request  请求
      * @param response 响应
      * @return
-     */
+     *//*
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -179,6 +198,7 @@ public class RunUserController extends BaseController {
         }
         return result;
     }
+*/
 
     /**
      * 根据token获取用户信息
@@ -227,19 +247,14 @@ public class RunUserController extends BaseController {
         }
         logger.info("用户注销", token);
         String callback = "http://localhost:8080";
-        BaseResult result ;
+        BaseResult result;
         try {
             result = runUserService.logout(token);
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "用户注销失败 token = {}, error = {}", new Object[]{token, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        if (StringUtils.isBlank(callback)) {
-            return result;
-        } else {
-            response.sendRedirect(callback);
-            return null;
-        }
+        return result;
     }
 
     /**
@@ -354,23 +369,23 @@ public class RunUserController extends BaseController {
     public BaseResult updateUserInfo(@RequestBody RunUserInfo userInfo, HttpServletRequest request) throws Exception {
         logger.info("更新用户信息", userInfo.getUserPhone());
         Integer uid = null;
-        BaseResult result;
         try {
             if (userInfo == null) {
                 return BaseResult.fail(ResultEnum.USER_INFO_ISEMPTY);
             }
             uid = requestUtil.getUserId(request);
             userInfo.setUid(uid);
-            result = runUserInfoService.updateRunUserInfo(userInfo);
+            runUserInfoService.updateRunUserInfo(userInfo);
         } catch (AppException ae) {
             logger.error(LOG_PREFIX + "更新用户信息失败 uid = {}, error = {}", new Object[]{uid, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        return result;
+        return BaseResult.success();
     }
 
     /**
      * 获取用户所有的地址信息
+     *
      * @param request
      * @return
      * @throws Exception
@@ -385,7 +400,7 @@ public class RunUserController extends BaseController {
             uid = requestUtil.getUserId(request);
             result = runUserAddressService.getAllRunUserAddress(uid);
         } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "获取所有地址信息失败 uid = {}, error = {}", new Object[] {uid, ae});
+            logger.error(LOG_PREFIX + "获取所有地址信息失败 uid = {}, error = {}", new Object[]{uid, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return result;
@@ -393,6 +408,7 @@ public class RunUserController extends BaseController {
 
     /**
      * 根据id获取当前地址信息
+     *
      * @param id
      * @param request
      * @return
@@ -411,4 +427,116 @@ public class RunUserController extends BaseController {
         }
         return result;
     }
+
+    /**
+     * 用户投诉配送员
+     *
+     * @param reportRecord
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/report", method = RequestMethod.POST)
+    @ApiOperation(value = "用户投诉配送员(刘明宇)", notes = "用户投诉配送员", response = BaseResult.class)
+    public BaseResult saveReportRecord(@RequestBody ReportRecord reportRecord, HttpServletRequest request) throws AppException {
+        if (reportRecord == null) {
+            return BaseResult.fail(ResultEnum.REPORT_INFO_IS_EMPTY);
+        }
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 用户投诉配送员 uid = {}, reportrecord = {}", LOG_PREFIX, uid, reportRecord);
+        try {
+            reportRecord.setUid(uid);
+            reportRecord.setActiveSide(UserTypeEnum.USER.getCode());
+            reportRecordService.saveReportRecord(reportRecord);
+        } catch (AppException ae) {
+            logger.error("{} 用户投诉配送员失败 uid = {}, reportrecord = {}", LOG_PREFIX, uid, reportRecord);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 用户退款申请
+     *
+     * @param apply
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @ApiOperation(value = "用户退款申请(刘明宇)", notes = "用户退款申请", response = BaseResult.class)
+    public BaseResult refundApply(@RequestBody RefundApply apply, HttpServletRequest request) throws AppException {
+        if (apply == null) {
+            return BaseResult.fail(ResultEnum.REFUND_INFO_IS_EMTPY);
+        }
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 用户退款申请 uid = {}", LOG_PREFIX, uid);
+        try {
+            apply.setUid(uid);
+            refundApplyService.saveRefundApply(apply);
+        } catch (AppException ae) {
+            logger.error("{} 用户退款申请失败 uid = {}, error = {}", uid, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 取消退款申请
+     *
+     * @param orderId
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refund/cancel", method = RequestMethod.PUT)
+    @ApiOperation(value = "取消退款申请(刘明宇)", notes = "取消退款申请", response = BaseResult.class)
+    public BaseResult cancelRefundApply(@RequestParam(value = "id", required = true) Integer id,
+                                        @RequestParam(value = "orderId", required = true) String orderId,
+                                        HttpServletRequest request) throws AppException {
+        logger.info("{} 取消退款申请", LOG_PREFIX);
+        try {
+            RefundApply apply = new RefundApply();
+            apply.setOrderid(orderId);
+            apply.setId(id);
+            apply.setStatus(RefundApplyStatusEnum.REFUND_CANCEL.getCode());
+            refundApplyService.updateRefundApply(apply);
+        } catch (AppException ae) {
+            logger.error("{} 取消退款申请失败 error = {}", LOG_PREFIX, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+
+    /**
+     * 分页获取退款记录
+     *
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/fefunds", method = RequestMethod.GET)
+    @ApiOperation(value = "分页获取退款记录(刘明宇)", notes = "分页获取退款记录", response = BaseResult.class)
+    public BaseResult pageRefundRecord(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                       @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                       @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                       HttpServletRequest request) throws AppException {
+        logger.info("{} 分页获取退款记录 page = {}, size = {}", LOG_PREFIX, page, size);
+        Integer uid = requestUtil.getUserId(request);
+        PageInfo<RefundRecordVO> pageInfo;
+        try {
+            pageInfo = refundRecordService.pageRefundByUID(uid, page, size, orderField, orderType);
+        } catch (AppException ae) {
+            logger.error("{} 分页获取退款记录失败 uid = {}, page = {}, size = {}, error = {}", LOG_PREFIX, uid, page, size, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(pageInfo);
+    }
+
+
 }

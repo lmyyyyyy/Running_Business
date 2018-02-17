@@ -27,9 +27,11 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 	 * @throws AppException
 	 */
 	@Override
-	public BaseResult saveRunUserInfo(RunUserInfo userInfo) throws AppException {
+	public void saveRunUserInfo(RunUserInfo userInfo) throws AppException {
+		if (userInfo == null) {
+			throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
+		}
 		runUserInfoMapper.insert(userInfo);
-		return BaseResult.success();
 	}
 
 	/**
@@ -39,18 +41,22 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 	 * @throws AppException
 	 */
 	@Override
-	public BaseResult updateRunUserInfo(RunUserInfo userInfo) throws AppException {
+	public void updateRunUserInfo(RunUserInfo userInfo) throws AppException {
 		if (userInfo == null) {
 			throw new AppException(ResultEnum.USER_INFO_ISEMPTY);
 		}
-		runUserInfoMapper.updateByPrimaryKey(userInfo);
-		return BaseResult.success();
+		runUserInfoMapper.updateByPrimaryKeySelective(userInfo);
 	}
 
+	/**
+	 * 根据用户id删除用户信息
+	 *
+	 * @param uid
+	 * @throws AppException
+	 */
 	@Override
-	public BaseResult deleteRunUserInfo(Integer uid) throws AppException {
+	public void deleteRunUserInfo(Integer uid) throws AppException {
 		runUserInfoMapper.deleteByPrimaryKey(uid);
-		return BaseResult.success();
 	}
 
 	/**
@@ -82,6 +88,12 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 		return userVO;
 	}
 
+	/**
+	 * 获取所有用户信息
+	 *
+	 * @return
+	 * @throws AppException
+	 */
 	@Override
 	public BaseResult getAllRunUserInfo() throws AppException {
 		RunUserInfoExample example = new RunUserInfoExample();

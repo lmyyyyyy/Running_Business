@@ -1,7 +1,5 @@
 package com.running.business.common;
 
-import io.swagger.models.auth.In;
-
 /**
  * @author liumingyu
  * @create 2018-01-13 下午6:55
@@ -33,6 +31,9 @@ public class Config {
     public static final String LOGIN_ADMIN_IDS_KEY = "run_admin_ids_key";
     //距现在该时间内的心跳（秒）
     public static final Integer HEART_BEAT_FRONT_TIME = 60;
+
+    //拼接多长时间内的订单信息（秒）
+    public static final Integer ROLLING_INFO_TIME = 8640;
 
     //是否打印日志
     public static final Boolean METHOD_LOG_PRINT_SWITCH = true;

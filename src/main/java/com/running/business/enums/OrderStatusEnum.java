@@ -14,7 +14,8 @@ public enum OrderStatusEnum {
     FINISH(5, "已送达"),
     CANCELLED(6, "已取消"),
     REFUND_APPLY(7, "退款申请中"),
-    REFUND(8, "已退款")
+    REFUND(8, "已退款"),
+    REFUND_FAIL(9, "退款失败")
     ;
 
     private Integer code;

@@ -11,6 +11,7 @@ import com.running.business.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +32,10 @@ public class RunDeliveryAddressServiceImpl implements RunDeliveryAddressService 
         if (address == null) {
             throw new AppException(ResultEnum.DELIVERY_ADDRESS_IS_EMPTY);
         }
+        address.setAddTime(new Date());
+        address.setIsDelete(false);
+        address.setUpdateTime(new Date());
+        address.setDid(address.getDid());
         Integer id = runDeliveryAddressMapper.insert(address);
         return id;
     }
@@ -46,7 +51,8 @@ public class RunDeliveryAddressServiceImpl implements RunDeliveryAddressService 
         if (address == null) {
             throw new AppException(ResultEnum.DELIVERY_ADDRESS_IS_EMPTY);
         }
-        runDeliveryAddressMapper.updateByPrimaryKey(address);
+        address.setUpdateTime(new Date());
+        runDeliveryAddressMapper.updateByPrimaryKeySelective(address);
     }
 
     /**

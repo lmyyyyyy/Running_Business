@@ -1,12 +1,17 @@
 package com.running.business.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
+import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunDeliveryAddress;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
+import com.running.business.service.RefundRecordService;
+import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunDeliveryAddressService;
 import com.running.business.service.RunDeliveryBalanceRecordService;
 import com.running.business.service.RunDeliveryBalanceService;
@@ -15,9 +20,9 @@ import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
 import com.running.business.util.IdcardValidator;
 import com.running.business.util.JsonUtils;
-import com.running.business.util.RegexUtils;
 import com.running.business.util.RequestUtil;
 import com.running.business.vo.DeliveryVO;
+import com.running.business.vo.RefundRecordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -68,69 +73,12 @@ public class RunDeliveryController extends BaseController {
     @Autowired
     private RequestUtil requestUtil;
 
-    /**
-     * 验证账号是否可用
-     *
-     * @param phone 用户名
-     * @return
-     */
-    @RequestMapping(value = "/check/{phone}", method = RequestMethod.GET)
-    @ApiOperation(value = "验证账号是否可用(刘明宇)", notes = "验证账号是否可用", response = Object.class)
-    public Object checkData(@PathVariable String phone) throws Exception {
-        if (phone == null || "".equals(phone)) {
-            return BaseResult.fail(ResultEnum.DELIVERY_PHONE_REGEX_IS_ERROR);
-        }
-        if (!RegexUtils.checkMobile(phone)) {
-            return BaseResult.fail(ResultEnum.DELIVERY_PHONE_REGEX_IS_ERROR);
-        }
-        LOGGER.info("验证账号是否可用：" + phone);
-        boolean flag;
-        try {
-            flag = runDeliveryuserService.checkRunDeliveryuser(phone);
-        } catch (AppException ae) {
-            LOGGER.error(LOG_PREFIX + "验证失败 phone = {} error = {}" + new Object[]{phone, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        if (flag) {
-            return BaseResult.success(flag);
-        } else {
-            return BaseResult.fail(ResultEnum.TELTPHONE_DELIVERY);
-        }
-    }
+    @Autowired
+    private ReportRecordService reportRecordService;
 
-    /**
-     * 添加配送员
-     *
-     * @param user 用户实体
-     * @return
-     */
-    @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "添加配送员(刘明宇)", notes = "添加配送员", response = BaseResult.class)
-    public BaseResult register(@RequestBody RunDeliveryuser user) throws Exception {
-        if (user == null) {
-            return BaseResult.fail(ResultEnum.INPUT_ERROR);
-        }
-        if (user.getUserphone() == null || "".equals(user.getUserphone().trim())
-                || user.getPassword() == null || "".equals(user.getPassword().trim())) {
-            return BaseResult.fail(ResultEnum.INPUT_ERROR);
-        }
-        if (!RegexUtils.checkMobile(user.getUserphone())) {
-            return BaseResult.fail(ResultEnum.DELIVERY_PHONE_REGEX_IS_ERROR);
-        }
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 18) {
-            return BaseResult.fail(ResultEnum.DELIVERY_PASSWORD_LEN);
-        }
-        LOGGER.info("注册用户，账号为：" + user.getUserphone());
-        BaseResult result = null;
-        Integer did;
-        try {
-            did = runDeliveryuserService.saveRunDeliveryuser(user);
-        } catch (AppException ae) {
-            LOGGER.error("{} 注册配送员失败 user = {}", LOG_PREFIX, user);
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        return BaseResult.success(user);
-    }
+    @Autowired
+    private RefundRecordService refundRecordService;
+
 
     /**
      * 验证配送员身份证号格式
@@ -164,39 +112,6 @@ public class RunDeliveryController extends BaseController {
         }
     }
 
-    /**
-     * 配送员登录
-     *
-     * @param user     用户实体
-     * @param request  请求
-     * @param response 响应
-     * @return
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "配送员登录(刘明宇)", notes = "配送员登录", response = BaseResult.class)
-    public BaseResult login(@RequestBody RunDeliveryuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (user == null) {
-            return BaseResult.fail(ResultEnum.DELIVERY_INFO_ISEMPTY);
-        }
-        LOGGER.info("配送员登录：" + user.getUserphone());
-        BaseResult result;
-        String token;
-        try {
-            if (user.getUserphone() == null || user.getUserphone().trim().equals("")
-                    || user.getPassword() == null || user.getPassword().trim().equals("")) {
-                result = BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
-                return result;
-            }
-            token = runDeliveryuserService.login(user.getUserphone(), user.getPassword(), request, response);
-            if (token == null || "".equals(token)) {
-                BaseResult.fail(ResultEnum.INNER_ERROR);
-            }
-        } catch (AppException ae) {
-            LOGGER.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        return BaseResult.success(token);
-    }
 
     /**
      * 根据token获取配送员信息
@@ -417,7 +332,7 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/address/{id}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/address/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id获取当前地址信息(刘明宇)", notes = "根据id获取当前地址信息", response = BaseResult.class)
     public BaseResult getUserAddrById(@PathVariable Integer id, HttpServletRequest request) throws Exception {
         LOGGER.info("根据id获取当前地址信息", id);
@@ -430,4 +345,116 @@ public class RunDeliveryController extends BaseController {
         }
         return BaseResult.success(address);
     }
+
+    /**
+     * 添加地址
+     *
+     * @param deliveryAddress
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/address", method = RequestMethod.POST)
+    @ApiOperation(value = "添加地址(刘明宇)", notes = "添加地址", response = BaseResult.class)
+    public BaseResult addAddr(@RequestBody RunDeliveryAddress deliveryAddress, HttpServletRequest request) throws AppException {
+        if (deliveryAddress == null) {
+            throw new AppException(ResultEnum.DELIVERY_ADDRESS_IS_EMPTY);
+        }
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} {}添加地址{}", LOG_PREFIX, did, deliveryAddress.getDeliveryAddress());
+        try {
+            deliveryAddress.setDid(did);
+            runDeliveryAddressService.saveRunDeliveryAddress(deliveryAddress);
+        } catch (AppException ae) {
+            LOGGER.error("{} 添加地址失败 operatorId = {}, address = {}", LOG_PREFIX, did, deliveryAddress);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 更新当前地址
+     *
+     * @param id
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/address/{id}", method = RequestMethod.PUT)
+    @ApiOperation(value = "更新当前地址(刘明宇)", notes = "更新当前地址", response = BaseResult.class)
+    public BaseResult updateCurrAddr(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
+        if (id == null || id < 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        Integer did = requestUtil.getDeliveryId(request);
+        try {
+            RunDeliveryInfo info = new RunDeliveryInfo();
+            info.setDid(did);
+            info.setAddressId(id);
+            runDeliveryInfoService.updateRunDeliveryInfo(info);
+        } catch (AppException ae) {
+            LOGGER.error("{} 更新当前地址失败 operatorId = {}, addressId = {}", LOG_PREFIX, did, id);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 配送员投诉用户
+     *
+     * @param reportRecord
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/report", method = RequestMethod.POST)
+    @ApiOperation(value = "配送员投诉用户(刘明宇)", notes = "配送员投诉用户", response = BaseResult.class)
+    public BaseResult saveReportRecord(@RequestBody ReportRecord reportRecord, HttpServletRequest request) throws AppException {
+        if (reportRecord == null) {
+            return BaseResult.fail(ResultEnum.REPORT_INFO_IS_EMPTY);
+        }
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 配送员投诉用户 did = {}, reportrecord = {}", LOG_PREFIX, did, reportRecord);
+        try {
+            reportRecord.setDid(did);
+            reportRecord.setActiveSide(UserTypeEnum.DELIVERY.getCode());
+            reportRecordService.saveReportRecord(reportRecord);
+        } catch (AppException ae) {
+            LOGGER.error("{} 配送员投诉用户失败 did = {}, reportrecord = {}", LOG_PREFIX, did, reportRecord);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 分页获取退款记录
+     *
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/refunds", method = RequestMethod.GET)
+    @ApiOperation(value = "分页获取退款记录(刘明宇)", notes = "分页获取退款记录", response = BaseResult.class)
+    public BaseResult pageRefundRecord(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                       @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                       @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                       HttpServletRequest request) throws AppException {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 分页获取退款记录", LOG_PREFIX);
+        PageInfo<RefundRecordVO> pageInfo;
+        try {
+            pageInfo = refundRecordService.pageRefundByDID(did, page, size, orderField, orderType);
+        } catch (AppException ae) {
+            LOGGER.error("{} 分页获取退款记录失败 error = {}", LOG_PREFIX, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(pageInfo);
+    }
+
+
 }

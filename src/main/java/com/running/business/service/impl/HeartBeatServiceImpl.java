@@ -41,32 +41,33 @@ public class HeartBeatServiceImpl implements HeartBeatService {
      * @throws AppException
      */
     @Override
-    public void save(HeartBeat heartBeat) throws AppException {
+    public HeartBeat save(HeartBeat heartBeat) throws AppException {
         if (heartBeat == null) {
             LOGGER.error("{} 保存-心跳参数异常", LOG_PREFIX);
             throw new AppException(ResultEnum.HEARTBEAT_INFO_EMPTY);
         }
-        this.saveOrUpdateHeartBeat(heartBeat);
+        HeartBeat beat = this.saveOrUpdateHeartBeat(heartBeat);
         boolean flag;
         if (UserTypeEnum.USER.getCode().equals(heartBeat.getUserType())) {
             flag = jedisClient.sismember(Config.LOGIN_USER_IDS_KEY, String.valueOf(heartBeat.getUid()));
             if (flag) {
-                return;
+                return beat;
             }
             jedisClient.sadd(Config.LOGIN_USER_IDS_KEY, String.valueOf(heartBeat.getUid()));
         } else if (UserTypeEnum.DELIVERY.getCode().equals(heartBeat.getUserType())) {
             flag = jedisClient.sismember(Config.LOGIN_DELIVERY_IDS_KEY, String.valueOf(heartBeat.getUid()));
             if (flag) {
-                return;
+                return beat;
             }
             jedisClient.sadd(Config.LOGIN_DELIVERY_IDS_KEY, String.valueOf(heartBeat.getUid()));
         } else {
             flag = jedisClient.sismember(Config.LOGIN_ADMIN_IDS_KEY, String.valueOf(heartBeat.getUid()));
             if (flag) {
-                return;
+                return beat;
             }
             jedisClient.sadd(Config.LOGIN_ADMIN_IDS_KEY, String.valueOf(heartBeat.getUid()));
         }
+        return beat;
     }
 
     /**
@@ -91,7 +92,7 @@ public class HeartBeatServiceImpl implements HeartBeatService {
      * @throws AppException
      */
     @Override
-    public void saveOrUpdateHeartBeat(HeartBeat heartBeat) throws AppException {
+    public HeartBeat saveOrUpdateHeartBeat(HeartBeat heartBeat) throws AppException {
         if (heartBeat == null) {
             LOGGER.error("{} 保存或更新-心跳参数异常", LOG_PREFIX);
             throw new AppException(ResultEnum.HEARTBEAT_INFO_EMPTY);
@@ -107,7 +108,7 @@ public class HeartBeatServiceImpl implements HeartBeatService {
             beat.setUserType(heartBeat.getUserType());
             beat.setSessionKey(heartBeat.getSessionKey());
             this.saveHeartBeat(beat);
-            return;
+            return beat;
         }
         HeartBeat beat = list.get(0);
         beat.setUid(heartBeat.getUid());
@@ -117,6 +118,7 @@ public class HeartBeatServiceImpl implements HeartBeatService {
         beat.setUpdateTime(new Date());
         beat.setUserInfo(heartBeat.getUserInfo());
         this.updateHeartBeat(beat);
+        return beat;
     }
 
     /**
