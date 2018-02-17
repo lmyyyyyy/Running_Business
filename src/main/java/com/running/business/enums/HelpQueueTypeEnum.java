@@ -1,5 +1,8 @@
 package com.running.business.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 代排队类型枚举
  *
@@ -59,5 +62,20 @@ public enum HelpQueueTypeEnum {
             }
         }
         return returnEnum;
+    }
+
+    /**
+     * 取所有desc
+     *
+     * @return
+     */
+    public static List<String> getAllQueue() {
+        List<String> list = new ArrayList<>();
+        for (HelpQueueTypeEnum helpQueueTypeEnum : HelpQueueTypeEnum.values()) {
+            if (!"".equals(helpQueueTypeEnum.getDesc())) {
+                list.add(helpQueueTypeEnum.getDesc());
+            }
+        }
+        return list;
     }
 }

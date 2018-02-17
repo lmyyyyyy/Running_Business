@@ -2,6 +2,7 @@ package com.running.business.service.impl;
 
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
+import com.running.business.exception.AppException;
 import com.running.business.mapper.RunUserAddressMapper;
 import com.running.business.pojo.RunUserAddress;
 import com.running.business.pojo.RunUserAddressExample;
@@ -18,33 +19,55 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 
 	@Autowired
 	private RunUserAddressMapper runUserAddressMapper;
-	
+
+	/**
+	 * 保存用户地址
+	 *
+	 * @param userAddress
+	 */
 	@Override
-	public BaseResult saveRunUserAddress(RunUserAddress userAddress) {
-		int id = runUserAddressMapper.insert(userAddress);
-		System.out.println(id);
-		return BaseResult.success();
+	public void saveRunUserAddress(RunUserAddress userAddress) throws AppException {
+		if (userAddress == null) {
+			throw new AppException(ResultEnum.USER_ADDRESS_INFO_EMTPY);
+		}
+		runUserAddressMapper.insert(userAddress);
 	}
 
+	/**
+	 * 更新用户地址
+	 *
+	 * @param userAddress
+	 */
 	@Override
-	public BaseResult updateRunUserAddress(RunUserAddress userAddress) {
-		int id = runUserAddressMapper.updateByPrimaryKey(userAddress);
-		System.out.println(id);
-		return BaseResult.success(userAddress);
+	public void updateRunUserAddress(RunUserAddress userAddress) throws AppException {
+		if (userAddress == null) {
+			throw new AppException(ResultEnum.USER_ADDRESS_INFO_EMTPY);
+		}
+		runUserAddressMapper.updateByPrimaryKeySelective(userAddress);
 	}
 
+	/**
+	 * 根据id删除用户地址
+	 *
+	 * @param id
+	 */
 	@Override
-	public BaseResult deleteRunUserAddressByID(Integer id) {
+	public void deleteRunUserAddressByID(Integer id) throws AppException {
 		RunUserAddress userAddress = runUserAddressMapper.selectByPrimaryKey(id);
 		if (userAddress == null) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+			throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
 		}
 		runUserAddressMapper.deleteByPrimaryKey(id);
-		return BaseResult.success(userAddress);
 	}
 
+	/**
+	 * 根据id获取地址
+	 *
+	 * @param id
+	 * @return
+	 */
 	@Override
-	public BaseResult getRunUserAddressByID(Integer id) {
+	public BaseResult getRunUserAddressByID(Integer id) throws AppException {
 		RunUserAddress userAddress = runUserAddressMapper.selectByPrimaryKey(id);
 		if (userAddress == null) {
 			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
@@ -58,31 +81,26 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 	 * @return
 	 */
 	@Override
-	public BaseResult getAllRunUserAddress(Integer uid) {
+	public BaseResult getAllRunUserAddress(Integer uid) throws AppException {
 		RunUserAddressExample example = new RunUserAddressExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
 		List<RunUserAddress> list = runUserAddressMapper.selectByExample(example);
-		if (list == null || list.size() == 0) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
-		}
 		return BaseResult.success(list);
 	}
 
+	/**
+	 * 根据用户id删除所有地址
+	 *
+	 * @param uid
+	 * @return
+	 */
 	@Override
-	public BaseResult deleteAllRunUserAddressByUID(Integer uid) {
-		RunUserAddressExample example = new RunUserAddressExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andUidEqualTo(uid);
-		List<RunUserAddress> list = runUserAddressMapper.selectByExample(example);
-		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
-		}
+	public void deleteAllRunUserAddressByUID(Integer uid) throws AppException {
 		RunUserAddressExample example1 = new RunUserAddressExample();
 		Criteria criteria1 = example1.createCriteria();
 		criteria1.andUidEqualTo(uid);
 		runUserAddressMapper.deleteByExample(example1);
-		return BaseResult.success();
 	}
 
 }

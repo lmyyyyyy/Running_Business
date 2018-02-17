@@ -3,6 +3,10 @@ package com.running.business.service;
 import com.running.business.common.BaseResult;
 import com.running.business.pojo.RunOrderStatus;
 
+/**
+ * 已废弃
+ *
+ */
 public interface RunOrderStatusService {
 
 	BaseResult saveRunOrderStatus(RunOrderStatus order);

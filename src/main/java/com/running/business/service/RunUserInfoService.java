@@ -13,7 +13,7 @@ public interface RunUserInfoService {
 	 * @return
 	 * @throws AppException
 	 */
-	BaseResult saveRunUserInfo(RunUserInfo userInfo) throws AppException;
+	void saveRunUserInfo(RunUserInfo userInfo) throws AppException;
 
 	/**
 	 * 更新用户信息
@@ -21,11 +21,39 @@ public interface RunUserInfoService {
 	 * @return
 	 * @throws AppException
 	 */
-	BaseResult updateRunUserInfo(RunUserInfo userInfo) throws AppException;
-	BaseResult deleteRunUserInfo(Integer uid) throws AppException;
-	
+	void updateRunUserInfo(RunUserInfo userInfo) throws AppException;
+
+	/**
+	 * 根据用户id删除用户信息
+	 *
+	 * @param uid
+	 * @throws AppException
+	 */
+	void deleteRunUserInfo(Integer uid) throws AppException;
+
+	/**
+	 * 根据用户id获取用户信息
+	 *
+	 * @param uid
+	 * @return
+	 * @throws AppException
+	 */
 	RunUserInfo getRunUserInfoById(Integer uid) throws AppException;
+
+	/**
+	 * 根据id获取用户vo
+	 * @param uid
+	 * @return
+	 * @throws AppException
+	 */
 	UserVO getUserVOById(Integer uid) throws AppException;
+
+	/**
+	 * 获取所有用户信息
+	 *
+	 * @return
+	 * @throws AppException
+	 */
 	BaseResult getAllRunUserInfo() throws AppException;
 
 	/**

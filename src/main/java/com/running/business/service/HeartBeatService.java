@@ -18,7 +18,7 @@ public interface HeartBeatService {
      * @param heartBeat
      * @throws AppException
      */
-    void save(HeartBeat heartBeat) throws AppException;
+    HeartBeat save(HeartBeat heartBeat) throws AppException;
 
     /**
      * 保存心跳
@@ -34,7 +34,7 @@ public interface HeartBeatService {
      * @param heartBeat
      * @throws AppException
      */
-    void saveOrUpdateHeartBeat(HeartBeat heartBeat) throws AppException;
+    HeartBeat saveOrUpdateHeartBeat(HeartBeat heartBeat) throws AppException;
 
     /**
      * 更新心跳

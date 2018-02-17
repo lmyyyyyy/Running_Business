@@ -3,6 +3,9 @@ package com.running.business.controller;
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.HelpBuyGoodsEnum;
+import com.running.business.enums.HelpQueueTypeEnum;
+import com.running.business.enums.HelpSendGoodsEnum;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
@@ -30,11 +33,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author liumingyu
@@ -43,7 +48,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/index")
 @Api(value = "注册登录模块", tags = {"注册登录模块"})
-public class IndexController extends BaseController{
+public class IndexController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RunUserController.class);
 
@@ -293,6 +298,10 @@ public class IndexController extends BaseController{
         LOGGER.info("注册用户，账号为：" + user.getUserphone());
         Integer did;
         try {
+            boolean flag = runDeliveryuserService.checkRunDeliveryuser(user.getUserphone());
+            if (!flag) {
+                return BaseResult.fail(ResultEnum.TELTPHONE_DELIVERY);
+            }
             did = runDeliveryuserService.saveRunDeliveryuser(user);
         } catch (AppException ae) {
             LOGGER.error("{} 注册配送员失败 user = {}", LOG_PREFIX, user);
@@ -312,7 +321,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping(value = "/delivery/check/card/id", method = RequestMethod.GET)
     @ApiOperation(value = "验证配送员身份证号格式(刘明宇)", notes = "验证配送员身份证号格式", response = BaseResult.class)
-    public BaseResult checkCard(@PathVariable Integer id, String card, HttpServletRequest request) throws Exception {
+    public BaseResult checkCard(@PathVariable Integer id, @RequestParam("card") String card, HttpServletRequest request) throws Exception {
         if (card == null || "".equals(card)) {
             LOGGER.error("{} 身份证号不能为空 id = {}", LOG_PREFIX, id);
             return BaseResult.fail(ResultEnum.DELIVERY_CARD_REGEX_IS_NOT_PASS);
@@ -414,6 +423,63 @@ public class IndexController extends BaseController{
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return result;
+    }
+
+
+    /**
+     * 跳到帮我买页面需初始化的数据
+     *
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/helpbuy", method = RequestMethod.GET)
+    @ApiOperation(value = "跳到帮我买页面需初始化的数据(刘明宇)", notes = "跳到帮我买页面需初始化的数据", response = BaseResult.class)
+    public BaseResult toHelpBuy() throws AppException {
+        LOGGER.info("{} 跳到帮我买页面", LOG_PREFIX);
+        List<String> goods = HelpBuyGoodsEnum.getAllGoods();
+        return BaseResult.success(goods);
+    }
+
+    /**
+     * 跳到帮我送页面需初始化的数据
+     *
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/helpsend", method = RequestMethod.GET)
+    @ApiOperation(value = "跳到帮我送页面需初始化的数据(刘明宇)", notes = "跳到帮我送页面需初始化的数据", response = BaseResult.class)
+    public BaseResult toHelpSend() throws AppException {
+        LOGGER.info("{} 跳到帮我送页面", LOG_PREFIX);
+        List<String> goods = HelpSendGoodsEnum.getAllGoods();
+        return BaseResult.success(goods);
+    }
+
+    /**
+     * 跳到帮我取页面需初始化的数据
+     *
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/helpget", method = RequestMethod.GET)
+    @ApiOperation(value = "跳到帮我取页面需初始化的数据(刘明宇)", notes = "跳到帮我取页面需初始化的数据", response = BaseResult.class)
+    public BaseResult toHelpGet() throws AppException {
+        LOGGER.info("{} 跳到帮我取页面", LOG_PREFIX);
+        List<String> goods = HelpSendGoodsEnum.getAllGoods();
+        return BaseResult.success(goods);
+    }
+
+    /**
+     * 跳到代排队页面需初始化的数据
+     *
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/helpqueue", method = RequestMethod.GET)
+    @ApiOperation(value = "跳到代排队页面需初始化的数据(刘明宇)", notes = "跳到代排队页面需初始化的数据", response = BaseResult.class)
+    public BaseResult toHelpQueue() throws AppException {
+        LOGGER.info("{} 跳到代排队页面", LOG_PREFIX);
+        List<String> queues = HelpQueueTypeEnum.getAllQueue();
+        return BaseResult.success(queues);
     }
 
 }

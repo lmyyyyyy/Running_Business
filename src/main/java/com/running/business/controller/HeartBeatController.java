@@ -86,8 +86,8 @@ public class HeartBeatController extends BaseController {
         heartBeat.setUid(id);
         heartBeat.setUserInfo(jsonStr);
         heartBeat.setIp(ip);
-        heartBeatService.save(heartBeat);
-        return BaseResult.success();
+        HeartBeat beat = heartBeatService.save(heartBeat);
+        return BaseResult.success(beat);
     }
 
 }
