@@ -77,6 +77,8 @@ public enum ResultEnum {
     ACTION_CONTEXT("99980007", "ActionContext对象为空"),
     JSON_TO_ENTITY_ERROR("99980008", "json串转实体异常"),
 
+    //数据异常
+    DATA_ERROR("60010001", "数据异常"),
     ;
 
     private String code;
