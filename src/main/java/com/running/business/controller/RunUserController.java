@@ -16,8 +16,10 @@ import com.running.business.service.RefundApplyService;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunUserAddressService;
+import com.running.business.service.RunUserBalanceRecordService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RequestUtil;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,131 +77,12 @@ public class RunUserController extends BaseController {
     @Autowired
     private RefundRecordService refundRecordService;
 
-    /**
-     * 验证账号是否可用
-     *
-     * @param username 用户名
-     * @param callback 回调
-     * @return
-     *//*
-    @RequestMapping(value = "/check/{username}", method = RequestMethod.GET)
-    @ApiOperation(value = "验证账号是否可用(刘明宇)", notes = "验证账号是否可用", response = Object.class)
-    public Object checkData(@PathVariable String username, String callback) throws Exception {
-        if (StringUtils.isBlank(username)) {
-             return BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
-        }
-        logger.info("验证账号是否可用：" + username);
-        BaseResult result = null;
-        //校验出错
-        try {
-            if (null != result) {
-                if (null != callback) {
-                    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(result);
-                    mappingJacksonValue.setJsonpFunction(callback);
-                    return mappingJacksonValue;
-                } else {
-                    return result;
-                }
-            }
-            result = runUserService.checkUser(username);
-        } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "验证失败 username = {} error = {}" + new Object[]{username, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        if (null != callback) {
-            MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(result);
-            mappingJacksonValue.setJsonpFunction(callback);
-            return mappingJacksonValue;
-        } else {
-            return result;
-        }
-    }
+    @Autowired
+    private RunUserBalanceRecordService runUserBalanceRecordService;
 
-    *//**
-     * 添加用户
-     *
-     * @param user 用户实体
-     * @return
-     *//*
-    @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
-        public BaseResult register(@RequestBody RunUser user) throws Exception {
-        if (user.getUserphone() == null || "".equals(user.getUserphone().trim())
-                || user.getPassword() == null || "".equals(user.getPassword().trim())) {
-            return BaseResult.fail(ResultEnum.INPUT_ERROR);
-        }
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 18) {
-            return BaseResult.fail(ResultEnum.USER_PASSWORD_LEN);
-        }
-        if (!RegexUtils.checkMobile(user.getUserphone())) {
-            return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
-        }
-        logger.info("注册用户，账号为：" + user.getUserphone());
-        BaseResult result = null;
-        try {
-            result = runUserService.checkUser(user.getUserphone());
-            if (!result.getCode().equals("200")) {
-                return result;
-            }
-            result = runUserService.saveUser(user);
-            if (result.getCode().equals("200")) {
-                int uid = user.getUid();
-                RunUserBalance balance = new RunUserBalance();
-                balance.setUid(uid);
-                balance.setUserBalance(0.00d);
-                balance.setUpdateTime(new Date());
-                runUserBalanceService.saveRunUserBalance(balance);
-                RunUserInfo runUserInfo = new RunUserInfo();
-                runUserInfo.setUid(uid);
-                runUserInfo.setUserPhone(user.getUserphone());
-                runUserInfo.setUserPhoto("/img/default.jpg");
-                runUserInfo.setUserPoint(0);
-                runUserInfo.setUserGender(false);
-                String name = RandomUtil.generateRandomDigitString(5);
-                int count = 0;
-                while (!runUserInfoService.checkNameUnique(name)) {
-                    if (count >= 5) {
-                        return BaseResult.fail(ResultEnum.Number_THAN_BIG);
-                    }
-                    name = RandomUtil.generateRandomDigitString(5);
-                    count++;
-                }
-                runUserInfo.setUserName("游客_" + name);
-                runUserInfoService.saveRunUserInfo(runUserInfo);
-            }
-        } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "注册用户失败- user = {}, error = {}" + new Object[]{user, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        return result;
-    }
+    @Autowired
+    private RunUserPreferenceService runUserPreferenceService;
 
-    *//**
-     * 用户登录
-     *
-     * @param user     用户实体
-     * @param request  请求
-     * @param response 响应
-     * @return
-     *//*
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
-    public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (user.getUserphone() == null || user.getUserphone().trim().equals("")
-                || user.getPassword() == null || user.getPassword().trim().equals("")) {
-            return BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
-        }
-        logger.info("用户登录：" + user.getUserphone());
-        BaseResult result = null;
-        try {
-            result = runUserService.login(user.getUserphone(), user.getPassword(), request, response);
-        } catch (AppException ae) {
-            logger.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        return result;
-    }
-*/
 
     /**
      * 根据token获取用户信息
@@ -536,6 +420,59 @@ public class RunUserController extends BaseController {
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return BaseResult.success(pageInfo);
+    }
+
+    /**
+     * 查询余额
+     *
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "查询余额(刘明宇)", notes = "查询余额", response = BaseResult.class)
+    @RequestMapping(value = "/balance", method = RequestMethod.GET)
+    public BaseResult queryBalance(HttpServletRequest request) throws AppException {
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 查询余额 uid = {}", LOG_PREFIX, uid);
+        return BaseResult.success(runUserBalanceService.getRunUserBalanceByUID(uid));
+    }
+
+    /**
+     * 分页获取交易记录
+     *
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "分页获取交易记录(刘明宇)", notes = "分页获取交易记录", response = BaseResult.class)
+    @RequestMapping(value = "/balances", method = RequestMethod.GET)
+    public BaseResult pageBalanceRecords(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                         @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                         @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                         @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                         HttpServletRequest request) throws AppException {
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 分页获取交易记录 uid = {}", LOG_PREFIX, uid);
+        return BaseResult.success(runUserBalanceRecordService.pageAllRunUserBalanceRecordByUID(uid, page, size, orderField, orderType));
+    }
+
+    /**
+     * 获取所有偏好
+     *
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "获取所有偏好(刘明宇)", notes = "获取所有偏好", response = BaseResult.class)
+    @RequestMapping(value = "/preferences", method = RequestMethod.GET)
+    public BaseResult queryAllPreference(HttpServletRequest request) throws AppException {
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 获取所有偏好 uid = {}", LOG_PREFIX, uid);
+        return BaseResult.success(runUserPreferenceService.getAllUserPreferenceByUID(uid));
     }
 
 }

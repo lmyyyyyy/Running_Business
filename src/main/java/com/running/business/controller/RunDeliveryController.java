@@ -8,6 +8,7 @@ import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.service.RefundRecordService;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -400,6 +402,42 @@ public class RunDeliveryController extends BaseController {
     }
 
     /**
+     * 查询配送距离
+     *
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "查询配送距离(刘明宇)", notes = "查询配送距离", response = BaseResult.class)
+    @RequestMapping(value = "/distance", method = RequestMethod.GET)
+    public BaseResult queryDistance(HttpServletRequest request) throws AppException {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 查询配送距离, did = {}", LOG_PREFIX, did);
+        return BaseResult.success(runDeliveryDistanceService.getRunDeliveryDistanceByDID(did));
+    }
+
+    /**
+     * 配送员更新配送距离
+     *
+     * @param deliveryDistance
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "配送员更新配送距离(刘明宇)", notes = "配送员更新配送距离", response = BaseResult.class)
+    @RequestMapping(value = "/distance", method = RequestMethod.PUT)
+    public BaseResult updateDistance(@RequestBody RunDeliveryDistance deliveryDistance, HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 配送员更新配送距离", LOG_PREFIX);
+        if (deliveryDistance == null) {
+            return BaseResult.fail(ResultEnum.DELIVERY_DISTANCE_SET_ERROR);
+        }
+        Integer did = requestUtil.getDeliveryId(request);
+        deliveryDistance.setDid(did);
+        runDeliveryDistanceService.updateRunDeliveryDistance(deliveryDistance);
+        return BaseResult.success();
+    }
+
+    /**
      * 配送员投诉用户
      *
      * @param reportRecord
@@ -456,5 +494,42 @@ public class RunDeliveryController extends BaseController {
         return BaseResult.success(pageInfo);
     }
 
+    /**
+     * 查询余额
+     *
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "查询余额(刘明宇)", notes = "查询余额", response = BaseResult.class)
+    @RequestMapping(value = "/balance", method = RequestMethod.GET)
+    public BaseResult queryBalance(HttpServletRequest request) throws AppException {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 查询余额 did = {}", LOG_PREFIX, did);
+        return BaseResult.success(runDeliveryBalanceService.getRunDeliveryBalanceByDID(did));
+    }
+
+    /**
+     * 分页获取交易记录
+     *
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "分页获取交易记录(刘明宇)", notes = "分页获取交易记录", response = BaseResult.class)
+    @RequestMapping(value = "/balances", method = RequestMethod.GET)
+    public BaseResult pageBalanceRecords(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                         @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                         @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                         @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                         HttpServletRequest request) throws AppException {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 分页获取交易记录 did = {}", LOG_PREFIX, did);
+        return BaseResult.success(runDeliveryBalanceRecordService.pageAllDeliveryRecordByDID(did, page, size, orderField, orderType));
+    }
 
 }

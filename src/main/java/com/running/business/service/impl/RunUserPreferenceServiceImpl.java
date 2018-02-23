@@ -29,7 +29,15 @@ public class RunUserPreferenceServiceImpl implements RunUserPreferenceService {
         if (userpre == null) {
             throw new AppException(ResultEnum.USER_PREFERENCE_INFO_EMTPY);
         }
-        runUserPreferenceMapper.insert(userpre);
+        List<RunUserPreference> list = this.getAllUserPreferenceByUIDAndType(userpre.getUid(), userpre.getUserGoodstype());
+        if (list == null || list.isEmpty()) {
+            userpre.setTimes(1);
+            runUserPreferenceMapper.insert(userpre);
+        } else {
+            RunUserPreference preference = list.get(0);
+            preference.setTimes(preference.getTimes() + 1);
+            this.updateRunUserPreference(preference);
+        }
     }
 
     /**
