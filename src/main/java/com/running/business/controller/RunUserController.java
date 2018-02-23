@@ -18,6 +18,7 @@ import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunUserAddressService;
 import com.running.business.service.RunUserBalanceRecordService;
 import com.running.business.service.RunUserBalanceService;
+import com.running.business.service.RunUserCouponService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
@@ -83,6 +84,8 @@ public class RunUserController extends BaseController {
     @Autowired
     private RunUserPreferenceService runUserPreferenceService;
 
+    @Autowired
+    private RunUserCouponService runUserCouponService;
 
     /**
      * 根据token获取用户信息
@@ -473,6 +476,31 @@ public class RunUserController extends BaseController {
         Integer uid = requestUtil.getUserId(request);
         logger.info("{} 获取所有偏好 uid = {}", LOG_PREFIX, uid);
         return BaseResult.success(runUserPreferenceService.getAllUserPreferenceByUID(uid));
+    }
+
+    /**
+     * 分页获取优惠券
+     *
+     * @param page
+     * @param size
+     * @param status
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "分页获取优惠券(刘明宇)", notes = "分页获取优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupons", method = RequestMethod.GET)
+    public BaseResult pageCoupons(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                  HttpServletRequest request) throws AppException {
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 分页获取优惠券 uid = {}", LOG_PREFIX, uid);
+        return BaseResult.success(runUserCouponService.pageRunUserCouponByUID(uid, status, page, size, orderField, orderType));
     }
 
 }

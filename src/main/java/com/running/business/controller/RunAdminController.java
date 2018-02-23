@@ -10,6 +10,7 @@ import com.running.business.interceptor.PermissionInterceptor;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.pojo.RunUser;
+import com.running.business.pojo.RunUserCoupon;
 import com.running.business.service.RefundApplyService;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -708,4 +710,67 @@ public class RunAdminController extends BaseController {
     }
 
     //-----------------------------------投诉end--------------------------
+
+    /**
+     * 分页获取优惠券
+     *
+     * @param page
+     * @param size
+     * @param status
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "分页获取优惠券(刘明宇)", notes = "分页获取优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupons", method = RequestMethod.GET)
+    public BaseResult pageCoupons(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                  HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 分页获取优惠券", LOG_PREFIX);
+        return BaseResult.success(runUserCouponService.pageRunUserCouponByStatus(status, page, size, orderField, orderType));
+    }
+
+    /**
+     * 添加优惠券（通知在线用户）
+     *
+     * @param coupon
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "添加优惠券(刘明宇)", notes = "添加优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupon", method = RequestMethod.POST)
+    public BaseResult saveCoupon(@RequestBody RunUserCoupon coupon, HttpServletRequest request) throws AppException {
+        if (coupon == null) {
+            return BaseResult.fail(ResultEnum.USER_COUPON_INFO_EMTPY);
+        }
+        LOGGER.info("{} 添加优惠券", LOG_PREFIX);
+        runUserCouponService.saveRunUserCoupon(coupon);
+        return BaseResult.success();
+    }
+
+    /**
+     * 更新优惠券
+     *
+     * @param coupon
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "更新优惠券(刘明宇)", notes = "更新优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupon", method = RequestMethod.PUT)
+    public BaseResult updateCoupon(@RequestBody RunUserCoupon coupon, HttpServletRequest request) throws AppException {
+        if (coupon == null) {
+            return BaseResult.fail(ResultEnum.USER_COUPON_INFO_EMTPY);
+        }
+        LOGGER.info("{} 更新优惠券", LOG_PREFIX);
+        runUserCouponService.updateRunUserCoupon(coupon);
+        return BaseResult.success();
+    }
+
 }
