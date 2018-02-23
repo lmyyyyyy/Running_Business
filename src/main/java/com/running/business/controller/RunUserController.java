@@ -7,6 +7,7 @@ import com.running.business.common.ResultEnum;
 import com.running.business.enums.RefundApplyStatusEnum;
 import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
+import com.running.business.facade.Cashier;
 import com.running.business.pojo.RefundApply;
 import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunUser;
@@ -72,7 +73,6 @@ public class RunUserController extends BaseController {
 
     @Autowired
     private RefundRecordService refundRecordService;
-
 
     /**
      * 验证账号是否可用
@@ -537,6 +537,5 @@ public class RunUserController extends BaseController {
         }
         return BaseResult.success(pageInfo);
     }
-
 
 }

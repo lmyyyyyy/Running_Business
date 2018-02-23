@@ -5,15 +5,17 @@ import com.running.business.common.BaseResult;
 import com.running.business.dto.InfoDTO;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunOrder;
+import com.running.business.pojo.RunOrderPay;
 import com.running.business.vo.OrderVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface RunOrderService {
 
-    BaseResult saveRunOrder(RunOrder order) throws AppException;
+    void saveRunOrder(RunOrder order) throws AppException;
 
-    BaseResult updateRunOrder(RunOrder order) throws AppException;
+    void updateRunOrder(RunOrder order) throws AppException;
 
     /**
      * 更新订单状态
@@ -24,11 +26,11 @@ public interface RunOrderService {
      */
     void updateOrderStatus(String orderId, Integer status) throws AppException;
 
-    BaseResult deleteRunOrderByOID(String oid) throws AppException;
+    void deleteRunOrderByOID(String oid) throws AppException;
 
-    BaseResult deleteAllRunOrderByUID(Integer uid) throws AppException;
+    void deleteAllRunOrderByUID(Integer uid) throws AppException;
 
-    BaseResult deleteAllRunOrderByDID(Integer did) throws AppException;
+    void deleteAllRunOrderByDID(Integer did) throws AppException;
 
     /**
      * 根据id获取订单
@@ -106,4 +108,13 @@ public interface RunOrderService {
      * @throws AppException
      */
     List<InfoDTO> queryInfoDTO(Long seconds) throws AppException;
+
+    /**
+     * 用户支付订单
+     *
+     * @param orderPay
+     * @param request
+     * @throws AppException
+     */
+    void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException;
 }
