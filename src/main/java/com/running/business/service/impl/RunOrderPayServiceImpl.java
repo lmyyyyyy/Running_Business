@@ -136,7 +136,9 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 		RunOrderPayExample example = new RunOrderPayExample();
 		RunOrderPayExample.Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(orderId);
-		criteria.andUidEqualTo(uid);
+		if (uid != null && uid > 0) {
+			criteria.andUidEqualTo(uid);
+		}
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (list == null || list.isEmpty()) {
 			return null;
