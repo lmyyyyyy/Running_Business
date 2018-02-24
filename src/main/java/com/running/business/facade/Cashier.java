@@ -16,6 +16,7 @@ public class Cashier {
 
     @Autowired
     private BalancePay balancePay;
+
     /**
      * 用户支付（暂只支持余额支付）
      *

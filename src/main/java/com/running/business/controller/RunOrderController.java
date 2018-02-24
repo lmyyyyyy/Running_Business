@@ -156,7 +156,30 @@ public class RunOrderController extends BaseController {
     }
 
     /**
-     * 模糊分页 根据状态查询订单(配送员自己操作)
+     * 模糊分页 根据关键字查询可抢订单(配送员刷单)
+     *
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "根据关键字查询可抢订单(刘明宇)", notes = "根据关键字查询可抢订单", response = BaseResult.class)
+    public BaseResult pageOrders(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                 @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                 HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 根据关键字查询可抢订单 keyword = {}, page = {}, size = {}", LOG_PREFIX, keyword, page, size);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByPaid(keyword, page, size, orderType);
+        return BaseResult.success(pageInfo);
+    }
+
+    /**
+     * 模糊分页 根据状态查询历史订单(配送员自己操作)
      *
      * @param keyword
      * @param page
@@ -167,7 +190,7 @@ public class RunOrderController extends BaseController {
      * @throws AppException
      */
     @RequestMapping(value = "/delivery", method = RequestMethod.GET)
-    @ApiOperation(value = "根据配送状态模糊查询订单(刘明宇)", notes = "根据配送员ID和配送状态模糊查询订单", response = BaseResult.class)
+    @ApiOperation(value = "根据配送状态模糊查询历史订单(刘明宇)", notes = "根据配送员ID和配送状态模糊查询订单", response = BaseResult.class)
     public BaseResult pageOrdersByKeywordAndStatus(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                    @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
                                                    @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
@@ -175,7 +198,7 @@ public class RunOrderController extends BaseController {
                                                    @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                                    HttpServletRequest request) throws AppException {
         Integer did = requestUtil.getDeliveryId(request);
-        LOGGER.info("{} 根据配送状态模糊查询订单 did = {}, status = {}, keyword = {}, page = {}, size = {}", LOG_PREFIX, did, status, keyword, page, size);
+        LOGGER.info("{} 根据配送状态模糊查询历史订单 did = {}, status = {}, keyword = {}, page = {}, size = {}", LOG_PREFIX, did, status, keyword, page, size);
         PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByDIDAndStatus(did, status, keyword, page, size, orderType);
         return BaseResult.success(pageInfo);
     }

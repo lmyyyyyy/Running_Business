@@ -11,6 +11,7 @@ import com.running.business.pojo.RunDeliveryAddress;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
+import com.running.business.pojo.RunOrder;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunDeliveryAddressService;
@@ -19,6 +20,7 @@ import com.running.business.service.RunDeliveryBalanceService;
 import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
+import com.running.business.service.RunOrderService;
 import com.running.business.util.IdcardValidator;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RequestUtil;
@@ -81,6 +83,8 @@ public class RunDeliveryController extends BaseController {
     @Autowired
     private RefundRecordService refundRecordService;
 
+    @Autowired
+    private RunOrderService runOrderService;
 
     /**
      * 验证配送员身份证号格式
@@ -414,6 +418,52 @@ public class RunDeliveryController extends BaseController {
         Integer did = requestUtil.getDeliveryId(request);
         LOGGER.info("{} 查询配送距离, did = {}", LOG_PREFIX, did);
         return BaseResult.success(runDeliveryDistanceService.getRunDeliveryDistanceByDID(did));
+    }
+
+    /**
+     * 配送员抢单
+     *
+     * @param orderId
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "配送员抢单(刘明宇)", notes = "配送员抢单", response = BaseResult.class)
+    @RequestMapping(value = "/grabOrder", method = RequestMethod.PUT)
+    public BaseResult grabOrder(@RequestParam(value = "orderId", required = true) String orderId,
+                                HttpServletRequest request) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return BaseResult.fail(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 配送员抢单 did = {}, orderId = {}", LOG_PREFIX, did, orderId);
+        runOrderService.updateOrderByGrab(orderId, did);
+        return BaseResult.success();
+    }
+
+    /**
+     * 配送员更新订单状态
+     *
+     * @param status
+     * @param orderId
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "配送员更新订单状态(刘明宇)", notes = "配送员更新订单状态", response = BaseResult.class)
+    @RequestMapping(value = "/modify/OrderStatus", method = RequestMethod.PUT)
+    public BaseResult updateOrderStatus(@RequestParam(value = "status", required = true) Integer status,
+                                        @RequestParam(value = "orderId", required = true) String orderId,
+                                        HttpServletRequest request) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return BaseResult.fail(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        if (status == null || status < 0) {
+            return BaseResult.fail(ResultEnum.ORDER_STATUS_IS_ERROR);
+        }
+        LOGGER.info("{} 配送员更新订单状态 orderId = {}, status = {}", LOG_PREFIX, orderId, status);
+        runOrderService.updateOrderStatus(orderId, status);
+        return BaseResult.success();
     }
 
     /**

@@ -13,9 +13,34 @@ import java.util.List;
 
 public interface RunOrderService {
 
+    /**
+     * 验证订单是否已被抢
+     *
+     * @param orderId
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    boolean checkGrab(String orderId, Integer did) throws AppException;
+
     void saveRunOrder(RunOrder order) throws AppException;
 
+    /**
+     * 更新订单
+     *
+     * @param order
+     * @throws AppException
+     */
     void updateRunOrder(RunOrder order) throws AppException;
+
+    /**
+     * 配送员抢单
+     *
+     * @param orderId
+     * @param did
+     * @throws AppException
+     */
+    void updateOrderByGrab(String orderId, Integer did) throws AppException;
 
     /**
      * 更新订单状态
@@ -84,6 +109,18 @@ public interface RunOrderService {
      * @throws AppException
      */
     PageInfo<OrderVO> pageRunOrderByDIDAndStatus(Integer did, Integer status, String keyword, Integer page, Integer size, String orderType) throws AppException;
+
+    /**
+     * 模糊分页 查询已支付可抢订单列表
+     *
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException;
 
     BaseResult getAllRunOrder() throws AppException;
 

@@ -27,7 +27,7 @@ import com.running.business.service.RunUserInfoService;
 import com.running.business.util.DateUtil;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.OrderVO;
-import io.swagger.annotations.ApiOperation;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +58,30 @@ public class RunOrderServiceImpl implements RunOrderService {
     @Autowired
     private RunOrderPayService runOrderPayService;
 
+    /**
+     * 验证订单是否已被抢 false:未被抢；true:已被抢
+     *
+     * @param orderId
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public boolean checkGrab(String orderId, Integer did) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderidEqualTo(orderId);
+        criteria.andStatusGreaterThanOrEqualTo(OrderStatusEnum.RECEIVED.getCode());
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        if (orders == null || orders.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void saveRunOrder(RunOrder order) throws AppException {
         if (order == null) {
@@ -73,11 +97,33 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @throws AppException
      */
     @Override
-    public void updateRunOrder(RunOrder order) throws AppException {
+    public synchronized void updateRunOrder(RunOrder order) throws AppException {
         if (order == null) {
             throw new AppException(ResultEnum.ORDER_PARAMETER_IS_EMPTY);
         }
         runOrderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 配送员抢单
+     *
+     * @param orderId
+     * @param did
+     * @throws AppException
+     */
+    @Override
+    public synchronized void updateOrderByGrab(String orderId, Integer did) throws AppException {
+        boolean flag = checkGrab(orderId, did);
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAVEN_BEEN_GRABED);
+        }
+        RunOrder order = new RunOrder();
+        order.setOrderid(orderId);
+        order.setDid(did);
+        order.setStatus(OrderStatusEnum.RECEIVED.getCode());
+        order.setRecvTime(new Date());
+        order.setUpdateTime(new Date());
+        this.updateRunOrder(order);
     }
 
     /**
@@ -293,6 +339,30 @@ public class RunOrderServiceImpl implements RunOrderService {
         if (status != -1) {
             criteria.andStatusEqualTo(status);
         }
+        if (keyword != null && !"".equals(keyword.trim())) {
+            criteria.andRemarkLike("%" + keyword.trim() + "%");
+        }
+        example.setOrderByClause(" add_time " + orderType);
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        List<OrderVO> list = convertOrders2VOs(orders);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        PageHelper.startPage(page, size);
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo(OrderStatusEnum.PAID.getCode());
         if (keyword != null && !"".equals(keyword.trim())) {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
