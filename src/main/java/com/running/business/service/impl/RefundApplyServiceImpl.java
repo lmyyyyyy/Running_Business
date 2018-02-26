@@ -14,13 +14,18 @@ import com.running.business.pojo.RefundRecord;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderPay;
+import com.running.business.pojo.RunUserBalance;
+import com.running.business.pojo.RunUserBalanceRecord;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RefundApplyService;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
+import com.running.business.service.RunUserBalanceRecordService;
+import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.util.RandomUtil;
 import com.running.business.vo.RefundApplyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +58,12 @@ public class RefundApplyServiceImpl implements RefundApplyService {
 
     @Autowired
     private RefundRecordService refundRecordService;
+
+    @Autowired
+    private RunUserBalanceService runUserBalanceService;
+
+    @Autowired
+    private RunUserBalanceRecordService runUserBalanceRecordService;
 
     /**
      * 验证该用户下的订单是否已退过款 false：没退过，true：退过
@@ -152,7 +163,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         apply.setId(refundDTO.getId());
         apply.setStatus(refundDTO.getStatus());
         if (RefundApplyStatusEnum.AGREE.getCode().equals(refundDTO.getStatus())) {
-            //todo 执行退款操作
+            this.refund(apply);
             runOrderService.updateOrderStatus(refundDTO.getOrderId(), OrderStatusEnum.REFUND.getCode());
         } else {
             runOrderService.updateOrderStatus(refundDTO.getOrderId(), OrderStatusEnum.REFUND_FAIL.getCode());
@@ -161,6 +172,33 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         //保存退款记录
         this.saveRefundRecord(apply, refundDTO);
         refundApplyMapper.updateByPrimaryKeySelective(apply);
+    }
+
+    /**
+     * 退款操作
+     *
+     * @param apply
+     * @throws AppException
+     */
+    private synchronized void refund(RefundApply apply) throws AppException {
+        String orderId = apply.getOrderid();
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RunOrderPay runOrderPay = runOrderPayService.queryPayByOIDAndUID(orderId, apply.getUid());
+        double money = runOrderPay.getOrderActualPrice();
+        RunUserBalance userBalance = runUserBalanceService.getRunUserBalanceByUID(apply.getUid());
+        RunUserBalanceRecord record = new RunUserBalanceRecord();
+        record.setUid(apply.getUid());
+        record.setOldBalance(userBalance.getUserBalance());
+        userBalance.setUserBalance(userBalance.getUserBalance() + money);
+        runUserBalanceService.updateRunUserBalance(userBalance);
+        record.setNewBalance(userBalance.getUserBalance());
+        record.setType(false);
+        record.setAmount(money);
+        record.setAddTime(new Date());
+        record.setNumber(RandomUtil.generateRandomDigitString(18));
+        runUserBalanceRecordService.saveRunUserBalanceRecord(record);
     }
 
     /**

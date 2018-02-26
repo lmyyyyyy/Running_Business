@@ -12,6 +12,7 @@ import com.running.business.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,17 +22,24 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	private RunOrderPayMapper runOrderPayMapper;
 
 	@Override
-	public void saveRunOrderPay(RunOrderPay pay) {
+	public void saveRunOrderPay(RunOrderPay pay) throws AppException {
+		if (pay == null) {
+			throw new AppException(ResultEnum.ORDER_PAY_INFO_EMPTY);
+		}
+		pay.setPayTime(new Date());
 		runOrderPayMapper.insert(pay);
 	}
 
 	@Override
-	public void updateRunOrderPay(RunOrderPay pay) {
-		runOrderPayMapper.updateByPrimaryKey(pay);
+	public void updateRunOrderPay(RunOrderPay pay) throws AppException {
+		if (pay == null) {
+			throw new AppException(ResultEnum.ORDER_PAY_INFO_EMPTY);
+		}
+		runOrderPayMapper.updateByPrimaryKeySelective(pay);
 	}
 
 	@Override
-	public void deleteRunOrderPayByID(Integer id) {
+	public void deleteRunOrderPayByID(Integer id) throws AppException {
 		RunOrderPay pay = runOrderPayMapper.selectByPrimaryKey(id);
 		if (pay == null) {
 			throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -40,7 +48,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public void deleteRunOrderPayByOID(String oid) {
+	public void deleteRunOrderPayByOID(String oid) throws AppException {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(oid);
@@ -55,7 +63,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public void deleteAllRunOrderByUID(Integer uid) {
+	public void deleteAllRunOrderByUID(Integer uid) throws AppException {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
@@ -70,7 +78,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult getRunOrderPayByID(Integer id) {
+	public BaseResult getRunOrderPayByID(Integer id) throws AppException {
 		RunOrderPay pay = runOrderPayMapper.selectByPrimaryKey(id);
 		if (pay == null) {
 			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
@@ -79,7 +87,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult getRunOrderPayByOID(String oid) {
+	public BaseResult getRunOrderPayByOID(String oid) throws AppException {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(oid);
@@ -91,7 +99,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult getAllRunOrderPayByUID(Integer uid) {
+	public BaseResult getAllRunOrderPayByUID(Integer uid) throws AppException {
 		RunOrderPayExample example = new RunOrderPayExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUidEqualTo(uid);
@@ -103,7 +111,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	}
 
 	@Override
-	public BaseResult getAllRunOrderPay() {
+	public BaseResult getAllRunOrderPay() throws AppException {
 		RunOrderPayExample example = new RunOrderPayExample();
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
@@ -128,7 +136,9 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 		RunOrderPayExample example = new RunOrderPayExample();
 		RunOrderPayExample.Criteria criteria = example.createCriteria();
 		criteria.andOrderidEqualTo(orderId);
-		criteria.andUidEqualTo(uid);
+		if (uid != null && uid > 0) {
+			criteria.andUidEqualTo(uid);
+		}
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (list == null || list.isEmpty()) {
 			return null;

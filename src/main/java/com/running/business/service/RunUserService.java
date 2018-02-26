@@ -127,6 +127,14 @@ public interface RunUserService {
     List<RunUser> getUsersByStatus(boolean status) throws AppException;
 
     /**
+     * 获取所有未被删除的用户
+     *
+     * @return
+     * @throws AppException
+     */
+    List<RunUser> queryUsers() throws AppException;
+
+    /**
      * 根据id集合查询当前在线的用户集合
      *
      * @param ids

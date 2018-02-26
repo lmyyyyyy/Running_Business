@@ -10,7 +10,8 @@ public enum PaySourceTypeEnum {
     BALANCE(1, "余额"),
     ALIPAY(2, "支付宝"),
     WECHATPAY(3, "微信"),
-    BANK(4, "银行卡")
+    APPLEPAY(4, "苹果支付"),
+    BANK(5, "银行卡")
     ;
 
     private Integer code;

@@ -92,7 +92,9 @@ public enum ResultEnum {
     ORDER_GENERATOR_FAIL("4001003", "订单号生成失败"),
     ORDER_ID_IS_ERROR("4001004", "订单号异常"),
     ORDER_STATUS_IS_ERROR("4001005", "订单状态异常"),
+    ORDER_HAVEN_BEEN_GRABED("4001006", "手慢了一步,订单被抢了"),
 
+    //订单支付相关异常
     ORDER_PAY_INFO_EMPTY("4002001", "订单支付信息为空"),
 
     //心跳相关异常
