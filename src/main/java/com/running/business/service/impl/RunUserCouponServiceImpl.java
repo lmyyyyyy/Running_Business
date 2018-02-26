@@ -6,15 +6,19 @@ import com.running.business.common.ResultEnum;
 import com.running.business.enums.CouponStatusEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.RunUserCouponMapper;
+import com.running.business.pojo.RunUser;
 import com.running.business.pojo.RunUserCoupon;
 import com.running.business.pojo.RunUserCouponExample;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RunUserCouponService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.service.RunUserService;
 import com.running.business.util.DateUtil;
 import com.running.business.vo.CouponVO;
+import com.running.business.websocket.SystemWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,9 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
     @Autowired
     private RunUserInfoService runUserInfoService;
 
+    @Autowired
+    private RunUserService runUserService;
+
     /**
      * 创建优惠券
      *
@@ -39,8 +46,27 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
         if (runUserCoupon == null) {
             throw new AppException(ResultEnum.USER_COUPON_INFO_EMTPY);
         }
-        runUserCoupon.setStatus(CouponStatusEnum.AVALIBALE.getCode());
-        runUserCouponMapper.insert(runUserCoupon);
+        if (runUserCoupon.getStatus() == null) {
+            runUserCoupon.setStatus(CouponStatusEnum.AVALIBALE.getCode());
+        }
+        List<RunUser> users = runUserService.queryUsers();
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+        for (RunUser user : users) {
+            if (user == null) {
+                continue;
+            }
+            Integer uid = user.getUid();
+            if (uid == null) {
+                continue;
+            }
+            runUserCoupon.setUid(uid);
+            runUserCouponMapper.insert(runUserCoupon);
+        }
+        //通知所有在线用户
+        SystemWebSocketHandler systemWebSocketHandler = new SystemWebSocketHandler();
+        systemWebSocketHandler.sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
     }
 
     /**
@@ -54,7 +80,22 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
         if (runUserCoupon == null) {
             throw new AppException(ResultEnum.USER_COUPON_INFO_EMTPY);
         }
-        runUserCouponMapper.updateByPrimaryKeySelective(runUserCoupon);
+        List<RunUser> users = runUserService.queryUsers();
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+        for (RunUser user : users) {
+            if (user == null) {
+                continue;
+            }
+            Integer uid = user.getUid();
+            if (uid == null) {
+                continue;
+            }
+            runUserCoupon.setUid(uid);
+            runUserCouponMapper.updateByPrimaryKeySelective(runUserCoupon);
+        }
+
     }
 
     /**
@@ -134,10 +175,10 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
         PageHelper.startPage(page, size);
         RunUserCouponExample example = new RunUserCouponExample();
         RunUserCouponExample.Criteria criteria = example.createCriteria();
-        if (uid == null || uid < 0) {
+        if (uid != null && uid > 0) {
             criteria.andUidEqualTo(uid);
         }
-        if (status == null || status < 0) {
+        if (status != null && status > 0) {
             criteria.andStatusEqualTo(status);
         }
         Long currentTime = System.currentTimeMillis();

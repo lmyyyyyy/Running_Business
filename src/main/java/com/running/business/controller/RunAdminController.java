@@ -7,10 +7,10 @@ import com.running.business.common.ResultEnum;
 import com.running.business.dto.RefundDTO;
 import com.running.business.exception.AppException;
 import com.running.business.interceptor.PermissionInterceptor;
-import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.pojo.RunUser;
+import com.running.business.pojo.RunUserCoupon;
 import com.running.business.service.RefundApplyService;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
@@ -23,6 +23,8 @@ import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.JsonUtils;
+import com.running.business.util.RandomUtil;
+import com.running.business.util.RegexUtils;
 import com.running.business.util.RequestUtil;
 import com.running.business.vo.AdminVO;
 import com.running.business.vo.RefundApplyVO;
@@ -106,7 +108,7 @@ public class RunAdminController extends BaseController {
      * @param request
      * @return
      * @throws Exception
-     *//*
+     */
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
     @ApiOperation(value = "添加管理员(刘明宇)", notes = "添加管理员", response = BaseResult.class)
     public BaseResult insertAdmin(@RequestBody RunAdmin admin, HttpServletRequest request) throws Exception {
@@ -114,12 +116,12 @@ public class RunAdminController extends BaseController {
                 || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
         }
-        *//*if (admin.getAdminPassword().length() < 6 || admin.getAdminPassword().length() > 18) {
+        if (admin.getAdminPassword().length() < 6 || admin.getAdminPassword().length() > 18) {
             return BaseResult.fail(ResultEnum.USER_PASSWORD_LEN);
         }
         if (!RegexUtils.checkMobile(admin.getAdminUsername())) {
             return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
-        }*//*
+        }
         //Integer adminId = requestUtil.getAdminId(request);
         Integer adminId = -1;
         LOGGER.info("{}添加管理员，账号为：{}", new Object[]{adminId, admin.getAdminUsername()});
@@ -154,32 +156,6 @@ public class RunAdminController extends BaseController {
         return BaseResult.success(admin);
     }
 
-    /**
-     * 管理员登录
-     *
-     * @param admin    用户实体
-     * @param request  请求
-     * @param response 响应
-     * @return
-     *//*
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
-    public BaseResult login(@RequestBody RunAdmin admin, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
-                || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
-            return BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
-        }
-        LOGGER.info("管理员登录：" + admin.getAdminUsername());
-        BaseResult result = null;
-        try {
-            result = runAdminService.login(admin.getAdminUsername(), admin.getAdminPassword(), request, response);
-        } catch (AppException ae) {
-            LOGGER.error(LOG_PREFIX + "登录失败- admin = {}, error = {}" + new Object[]{admin, ae});
-            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
-        }
-        return result;
-    }
-*/
 
     /**
      * 根据token获取管理员信息
@@ -734,4 +710,67 @@ public class RunAdminController extends BaseController {
     }
 
     //-----------------------------------投诉end--------------------------
+
+    /**
+     * 分页获取优惠券
+     *
+     * @param page
+     * @param size
+     * @param status
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "分页获取优惠券(刘明宇)", notes = "分页获取优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupons", method = RequestMethod.GET)
+    public BaseResult pageCoupons(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                  HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 分页获取优惠券", LOG_PREFIX);
+        return BaseResult.success(runUserCouponService.pageRunUserCouponByStatus(status, page, size, orderField, orderType));
+    }
+
+    /**
+     * 添加优惠券（通知在线用户）
+     *
+     * @param coupon
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "添加优惠券(刘明宇)", notes = "添加优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupon", method = RequestMethod.POST)
+    public BaseResult saveCoupon(@RequestBody RunUserCoupon coupon, HttpServletRequest request) throws AppException {
+        if (coupon == null) {
+            return BaseResult.fail(ResultEnum.USER_COUPON_INFO_EMTPY);
+        }
+        LOGGER.info("{} 添加优惠券", LOG_PREFIX);
+        runUserCouponService.saveRunUserCoupon(coupon);
+        return BaseResult.success();
+    }
+
+    /**
+     * 更新优惠券
+     *
+     * @param coupon
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @ApiOperation(value = "更新优惠券(刘明宇)", notes = "更新优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/coupon", method = RequestMethod.PUT)
+    public BaseResult updateCoupon(@RequestBody RunUserCoupon coupon, HttpServletRequest request) throws AppException {
+        if (coupon == null) {
+            return BaseResult.fail(ResultEnum.USER_COUPON_INFO_EMTPY);
+        }
+        LOGGER.info("{} 更新优惠券", LOG_PREFIX);
+        runUserCouponService.updateRunUserCoupon(coupon);
+        return BaseResult.success();
+    }
+
 }

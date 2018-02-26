@@ -365,6 +365,21 @@ public class RunUserServiceImpl implements RunUserService {
     }
 
     /**
+     * 获取所有未被删除的用户
+     *
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunUser> queryUsers() throws AppException {
+        RunUserExample example = new RunUserExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(false);
+        List<RunUser> runUsers = runUserMapper.selectByExample(example);
+        return runUsers;
+    }
+
+    /**
      * 根据id集合查询用户集合（去除正常退出的用户）
      *
      * @param ids

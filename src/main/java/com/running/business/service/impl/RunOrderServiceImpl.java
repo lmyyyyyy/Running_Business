@@ -9,23 +9,29 @@ import com.running.business.enums.DistanceMinutesRelationEnum;
 import com.running.business.enums.OrderPayTypeEnum;
 import com.running.business.enums.OrderStatusEnum;
 import com.running.business.enums.OrderTypeEnum;
+import com.running.business.enums.PaySourceTypeEnum;
 import com.running.business.exception.AppException;
+import com.running.business.facade.Cashier;
 import com.running.business.mapper.RunOrderMapper;
 import com.running.business.mapper.RunUserInfoMapper;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderExample;
 import com.running.business.pojo.RunOrderExample.Criteria;
+import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RunDeliveryInfoService;
+import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.util.DateUtil;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.OrderVO;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,16 +52,78 @@ public class RunOrderServiceImpl implements RunOrderService {
     @Autowired
     private RunUserInfoService runUserInfoService;
 
+    @Autowired
+    private Cashier cashier;
+
+    @Autowired
+    private RunOrderPayService runOrderPayService;
+
+    /**
+     * 验证订单是否已被抢 false:未被抢；true:已被抢
+     *
+     * @param orderId
+     * @param did
+     * @return
+     * @throws AppException
+     */
     @Override
-    public BaseResult saveRunOrder(RunOrder order) throws AppException {
-        runOrderMapper.insert(order);
-        return BaseResult.success();
+    public boolean checkGrab(String orderId, Integer did) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderidEqualTo(orderId);
+        criteria.andStatusGreaterThanOrEqualTo(OrderStatusEnum.RECEIVED.getCode());
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        if (orders == null || orders.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public BaseResult updateRunOrder(RunOrder order) throws AppException {
-        runOrderMapper.updateByPrimaryKey(order);
-        return BaseResult.success(order);
+    public void saveRunOrder(RunOrder order) throws AppException {
+        if (order == null) {
+            throw new AppException(ResultEnum.ORDER_PARAMETER_IS_EMPTY);
+        }
+        runOrderMapper.insert(order);
+    }
+
+    /**
+     * 更新订单
+     *
+     * @param order
+     * @throws AppException
+     */
+    @Override
+    public synchronized void updateRunOrder(RunOrder order) throws AppException {
+        if (order == null) {
+            throw new AppException(ResultEnum.ORDER_PARAMETER_IS_EMPTY);
+        }
+        runOrderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 配送员抢单
+     *
+     * @param orderId
+     * @param did
+     * @throws AppException
+     */
+    @Override
+    public synchronized void updateOrderByGrab(String orderId, Integer did) throws AppException {
+        boolean flag = checkGrab(orderId, did);
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAVEN_BEEN_GRABED);
+        }
+        RunOrder order = new RunOrder();
+        order.setOrderid(orderId);
+        order.setDid(did);
+        order.setStatus(OrderStatusEnum.RECEIVED.getCode());
+        order.setRecvTime(new Date());
+        order.setUpdateTime(new Date());
+        this.updateRunOrder(order);
     }
 
     /**
@@ -88,45 +156,42 @@ public class RunOrderServiceImpl implements RunOrderService {
     }
 
     @Override
-    public BaseResult deleteRunOrderByOID(String oid) throws AppException {
+    public void deleteRunOrderByOID(String oid) throws AppException {
         RunOrder order = runOrderMapper.selectByPrimaryKey(oid);
         if (order == null) {
-            return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+            throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
         runOrderMapper.deleteByPrimaryKey(oid);
-        return BaseResult.success(order);
     }
 
     @Override
-    public BaseResult deleteAllRunOrderByUID(Integer uid) throws AppException {
+    public void deleteAllRunOrderByUID(Integer uid) throws AppException {
         RunOrderExample example = new RunOrderExample();
         Criteria criteria = example.createCriteria();
         criteria.andUidEqualTo(uid);
         List<RunOrder> list = runOrderMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
-            return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+            throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
         RunOrderExample example1 = new RunOrderExample();
         Criteria criteria1 = example1.createCriteria();
         criteria1.andUidEqualTo(uid);
         runOrderMapper.deleteByExample(example1);
-        return BaseResult.success();
     }
 
     @Override
-    public BaseResult deleteAllRunOrderByDID(Integer did) throws AppException {
+    public void deleteAllRunOrderByDID(Integer did) throws AppException {
         RunOrderExample example = new RunOrderExample();
         Criteria criteria = example.createCriteria();
         criteria.andDidEqualTo(did);
         List<RunOrder> list = runOrderMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
-            return BaseResult.fail(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
+            throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
         }
         RunOrderExample example1 = new RunOrderExample();
         Criteria criteria1 = example1.createCriteria();
         criteria1.andDidEqualTo(did);
         runOrderMapper.deleteByExample(example1);
-        return BaseResult.success();
     }
 
     /**
@@ -284,6 +349,30 @@ public class RunOrderServiceImpl implements RunOrderService {
     }
 
     @Override
+    public PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        PageHelper.startPage(page, size);
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo(OrderStatusEnum.PAID.getCode());
+        if (keyword != null && !"".equals(keyword.trim())) {
+            criteria.andRemarkLike("%" + keyword.trim() + "%");
+        }
+        example.setOrderByClause(" add_time " + orderType);
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        List<OrderVO> list = convertOrders2VOs(orders);
+        return new PageInfo<>(list);
+    }
+
+    @Override
     public BaseResult getAllRunOrder() throws AppException {
         RunOrderExample example = new RunOrderExample();
         List<RunOrder> list = runOrderMapper.selectByExample(example);
@@ -353,6 +442,24 @@ public class RunOrderServiceImpl implements RunOrderService {
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
 
         return convertOrder2Info(orders);
+    }
+
+    /**
+     * 用户支付订单
+     *
+     * @param orderPay
+     * @param request
+     * @throws AppException
+     */
+    @Override
+    public synchronized void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException {
+        double money = orderPay.getOrderActualPrice();
+        PaySourceTypeEnum paySourceTypeEnum = PaySourceTypeEnum.getOrderPayTypeEnum(orderPay.getPayType());
+        cashier.pay(paySourceTypeEnum, money, request);
+        //保存订单支付记录
+        runOrderPayService.saveRunOrderPay(orderPay);
+        //更新订单状态
+        this.updateOrderStatus(orderPay.getOrderid(), OrderStatusEnum.PAID.getCode());
     }
 
     /**
