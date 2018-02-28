@@ -281,8 +281,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `running_business`.`run_delivery_distance` (
   `did` INT NOT NULL COMMENT '配送员id',
   `send_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '从源地址到目标地址的距离长度（配送员可选择最大配送长度）',
-  `delivery_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '可配送距离范围（里或公里都可）',
-  `view_order_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '抢单时显示的订单到配送员的距离（为了抢单调度）',
+  `delivery_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '可配送距离范围（里或公里都可）（源位置到配送员的距离）',
+  `view_order_distance` DOUBLE NOT NULL DEFAULT -1 COMMENT '抢单时显示的订单（目标位置）到配送员的距离（为了抢单调度）',
   `update_time` DATETIME NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`did`))
 ENGINE = InnoDB;

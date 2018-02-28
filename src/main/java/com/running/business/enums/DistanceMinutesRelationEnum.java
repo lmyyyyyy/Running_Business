@@ -18,17 +18,17 @@ public enum DistanceMinutesRelationEnum {
     ;
 
     /**
-     * 最小距离
+     * 最小距离 单位：m
      */
     private Double min;
 
     /**
-     * 最大距离
+     * 最大距离 单位：m
      */
     private Double max;
 
     /**
-     * 需要时间
+     * 需要时间 单位：分钟
      */
     private Long ms;
 

@@ -168,13 +168,24 @@ public class RunOrderController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "根据关键字查询可抢订单(刘明宇)", notes = "根据关键字查询可抢订单", response = BaseResult.class)
-    public BaseResult pageOrders(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+    public BaseResult pageOrders(@RequestParam(value = "type", required = false, defaultValue = "-1") Integer type,
+                                 @RequestParam(value = "longitude", required = true) Double longitude,
+                                 @RequestParam(value = "latitude", required = true) Double latitude,
+                                 @RequestParam(value = "good", required = false, defaultValue = "") String good,
+                                 @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                  HttpServletRequest request) throws AppException {
-        LOGGER.info("{} 根据关键字查询可抢订单 keyword = {}, page = {}, size = {}", LOG_PREFIX, keyword, page, size);
-        PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByPaid(keyword, page, size, orderType);
+        Integer did;
+        try {
+            did = requestUtil.getDeliveryId(request);
+        } catch (Exception e) {
+            LOGGER.warn("{} 刷新可抢订单 当前未登录", LOG_PREFIX);
+            did = null;
+        }
+        LOGGER.info("{} 根据关键字查询可抢订单 当前位置经度:[{}] 纬度:[{}], did = {}, good = {}, keyword = {}, page = {}, size = {}", LOG_PREFIX, longitude, latitude, did, good, keyword, page, size);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageRunOrderByPaid(type, did, longitude, latitude, good, keyword, page, size, orderType);
         return BaseResult.success(pageInfo);
     }
 
