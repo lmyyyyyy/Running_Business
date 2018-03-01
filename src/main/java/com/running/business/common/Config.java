@@ -48,4 +48,11 @@ public class Config {
     //是否递归记录一个线程中的所有方法
     public static final Boolean SERVICE_LOG_RECURSION_SWITCH = true;
 
+    //当配送员未登录情况下，当前配送员位置距源地址的默认距离 单位：m
+    public static final Long ORDER_SOURCE_ADDRESS_DISTANCE = 2000L;
+    //当配送员未登录情况下，订单的默认距离 单位：m
+    public static final Long ORDER_DISTANCE = 2000L;
+    //当配送员未登录情况下，当前配送员位置距目标地址的默认距离 单位：m
+    public static final Long ORDER_TARGET_ADDRESS_DISTANCE = 2000L;
+
 }

@@ -18,5 +18,6 @@ public class OrderVO extends RunOrder{
     private String orderStatusDesc;
     private String payTypeDesc;
     private Date probablyArriveTime;
-
+    //单位：m
+    private Double DistanceDesc;
 }
