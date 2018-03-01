@@ -3,6 +3,7 @@ package com.running.business.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.InfoDTO;
 import com.running.business.enums.DistanceMinutesRelationEnum;
@@ -14,28 +15,36 @@ import com.running.business.exception.AppException;
 import com.running.business.facade.Cashier;
 import com.running.business.mapper.RunOrderMapper;
 import com.running.business.mapper.RunUserInfoMapper;
+import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
+import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderExample;
 import com.running.business.pojo.RunOrderExample.Criteria;
 import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunUserInfo;
+import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.util.DateUtil;
+import com.running.business.util.MapDistance;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.OrderVO;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RunOrderServiceImpl implements RunOrderService {
@@ -57,6 +66,13 @@ public class RunOrderServiceImpl implements RunOrderService {
 
     @Autowired
     private RunOrderPayService runOrderPayService;
+
+    @Autowired
+    private RunDeliveryDistanceService runDeliveryDistanceService;
+
+
+    @Autowired
+    private RunDeliveryAddressService runDeliveryAddressService;
 
     /**
      * 验证订单是否已被抢 false:未被抢；true:已被抢
@@ -207,7 +223,7 @@ public class RunOrderServiceImpl implements RunOrderService {
         if (order == null) {
             return null;
         }
-        return convertOrder2VO(order);
+        return convertOrder2VO(order, null, null);
     }
 
     /**
@@ -344,32 +360,82 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         example.setOrderByClause(" add_time " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
+        List<OrderVO> list = convertOrders2VOs(orders, null, null);
         return new PageInfo<>(list);
     }
 
+    /**
+     * 模糊分页 查询已支付可抢订单列表
+     *
+     * @param type
+     * @param did
+     * @param longitude
+     * @param latitude
+     * @param good
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
     @Override
-    public PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException {
+    public PageInfo<OrderVO> pageRunOrderByPaid(Integer type, Integer did, Double longitude, Double latitude, String good, String keyword, Integer page, Integer size, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
         if (size == null || size <= 0) {
-            size = 10;
+            size = 20;
         }
         if (orderType == null || "".equals(orderType)) {
             orderType = "DESC";
+        }
+        RunDeliveryDistance distance = null;
+        RunDeliveryInfo info = null;
+        RunDeliveryAddress address = null;
+        if (did != null) {
+            /*info = runDeliveryInfoService.getRunDeliveryInfoByID(did);
+            if (info != null && info.getAddressId() != null) {
+                address = runDeliveryAddressService.getRunDeliveryAddressByID(info.getAddressId());
+            }*/
+            distance = runDeliveryDistanceService.getRunDeliveryDistanceByDID(did);
         }
         PageHelper.startPage(page, size);
         RunOrderExample example = new RunOrderExample();
         RunOrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusEqualTo(OrderStatusEnum.PAID.getCode());
+        if (good != null && !"".equals(good.trim())) {
+            criteria.andGoodsEqualTo(good);
+        }
         if (keyword != null && !"".equals(keyword.trim())) {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
-        example.setOrderByClause(" add_time " + orderType);
+        double[] range;
+        if (longitude != null && latitude != null) {
+            if (distance != null) {
+                range = MapDistance.getRectangle(longitude, latitude, distance.getSendDistance().longValue());
+
+                criteria.andDistanceLessThanOrEqualTo(distance.getDeliveryDistance());
+            } else {
+                range = MapDistance.getRectangle(longitude, latitude, Config.ORDER_TARGET_ADDRESS_DISTANCE);
+
+                criteria.andDistanceLessThanOrEqualTo(Double.valueOf(Config.ORDER_DISTANCE));
+            }
+            if (type != -1) {
+                criteria.andSourceLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andSourceLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+                criteria.andTypeEqualTo(type);
+            } else {
+                criteria.andSourceLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andSourceLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+                criteria.andRecvLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andRecvLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+            }
+        }
+        example.setOrderByClause(" add_time " + orderType + ", distance " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
-        return new PageInfo<>(list);
+        List<OrderVO> list = convertOrders2VOs(orders, longitude, latitude);
+        return new PageInfo<>(orderByOrderVO(list));
     }
 
     @Override
@@ -422,7 +488,7 @@ public class RunOrderServiceImpl implements RunOrderService {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
+        List<OrderVO> list = convertOrders2VOs(orders, null, null);
         return new PageInfo<>(list);
     }
 
@@ -503,7 +569,7 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @return
      * @throws AppException
      */
-    public List<OrderVO> convertOrders2VOs(List<RunOrder> orders) throws AppException {
+    public List<OrderVO> convertOrders2VOs(List<RunOrder> orders, Double longitude, Double latitude) throws AppException {
         if (orders == null || orders.size() == 0) {
             return new ArrayList<>();
         }
@@ -512,7 +578,7 @@ public class RunOrderServiceImpl implements RunOrderService {
             if (order == null) {
                 continue;
             }
-            OrderVO orderVO = convertOrder2VO(order);
+            OrderVO orderVO = convertOrder2VO(order, longitude, latitude);
             if (orderVO == null) {
                 continue;
             }
@@ -527,7 +593,7 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @param order
      * @return
      */
-    public OrderVO convertOrder2VO(RunOrder order) {
+    public OrderVO convertOrder2VO(RunOrder order, Double longitude, Double latitude) {
         if (order == null) {
             return null;
         }
@@ -574,9 +640,28 @@ public class RunOrderServiceImpl implements RunOrderService {
             orderVO.setDeliveryName(runDeliveryInfo.getName());
             orderVO.setDeliveryPhone(runDeliveryInfo.getPhone());
         }
-        Long resultTime = DistanceMinutesRelationEnum.getOrderTypeEnum(order.getDistance()).getMs();
-        orderVO.setProbablyArriveTime(DateUtil.ms2Date(resultTime));
+        //预计到达时间
+        if (order.getStatus() >= OrderStatusEnum.RECEIVED.getCode() && order.getStatus() <= OrderStatusEnum.SENDING.getCode()) {
+            Long resultTime = DistanceMinutesRelationEnum.getOrderTypeEnum(order.getDistance()).getMs();
+            resultTime += order.getAddTime().getTime();
+            orderVO.setProbablyArriveTime(DateUtil.ms2Date(resultTime));
+        }
+        if (longitude != null && latitude != null) {
+            Double distanceDesc = MapDistance.getDistanceOfMeter(longitude, latitude, Double.valueOf(order.getSourceLongitude()), Double.valueOf(order.getSourceLatitude()));
+            orderVO.setDistanceDesc(distanceDesc);
+        }
         return orderVO;
+    }
+
+    /**
+     * 按照距离排序
+     *
+     * @param orderVOS
+     * @return
+     * @throws Exception
+     */
+    public List<OrderVO> orderByOrderVO(List<OrderVO> orderVOS) throws AppException{
+        return orderVOS.stream().sorted(Comparator.comparing(OrderVO::getDistanceDesc)).collect(Collectors.toList());
     }
 
 }

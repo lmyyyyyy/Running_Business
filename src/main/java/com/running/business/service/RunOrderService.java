@@ -113,6 +113,11 @@ public interface RunOrderService {
     /**
      * 模糊分页 查询已支付可抢订单列表
      *
+     * @param type
+     * @param did
+     * @param longitude
+     * @param latitude
+     * @param good
      * @param keyword
      * @param page
      * @param size
@@ -120,7 +125,7 @@ public interface RunOrderService {
      * @return
      * @throws AppException
      */
-    PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException;
+    PageInfo<OrderVO> pageRunOrderByPaid(Integer type, Integer did, Double longitude, Double latitude, String good, String keyword, Integer page, Integer size, String orderType) throws AppException;
 
     BaseResult getAllRunOrder() throws AppException;
 
