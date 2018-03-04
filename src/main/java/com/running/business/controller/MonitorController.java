@@ -18,4 +18,5 @@ public class MonitorController extends BaseController{
 
     private static final String LOG_PREFIX = "【监控平台模块】 ";
 
+
 }
