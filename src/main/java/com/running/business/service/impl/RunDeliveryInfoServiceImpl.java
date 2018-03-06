@@ -1,13 +1,18 @@
 package com.running.business.service.impl;
 
+import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.RunDeliveryInfoMapper;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.service.RunDeliveryInfoService;
+import com.running.business.util.FileUploadUtil;
 import com.running.business.vo.DeliveryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileInputStream;
 
 @Service
 public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
@@ -85,6 +90,25 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
         return convert2VO(runDeliveryInfo);
+    }
+
+    /**
+     * 上传配送员头像
+     * @param file
+     * @param did
+     * @return
+     */
+    @Override
+    public BaseResult uploadDeliveryImg(MultipartFile file, Integer did) {
+        try {
+            String filePath = FileUploadUtil.uploadFile(file, "deliveryPhoto");
+            RunDeliveryInfo runDeliveryInfo = runDeliveryInfoMapper.selectByPrimaryKey(did);
+            runDeliveryInfo.setPhoto(filePath);
+            runDeliveryInfoMapper.insert(runDeliveryInfo);
+        } catch (Exception e) {
+            return BaseResult.fail("配送员头像图片上传异常");
+        }
+        return BaseResult.success("配送员头像图片上传异常");
     }
 
     /**

@@ -38,11 +38,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liumingyu
@@ -580,6 +582,44 @@ public class RunDeliveryController extends BaseController {
         Integer did = requestUtil.getDeliveryId(request);
         LOGGER.info("{} 分页获取交易记录 did = {}", LOG_PREFIX, did);
         return BaseResult.success(runDeliveryBalanceRecordService.pageAllDeliveryRecordByDID(did, page, size, orderField, orderType));
+    }
+
+    /**
+     * 上传配送员头像
+     * @param file
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "上传配送员头像(孙晓东)", notes = "上传配送员头像", response = BaseResult.class)
+    @RequestMapping(value = "/uploadDeliveryPhoto", method = RequestMethod.POST)
+    public BaseResult uploadDeliveryPhoto(MultipartFile file, HttpServletRequest request) {
+        BaseResult result = null;
+        Integer did = requestUtil.getDeliveryId(request);
+        try {
+            result = runDeliveryInfoService.uploadDeliveryImg(file, did);
+        } catch (AppException e) {
+            LOGGER.error("{} ：配送员头像上传异常 did = {}", LOG_PREFIX, did, e);
+        }
+        return result;
+    }
+
+    /**
+     * 上传配送员审核身份证
+     * @param file
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "上传配送员头像(孙晓东)", notes = "上传配送员头像", response = BaseResult.class)
+    @RequestMapping(value = "/uploadDeliveryPhoto", method = RequestMethod.POST)
+    public BaseResult uploadDeliveryCard(MultipartFile file, HttpServletRequest request) {
+        BaseResult result = null;
+        Integer did = requestUtil.getDeliveryId(request);
+        try {
+            result = runDeliveryuserService.uploadDeliveryCard(file, did);
+        } catch (AppException e) {
+            LOGGER.error("{} ：配送员身份证图片上传异常 did = {}", LOG_PREFIX, did, e);
+        }
+        return result;
     }
 
 }

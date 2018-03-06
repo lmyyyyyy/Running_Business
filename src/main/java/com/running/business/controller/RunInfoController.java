@@ -8,6 +8,7 @@ import com.running.business.pojo.RunInfo;
 import com.running.business.pojo.RunPushInfo;
 import com.running.business.service.RunInfoService;
 import com.running.business.service.RunPushInfoService;
+import com.running.business.util.FileUploadUtil;
 import com.running.business.util.RequestUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -228,7 +230,7 @@ public class RunInfoController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "添加推送信息(刘明宇)", notes = "添加推送信息", response = BaseResult.class)
-    public BaseResult save(@RequestBody RunPushInfo pushInfo, HttpServletRequest request) throws AppException {
+    public BaseResult save(@RequestBody RunPushInfo pushInfo, HttpServletRequest request, MultipartFile file) throws AppException {
         if (pushInfo == null) {
             return BaseResult.fail(ResultEnum.INFO_IS_EMPTY);
         }
@@ -236,6 +238,8 @@ public class RunInfoController extends BaseController {
         LOGGER.info("{} 添加推送信息 id = {}", LOG_PREFIX, id);
         try {
             pushInfo.setOperator(id);
+            String filePath = FileUploadUtil.uploadFile(file, "pushPhoto");
+            pushInfo.setPushPhoto(filePath);
             runPushInfoService.saveRunPushInfo(pushInfo);
         } catch (AppException ae) {
             LOGGER.error("{} 添加推送信息失败 id = {}, info = {}, error = {}", LOG_PREFIX, id, pushInfo, ae);

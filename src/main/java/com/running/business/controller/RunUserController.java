@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
@@ -503,4 +504,16 @@ public class RunUserController extends BaseController {
         return BaseResult.success(runUserCouponService.pageRunUserCouponByUID(uid, status, page, size, orderField, orderType));
     }
 
+    @ApiOperation(value = "分页获取优惠券(刘明宇)", notes = "分页获取优惠券", response = BaseResult.class)
+    @RequestMapping(value = "/uploadUserImg", method = RequestMethod.POST)
+    public BaseResult uploadUserImg(MultipartFile file, HttpServletRequest request) {
+        BaseResult result = null;
+        Integer uid = requestUtil.getUserId(request);
+        try {
+            result = runUserInfoService.uploadUserImg(file, uid);
+        } catch (AppException e) {
+            logger.error("{} 用户头像上传异常 uid = {}", LOG_PREFIX, uid, e);
+        }
+        return result;
+    }
 }

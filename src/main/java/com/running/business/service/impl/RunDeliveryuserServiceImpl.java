@@ -16,15 +16,12 @@ import com.running.business.pojo.RunDeliveryuserExample;
 import com.running.business.pojo.RunDeliveryuserExample.Criteria;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
-import com.running.business.util.CookieUtils;
-import com.running.business.util.JsonUtils;
-import com.running.business.util.Run_StringUtil;
-import com.running.business.util.UserUtil;
-import com.running.business.util.ValidateUtil;
+import com.running.business.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -396,5 +393,24 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         example.setOrderByClause(" update_time desc");
         List<RunDeliveryuser> list = runDeliveryuserMapper.selectByExample(example);
         return list.stream().map(user ->user.getDid()).collect(Collectors.toSet());
+    }
+
+    /**
+     * 上传配送员身份证
+     * @param file
+     * @param did
+     * @return
+     */
+    @Override
+    public BaseResult uploadDeliveryCard(MultipartFile file, Integer did) {
+        try {
+            String filePath = FileUploadUtil.uploadFile(file, "reviewPhoto");
+            RunDeliveryuser runDeliveryuser = runDeliveryuserMapper.selectByPrimaryKey(did);
+            runDeliveryuser.setReviewPhoto(filePath);
+            runDeliveryuserMapper.insert(runDeliveryuser);
+        } catch (Exception e) {
+            return BaseResult.fail("配送员身份证图片上传异常");
+        }
+        return BaseResult.success("配送员身份证图片上传成功");
     }
 }
