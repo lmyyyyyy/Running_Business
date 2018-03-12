@@ -609,8 +609,8 @@ public class RunDeliveryController extends BaseController {
      * @param request
      * @return
      */
-    @ApiOperation(value = "上传配送员头像(孙晓东)", notes = "上传配送员头像", response = BaseResult.class)
-    @RequestMapping(value = "/uploadDeliveryPhoto", method = RequestMethod.POST)
+    @ApiOperation(value = "上传配送员身份证(孙晓东)", notes = "上传配送员身份证", response = BaseResult.class)
+    @RequestMapping(value = "/uploadDeliveryCard", method = RequestMethod.POST)
     public BaseResult uploadDeliveryCard(MultipartFile file, HttpServletRequest request) {
         BaseResult result = null;
         Integer did = requestUtil.getDeliveryId(request);
