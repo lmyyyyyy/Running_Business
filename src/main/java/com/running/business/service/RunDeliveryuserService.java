@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunDeliveryuser;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -136,4 +137,13 @@ public interface RunDeliveryuserService {
      * @throws AppException
      */
     Set<Integer> queryDeliverysByIds(Set<Integer> ids) throws AppException;
+
+
+    /**
+     * 上传配送员身份证
+     * @param file
+     * @param did
+     * @return
+     */
+    BaseResult uploadDeliveryCard(MultipartFile file, Integer did);
 }

@@ -1,7 +1,10 @@
 package com.running.business.service;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
+import com.running.business.common.BaseResult;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.vo.DeliveryVO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface RunDeliveryInfoService {
 
@@ -44,4 +47,13 @@ public interface RunDeliveryInfoService {
      * @return
      */
     DeliveryVO getDeliveryVOByID(Integer did);
+
+    /**
+     * 上传配送员头像
+     * @param file
+     * @param did
+     * @return
+     */
+    BaseResult uploadDeliveryImg(MultipartFile file, Integer did);
+
 }

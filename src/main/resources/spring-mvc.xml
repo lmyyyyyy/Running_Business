@@ -110,6 +110,7 @@
     <!-- 文件解析器 -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
     </bean>
     <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
     <bean

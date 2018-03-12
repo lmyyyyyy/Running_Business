@@ -7,10 +7,12 @@ import com.running.business.mapper.RunUserInfoMapper;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.pojo.RunUserInfoExample;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.util.FileUploadUtil;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 
 	@Autowired
 	private RunUserInfoMapper runUserInfoMapper;
+
 
 	/**
 	 * 添加用户详细信息
@@ -116,6 +119,19 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public BaseResult uploadUserImg(MultipartFile file, Integer uid) {
+		try {
+			String filePath = FileUploadUtil.uploadFile(file, "userPhoto");
+			RunUserInfo runUserInfo = runUserInfoMapper.selectByPrimaryKey(uid);
+			runUserInfo.setUserPhone(filePath);
+			runUserInfoMapper.insert(runUserInfo);
+		} catch (Exception e) {
+			return BaseResult.fail();
+		}
+		return BaseResult.success();
 	}
 
 	/**
