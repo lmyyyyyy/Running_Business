@@ -8,6 +8,10 @@ public class Config {
 
     //用户session在redis存储的key
     public static final String REDIS_USER_SESSION_KEY = "REDIS_USER_SESSION";
+    //session key
+    public static final String SESSION_USERNAME = "SESSION_USERNAME";
+    //websocket
+    public static final String WEBSOCKET_USERNAME = "WEBSOCKET_USERNAME";
     //用户session的超时时间
     public static final Integer SSO_SESSION_EXPIRE = 1800;
     //ThreadLocal副本key

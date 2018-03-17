@@ -115,4 +115,13 @@ public interface RefundRecordService {
      * @throws AppException
      */
     PageInfo<RefundRecordVO> pageRefundByOperatorId(Integer operatorId, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
+     * 获取当前用户的退款记录数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    Integer refundRecordCountByUID(Integer uid) throws AppException;
 }

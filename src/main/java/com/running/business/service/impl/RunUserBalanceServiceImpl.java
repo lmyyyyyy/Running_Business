@@ -70,9 +70,6 @@ public class RunUserBalanceServiceImpl implements RunUserBalanceService {
     @Override
     public RunUserBalance getRunUserBalanceByUID(Integer uid) throws AppException {
         RunUserBalance userBalance = runUserBalanceMapper.selectByPrimaryKey(uid);
-        if (userBalance == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-        }
         return userBalance;
     }
 }

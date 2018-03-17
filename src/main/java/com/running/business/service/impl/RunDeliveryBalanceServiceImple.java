@@ -43,7 +43,7 @@ public class RunDeliveryBalanceServiceImple implements RunDeliveryBalanceService
 	 * @throws AppException
 	 */
 	@Override
-	public void updateRunDeliveryBalance(RunDeliveryBalance balance) throws AppException {
+	public synchronized void updateRunDeliveryBalance(RunDeliveryBalance balance) throws AppException {
 		if (balance == null) {
 			throw new AppException(ResultEnum.DELIVERY_BALANCE_INFO_EMPTY);
 		}
@@ -76,9 +76,6 @@ public class RunDeliveryBalanceServiceImple implements RunDeliveryBalanceService
 	@Override
 	public RunDeliveryBalance getRunDeliveryBalanceByDID(Integer did) throws AppException {
 		RunDeliveryBalance balance = runDeliveryBalanceMapper.selectByPrimaryKey(did);
-		if (balance == null) {
-			throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-		}
 		return balance;
 	}
 

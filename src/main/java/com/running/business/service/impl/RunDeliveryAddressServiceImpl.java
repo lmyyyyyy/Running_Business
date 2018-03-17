@@ -100,9 +100,6 @@ public class RunDeliveryAddressServiceImpl implements RunDeliveryAddressService 
     @Override
     public RunDeliveryAddress getRunDeliveryAddressByID(Integer id) throws AppException {
         RunDeliveryAddress address = runDeliveryAddressMapper.selectByPrimaryKey(id);
-        if (address == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-        }
         return address;
     }
 
