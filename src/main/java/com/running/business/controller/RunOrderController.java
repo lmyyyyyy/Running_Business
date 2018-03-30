@@ -258,24 +258,7 @@ public class RunOrderController extends BaseController {
         return BaseResult.success(pageInfo);
     }
 
-    /**
-     * 根据用户id和订单状态查询用户各种状态订单（分页）(管理员操作)
-     *
-     * @param status 订单状态
-     * @return
-     */
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "根据用户id和订单状态查询用户各种状态订单(管理员操作)/分页(孙晓东)", notes = "根据用户id和订单状态查询用户各种状态订单（分页）", response = BaseResult.class)
-    public BaseResult pageOrdersByUIDAndStatus(@PathVariable Integer id,
-                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                               @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
-                                               @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
-                                               @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
-                                               HttpServletRequest request) {
-        PageInfo<OrderVO> pageInfo = runOrderService.pageOrderByUIDAndStatus(keyword, id, status, page, size, orderType);
-        return BaseResult.success(pageInfo);
-    }
+
 
 
     //-----------------------------------退款begin--------------------------

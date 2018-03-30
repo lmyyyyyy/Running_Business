@@ -144,6 +144,16 @@ public interface RunOrderService {
     PageInfo<OrderVO> pageOrderByUIDAndStatus(String keyword, Integer id, Integer status, Integer page, Integer size, String orderType) throws AppException;
 
     /**
+     * 根据用户id或配送员id获取订单数
+     *
+     * @param uid
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    Integer orderCountByUIDAndDID(Integer uid, Integer did) throws AppException;
+
+    /**
      * 拼接滚动消息
      *
      * @return

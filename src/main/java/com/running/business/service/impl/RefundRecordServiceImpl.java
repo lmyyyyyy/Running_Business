@@ -277,6 +277,23 @@ public class RefundRecordServiceImpl implements RefundRecordService {
     }
 
     /**
+     * 获取当前用户的退款记录数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Integer refundRecordCountByUID(Integer uid) throws AppException {
+        RefundRecordExample example = new RefundRecordExample();
+        RefundRecordExample.Criteria criteria = example.createCriteria();
+        if (uid != null) {
+            criteria.andUidEqualTo(uid);
+        }
+        return refundRecordMapper.countByExample(example);
+    }
+
+    /**
      * 退款记录集合转VO
      *
      * @param refundRecords

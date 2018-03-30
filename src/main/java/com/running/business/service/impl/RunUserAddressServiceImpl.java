@@ -69,9 +69,6 @@ public class RunUserAddressServiceImpl implements RunUserAddressService{
 	@Override
 	public BaseResult getRunUserAddressByID(Integer id) throws AppException {
 		RunUserAddress userAddress = runUserAddressMapper.selectByPrimaryKey(id);
-		if (userAddress == null) {
-			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-		}
 		return BaseResult.success(userAddress);
 	}
 

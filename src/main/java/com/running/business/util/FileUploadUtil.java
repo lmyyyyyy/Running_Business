@@ -1,6 +1,7 @@
 package com.running.business.util;
 
 import com.google.common.io.FileBackedOutputStream;
+import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,13 @@ public class FileUploadUtil {
         String fileName = System.currentTimeMillis() + "_" + uploadFile.getOriginalFilename();
         String filePath = "/"+path+"/" + fileName;
         try {
+            File direcotry = new File(path);
+            if (!direcotry.isDirectory()) {
+                throw new AppException(ResultEnum.NOT_IS_DIRECTORY);
+            }
+            if (!direcotry.exists()) {
+                direcotry.mkdir();
+            }
             File file = new File(filePath);
             InputStream is = uploadFile.getInputStream();
             OutputStream os = new FileOutputStream(file);

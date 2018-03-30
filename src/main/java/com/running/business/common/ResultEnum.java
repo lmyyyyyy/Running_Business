@@ -26,6 +26,7 @@ public enum ResultEnum {
     USER_PASSWORD_OLD_AND_NEW_IS_SAME("1001013", "新密码不能与旧密码相同"),
     USER_ID_IS_ERROR("1001014", "用户ID异常"),
     USER_IS_DELETE("1001015", "用户已被删除"),
+    USER_LIST_IS_EMTPY("1001016", "用户列表不能为空"),
 
     //用户优惠券相关异常
     USER_COUPON_INFO_EMTPY("1002001", "优惠券信息为空"),
@@ -58,7 +59,7 @@ public enum ResultEnum {
     DELIVERY_PHOTO_TOO_BIG("2001007", "图片过大"),
     DELIVERY_REVIEWPHOTO_IS_NOT_PASS("2001008", "照片审核未通过"),
     DELIVERY_CARD_REGEX_IS_NOT_PASS("2001009", "身份证格式不正确"),
-    DELIVERY_IS_NOT_AVAILABLE("2001010", "账号已被禁用"),
+    DELIVERY_IS_NOT_AVAILABLE("2001010", "账号不可用"),
     DELIVERY_CREDITS_IS_TOO_LOW("2001011", "账号信用额度过低,已被禁用,如有疑问请忍着"),
     DELIVERY_REGISTER_SUCCESS("2001012", "账号注册成功,请填写真实的信息"),
     DELIVERY_CARD_CHECK_ERROR("2001013", "身份证验证异常"),
@@ -143,7 +144,9 @@ public enum ResultEnum {
     NOT_HAVE_THIS_BIZID("99980006", "业务线初始化失败"),
     ACTION_CONTEXT("99980007", "ActionContext对象为空"),
     JSON_TO_ENTITY_ERROR("99980008", "json串转实体异常"),
-
+    NOT_IS_DIRECTORY("99980009", "当前不是一个目录"),
+    AMOUNT_CAN_NOT_LESS_ZERO("99980010", "充值余额不能小于等于0"),
+    SEND_MESSAGE_IS_EMPTY("99980011", "不能发送空消息")
     ;
 
     private String code;

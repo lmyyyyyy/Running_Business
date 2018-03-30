@@ -17,6 +17,7 @@ import com.running.business.util.DateUtil;
 import com.running.business.vo.CouponVO;
 import com.running.business.websocket.SystemWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 
@@ -34,6 +35,9 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
 
     @Autowired
     private RunUserService runUserService;
+
+    @Autowired
+    private static SystemWebSocketHandler systemWebSocketHandler;
 
     /**
      * 创建优惠券
@@ -63,10 +67,46 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
             }
             runUserCoupon.setUid(uid);
             runUserCouponMapper.insert(runUserCoupon);
+            //通知当前用户
+            //initHandler().sendMessageToUser(user.getUserphone(), new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
         }
         //通知所有在线用户
-        SystemWebSocketHandler systemWebSocketHandler = new SystemWebSocketHandler();
         systemWebSocketHandler.sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
+    }
+
+    /**
+     * 给固定用户列表添加优惠券
+     *
+     * @param runUserCoupon
+     * @throws AppException
+     */
+    @Override
+    public void saveRunUserCouponByUsers(RunUserCoupon runUserCoupon, List<Integer> userIds) throws AppException {
+        if (runUserCoupon == null) {
+            throw new AppException(ResultEnum.USER_COUPON_INFO_EMTPY);
+        }
+        if (runUserCoupon.getStatus() == null) {
+            runUserCoupon.setStatus(CouponStatusEnum.AVALIBALE.getCode());
+        }
+        if (userIds == null || userIds.isEmpty()) {
+            throw new AppException(ResultEnum.USER_LIST_IS_EMTPY);
+        }
+        for (Integer uid : userIds) {
+            if (uid == null || uid < 0) {
+                continue;
+            }
+            runUserCoupon.setUid(uid);
+            RunUser user = (RunUser) runUserService.getRunUser(uid).getData();
+            if (user == null) {
+                continue;
+            }
+            runUserCouponMapper.insert(runUserCoupon);
+
+            //通知当前用户
+            systemWebSocketHandler.sendMessageToUser(user.getUserphone(), new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
+        }
+        //通知所有在线用户
+        //initHandler().sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
     }
 
     /**
@@ -144,6 +184,22 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
             return null;
         }
         return convertCoupon2VO(coupon);
+    }
+
+    /**
+     * 获取该用户下的所有可用的优惠券
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<CouponVO> queryCouponsByUID(Integer uid) throws AppException {
+        RunUserCouponExample example = new RunUserCouponExample();
+        RunUserCouponExample.Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        List<RunUserCoupon> coupons = runUserCouponMapper.selectByExample(example);
+        return this.convertCoupons2VOs(coupons);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.running.business.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
@@ -81,7 +83,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 	public BaseResult getRunOrderPayByID(Integer id) throws AppException {
 		RunOrderPay pay = runOrderPayMapper.selectByPrimaryKey(id);
 		if (pay == null) {
-			return BaseResult.fail(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
+			throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
 		}
 		return BaseResult.success(pay);
 	}
@@ -93,7 +95,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 		criteria.andOrderidEqualTo(oid);
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -105,7 +107,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 		criteria.andUidEqualTo(uid);
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -115,7 +117,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 		RunOrderPayExample example = new RunOrderPayExample();
 		List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
 		if (!ValidateUtil.isValid(list)) {
-			return BaseResult.fail(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+			throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
 		}
 		return BaseResult.success(list);
 	}
@@ -144,5 +146,58 @@ public class RunOrderPayServiceImpl implements RunOrderPayService{
 			return null;
 		}
 		return list.get(0);
+	}
+
+	/**
+	 * 根据用户id获取支付总数
+	 *
+	 * @param uid
+	 * @return
+	 * @throws AppException
+	 */
+	@Override
+	public Integer payCountByUIDOrDId(Integer uid) throws AppException {
+		RunOrderPayExample example = new RunOrderPayExample();
+		RunOrderPayExample.Criteria criteria = example.createCriteria();
+		if (uid != null) {
+			criteria.andUidEqualTo(uid);
+		}
+		return runOrderPayMapper.countByExample(example);
+	}
+
+	/**
+	 * 根据用户id和支付类型分页查询支付记录
+	 *
+	 * @param uid
+	 * @param type
+	 * @param page
+	 * @param size
+	 * @param orderType
+	 * @return
+	 * @throws AppException
+	 */
+	@Override
+	public PageInfo<RunOrderPay> pagePaysByUIDAndType(Integer uid, Integer type, Integer page, Integer size, String orderType) throws AppException {
+		if (page == null || page <= 0) {
+			page = 1;
+		}
+		if (size == null || size <= 0) {
+			size = 20;
+		}
+		if (orderType == null || "".equals(orderType)) {
+			orderType = "DESC";
+		}
+		PageHelper.startPage(page, size);
+		RunOrderPayExample example = new RunOrderPayExample();
+		RunOrderPayExample.Criteria criteria = example.createCriteria();
+		if (uid != null && uid > 0) {
+			criteria.andUidEqualTo(uid);
+		}
+		if (type != null && type >= 0) {
+			criteria.andPayTypeEqualTo(type);
+		}
+		example.setOrderByClause(" pay_time " + orderType);
+		List<RunOrderPay> pays = runOrderPayMapper.selectByExample(example);
+		return new PageInfo<>(pays);
 	}
 }
