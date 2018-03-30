@@ -209,7 +209,7 @@ public class IndexController extends BaseController {
      */
     @RequestMapping(value = "/users/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
-    public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
+    public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (user.getUserphone() == null || user.getUserphone().trim().equals("")
                 || user.getPassword() == null || user.getPassword().trim().equals("")) {
             return BaseResult.fail(ResultEnum.INPUT_ERROR.getCode(), ResultEnum.INPUT_ERROR.getMsg());
@@ -219,13 +219,13 @@ public class IndexController extends BaseController {
         try {
             result = runUserService.login(user.getUserphone(), user.getPassword(), request, response);
             if(result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
+                HttpSession session = request.getSession();
                 session.setAttribute(Config.SESSION_USERNAME, user.getUserphone());
             }
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-
         return result;
     }
 

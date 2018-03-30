@@ -44,6 +44,7 @@
         <websocket:handshake-interceptors>
             <bean class="com.running.business.interceptor.HandShakeInterceptor"/>
         </websocket:handshake-interceptors>
+        <websocket:sockjs></websocket:sockjs>
     </websocket:handlers>
     <!--<import resource="spring-jedis.xml"/>-->
     <!--<import resource="spring-task.xml"/>-->
