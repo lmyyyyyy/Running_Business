@@ -1,12 +1,17 @@
 package com.running.business.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.UserDTO;
+import com.running.business.enums.IsDeleteEnum;
+import com.running.business.enums.PersonStatusEnum;
 import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
+import com.running.business.mapper.RunAdminInfoMapper;
 import com.running.business.mapper.RunAdminMapper;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminExample;
@@ -18,6 +23,7 @@ import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
 import com.running.business.util.UserUtil;
 import com.running.business.util.ValidateUtil;
+import com.running.business.vo.AdminVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +46,9 @@ public class RunAdminServiceImpl implements RunAdminService {
 
     @Autowired
     private RunAdminMapper runAdminMapper;
+
+    @Autowired
+    private RunAdminInfoMapper runAdminInfoMapper;
 
     /**
      * 连接redis
@@ -350,7 +359,116 @@ public class RunAdminServiceImpl implements RunAdminService {
         criteria.andStatusEqualTo(true);
         example.setOrderByClause(" update_time desc");
         List<RunAdmin> list = runAdminMapper.selectByExample(example);
-        return list.stream().map(user ->user.getAdminId()).collect(Collectors.toSet());
+        return list.stream().map(user -> user.getAdminId()).collect(Collectors.toSet());
+    }
+
+    /**
+     * 分页获取AdminVO
+     *
+     * @param status
+     * @param isDelete
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public PageInfo<AdminVO> pageAdminVO(Boolean status, Boolean isDelete, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "admin_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        RunAdminExample example = new RunAdminExample();
+        RunAdminExample.Criteria criterie = example.createCriteria();
+        if (status != null) {
+            criterie.andStatusEqualTo(status);
+        }
+        if (isDelete != null) {
+            criterie.andIsDeleteEqualTo(isDelete);
+        }
+        example.setOrderByClause(" " + orderField + " " + orderType);
+        PageHelper.startPage(page, size);
+        List<RunAdmin> admins = runAdminMapper.selectByExample(example);
+        List<AdminVO> vos = convertAdmins2VOs(admins);
+        return new PageInfo<>(vos);
+    }
+
+
+    /**
+     * 根据id获取AdminVO
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public AdminVO getAdminVOById(Integer id) throws AppException {
+        RunAdmin runAdmin = runAdminMapper.selectByPrimaryKey(id);
+        AdminVO adminVO;
+        adminVO = this.convertAdmin2VO(runAdmin);
+        return adminVO;
+    }
+
+    /**
+     * admin集合转VOS
+     *
+     * @param admins
+     * @return
+     */
+    @Override
+    public List<AdminVO> convertAdmins2VOs(List<RunAdmin> admins) throws AppException {
+        if (admins == null || admins.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<AdminVO> vos = new ArrayList<>(admins.size());
+        for (RunAdmin admin : admins) {
+            if (admin == null) {
+                continue;
+            }
+            AdminVO vo = convertAdmin2VO(admin);
+            if (vo == null) {
+                continue;
+            }
+            vos.add(vo);
+        }
+        return vos;
+    }
+
+    /**
+     * admin转VO
+     *
+     * @param runAdmin
+     * @return
+     */
+    @Override
+    public AdminVO convertAdmin2VO(RunAdmin runAdmin) throws AppException {
+        if (runAdmin == null) {
+            return null;
+        }
+        RunAdminInfo info = runAdminInfoMapper.selectByPrimaryKey(runAdmin.getAdminId());
+        AdminVO adminVO = new AdminVO();
+        adminVO.setUpdateTime(runAdmin.getUpdateTime());
+        adminVO.setAdminUsername(runAdmin.getAdminUsername());
+        adminVO.setAdminPassword(runAdmin.getAdminPassword());
+        adminVO.setAdminId(runAdmin.getAdminId());
+        adminVO.setStatus(runAdmin.getStatus());
+        adminVO.setIsDelete(runAdmin.getIsDelete());
+        adminVO.setStatusDesc(runAdmin.getStatus() ? PersonStatusEnum.ONLINE.getDesc() : PersonStatusEnum.NOT_ONLINE.getDesc());
+        adminVO.setIsDeleteDesc(runAdmin.getIsDelete() ? IsDeleteEnum.DELETE.getDesc() : IsDeleteEnum.NOT_DELETE.getDesc());
+        adminVO.setAdminName(info.getAdminName());
+        adminVO.setAdminPhone(info.getAdminPhone());
+        adminVO.setAdminTime(runAdmin.getAdminTime());
+        return adminVO;
     }
 
 }

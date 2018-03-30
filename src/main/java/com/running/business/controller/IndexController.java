@@ -2,6 +2,7 @@ package com.running.business.controller;
 
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.enums.HelpBuyGoodsEnum;
 import com.running.business.enums.HelpQueueTypeEnum;
@@ -9,12 +10,20 @@ import com.running.business.enums.HelpSendGoodsEnum;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
+import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryBalance;
+import com.running.business.pojo.RunDeliveryDistance;
+import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunUser;
 import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunAdminService;
+import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryBalanceService;
+import com.running.business.service.RunDeliveryDistanceService;
+import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
@@ -38,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +75,15 @@ public class IndexController extends BaseController {
 
     @Autowired
     private RunDeliveryuserService runDeliveryuserService;
+
+    @Autowired
+    private RunDeliveryInfoService runDeliveryInfoService;
+
+    @Autowired
+    private RunDeliveryBalanceService runDeliveryBalanceService;
+
+    @Autowired
+    private RunDeliveryDistanceService runDeliveryDistanceService;
 
     @Autowired
     private RunAdminService runAdminService;
@@ -126,7 +145,7 @@ public class IndexController extends BaseController {
      * @param user 用户实体
      * @return
      */
-    @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
     public BaseResult register(@RequestBody RunUser user) throws Exception {
         if (user.getUserphone() == null || "".equals(user.getUserphone().trim())
@@ -188,7 +207,7 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/users/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (user.getUserphone() == null || user.getUserphone().trim().equals("")
@@ -199,6 +218,10 @@ public class IndexController extends BaseController {
         BaseResult result = null;
         try {
             result = runUserService.login(user.getUserphone(), user.getPassword(), request, response);
+            if(result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
+                HttpSession session = request.getSession();
+                session.setAttribute(Config.SESSION_USERNAME, user.getUserphone());
+            }
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -246,7 +269,7 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/delivery/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/delivery/login", method = RequestMethod.POST)
     @ApiOperation(value = "配送员登录(刘明宇)", notes = "配送员登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunDeliveryuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (user == null) {
@@ -279,7 +302,7 @@ public class IndexController extends BaseController {
      * @param user 用户实体
      * @return
      */
-    @RequestMapping(value = "/delivery", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/delivery", method = RequestMethod.POST)
     @ApiOperation(value = "添加配送员(刘明宇)", notes = "添加配送员", response = BaseResult.class)
     public BaseResult register(@RequestBody RunDeliveryuser user) throws Exception {
         if (user == null) {
@@ -303,6 +326,41 @@ public class IndexController extends BaseController {
                 return BaseResult.fail(ResultEnum.TELTPHONE_DELIVERY);
             }
             did = runDeliveryuserService.saveRunDeliveryuser(user);
+            if (did != null && did > 0) {
+                RunDeliveryInfo info = new RunDeliveryInfo();
+                info.setDid(did);
+                info.setPhoto("/img/default.jpg");
+                info.setGender(false);
+                info.setPoint(0);
+                info.setLevel("一条腿");
+                info.setPhone(user.getUserphone());
+                info.setReportedTimes(0);
+                info.setAddressId(-1);
+                info.setCard("");
+                String name = RandomUtil.generateRandomDigitString(5);
+                int count = 0;
+                while (!runDeliveryInfoService.checkNameUnique(name)) {
+                    if (count >= 5) {
+                        return BaseResult.fail(ResultEnum.Number_THAN_BIG);
+                    }
+                    name = RandomUtil.generateRandomDigitString(5);
+                    count++;
+                }
+                runDeliveryInfoService.saveRunDeliveryInfo(info);
+                info.setName("游客_" + name);
+                RunDeliveryDistance distance = new RunDeliveryDistance();
+                distance.setDid(did);
+                distance.setSendDistance(Double.valueOf(Config.ORDER_DISTANCE));
+                distance.setDeliveryDistance(Double.valueOf(Config.ORDER_SOURCE_ADDRESS_DISTANCE));
+                distance.setViewOrderDistance(Double.valueOf(Config.ORDER_TARGET_ADDRESS_DISTANCE));
+                distance.setUpdateTime(new Date());
+                runDeliveryDistanceService.saveRunDeliveryDistance(distance);
+                RunDeliveryBalance balance = new RunDeliveryBalance();
+                balance.setDid(did);
+                balance.setUpdateTime(new Date());
+                balance.setDeliveryBalance(0.0);
+                runDeliveryBalanceService.saveRunDeliveryBalance(balance);
+            }
         } catch (AppException ae) {
             LOGGER.error("{} 注册配送员失败 user = {}", LOG_PREFIX, user);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -352,7 +410,7 @@ public class IndexController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/admins", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/admins", method = RequestMethod.POST)
     @ApiOperation(value = "添加管理员(刘明宇)", notes = "添加管理员", response = BaseResult.class)
     public BaseResult insertAdmin(@RequestBody RunAdmin admin, HttpServletRequest request) throws Exception {
         if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
@@ -407,8 +465,8 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/admins/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
+    @RequestMapping(value = "/admins/login", method = RequestMethod.POST)
+    @ApiOperation(value = "管理员登录(刘明宇)", notes = "管理员登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunAdmin admin, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
                 || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {

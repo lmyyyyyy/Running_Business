@@ -1,42 +1,21 @@
 package com.running.business.vo;
 
+import com.running.business.pojo.RunAdmin;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * @author liumingyu
  * @create 2017-12-24 下午5:08
  */
 @Data
-public class AdminVO {
-    public String adminName;
+public class AdminVO extends RunAdmin {
 
-    public String adminPhone;
+    private String adminName;
 
-    public Date createTime;
+    private String adminPhone;
 
-    public String getAdminName() {
-        return adminName;
-    }
+    private String statusDesc;
 
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
+    private String isDeleteDesc;
 
-    public String getAdminPhone() {
-        return adminPhone;
-    }
-
-    public void setAdminPhone(String adminPhone) {
-        this.adminPhone = adminPhone;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

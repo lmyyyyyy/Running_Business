@@ -2,7 +2,6 @@ package com.running.business.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
-import com.running.business.common.CodeConstants;
 import com.running.business.common.ResultEnum;
 import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
@@ -11,7 +10,6 @@ import com.running.business.pojo.RunDeliveryAddress;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
-import com.running.business.pojo.RunOrder;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunDeliveryAddressService;
@@ -24,7 +22,7 @@ import com.running.business.service.RunOrderService;
 import com.running.business.util.IdcardValidator;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RequestUtil;
-import com.running.business.vo.DeliveryVO;
+import com.running.business.vo.DeliveryDetailVO;
 import com.running.business.vo.RefundRecordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,12 +37,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author liumingyu
@@ -127,7 +123,7 @@ public class RunDeliveryController extends BaseController {
      * @param token token字符串
      * @return
      */
-    @RequestMapping(value = "/token/{token}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/token/{token}", method = RequestMethod.GET)
     @ApiOperation(value = "根据token获取配送员信息(刘明宇)", notes = "根据token获取配送员信息", response = BaseResult.class)
     public Object getUserByToken(@PathVariable String token) throws Exception {
         if (token == null || "".equals(token)) {
@@ -152,7 +148,7 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/logout/{token}", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/logout/{token}", method = RequestMethod.POST)
     @ApiOperation(value = "配送员注销(刘明宇)", notes = "配送员注销", response = BaseResult.class)
     public BaseResult logout(@PathVariable String token, HttpServletResponse response) throws Exception {
         if (token == null || "".equals(token)) {
@@ -182,7 +178,7 @@ public class RunDeliveryController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/checkoldpwd", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/checkoldpwd", method = RequestMethod.GET)
     @ApiOperation(value = "检查旧密码是否匹配(刘明宇)", notes = "检查旧密码是否匹配", response = BaseResult.class)
     public BaseResult checkOldPwd(@RequestParam("oldPassword") String oldPassword,
                                   HttpServletRequest request) throws Exception {
@@ -218,7 +214,7 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/updatepwd", method = RequestMethod.PUT, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/updatepwd", method = RequestMethod.PUT)
     @ApiOperation(value = "修改配送员密码(刘明宇)", notes = "修改配送员密码", response = BaseResult.class)
     public BaseResult modifyPwd(@RequestParam("oldPassword") String oldPassword,
                                 @RequestParam("newPassword") String newPassword,
@@ -258,21 +254,15 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/info", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "获取配送员信息(刘明宇)", notes = "获取配送员信息", response = BaseResult.class)
     public BaseResult getUserInfo(HttpServletRequest request) throws Exception {
         LOGGER.info("{} 获取配送员信息", LOG_PREFIX);
-        DeliveryVO userVO;
+        DeliveryDetailVO userVO;
         Integer did = null;
         try {
-            String jsonStr = requestUtil.getToken(request);
-
-            if (jsonStr == null) {
-                return BaseResult.fail(ResultEnum.SESSION_IS_OUT_TIME);
-            }
-            RunDeliveryuser user = JsonUtils.jsonToPojo(jsonStr, RunDeliveryuser.class);
-            did = user.getDid();
-            userVO = runDeliveryInfoService.getDeliveryVOByID(did);
+            did = requestUtil.getDeliveryId(request);
+            userVO = runDeliveryuserService.queryDeliveryVO(did);
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "获取用户基本信息失败 did = {}, error = {}", new Object[]{did, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -287,7 +277,7 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/info", method = RequestMethod.PUT, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ApiOperation(value = "更新配送员信息(刘明宇)", notes = "更新配送员信息", response = BaseResult.class)
     public BaseResult updateUserInfo(@RequestBody RunDeliveryInfo userInfo, HttpServletRequest request) throws Exception {
         if (userInfo == null) {
@@ -316,7 +306,7 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/address", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/address", method = RequestMethod.GET)
     @ApiOperation(value = "获取配送员所有的地址信息(刘明宇)", notes = "获取配送员所有的地址信息", response = BaseResult.class)
     public BaseResult getAllUserAddr(HttpServletRequest request) throws Exception {
         LOGGER.info("获取配送员所有的地址信息");
@@ -438,6 +428,10 @@ public class RunDeliveryController extends BaseController {
             return BaseResult.fail(ResultEnum.ORDER_ID_IS_ERROR);
         }
         Integer did = requestUtil.getDeliveryId(request);
+        boolean isAble = runDeliveryuserService.checkIsAble(did);
+        if (!isAble) {
+            return BaseResult.fail(ResultEnum.DELIVERY_IS_NOT_AVAILABLE);
+        }
         LOGGER.info("{} 配送员抢单 did = {}, orderId = {}", LOG_PREFIX, did, orderId);
         runOrderService.updateOrderByGrab(orderId, did);
         return BaseResult.success();
@@ -586,6 +580,7 @@ public class RunDeliveryController extends BaseController {
 
     /**
      * 上传配送员头像
+     *
      * @param file
      * @param request
      * @return
@@ -605,6 +600,7 @@ public class RunDeliveryController extends BaseController {
 
     /**
      * 上传配送员审核身份证
+     *
      * @param file
      * @param request
      * @return

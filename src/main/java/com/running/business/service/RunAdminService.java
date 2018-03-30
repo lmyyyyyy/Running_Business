@@ -1,11 +1,14 @@
 package com.running.business.service;
 
+import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunAdmin;
+import com.running.business.vo.AdminVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -130,4 +133,43 @@ public interface RunAdminService {
      * @throws AppException
      */
     Set<Integer> queryAdminsByIds(Set<Integer> ids) throws AppException;
+
+    /**
+     * 分页获取AdminVO
+     *
+     * @param status
+     * @param isDelete
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    PageInfo<AdminVO> pageAdminVO(Boolean status, Boolean isDelete, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
+     * 根据id获取AdminVO
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
+    AdminVO getAdminVOById(Integer id) throws AppException;
+
+    /**
+     * admin集合转VOS
+     *
+     * @param admins
+     * @return
+     */
+    List<AdminVO> convertAdmins2VOs(List<RunAdmin> admins) throws AppException;
+
+    /**
+     * admin转VO
+     *
+     * @param runAdmin
+     * @return
+     */
+    AdminVO convertAdmin2VO(RunAdmin runAdmin) throws AppException;
 }

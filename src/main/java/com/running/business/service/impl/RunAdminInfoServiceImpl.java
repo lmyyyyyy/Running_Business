@@ -5,10 +5,10 @@ import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.RunAdminInfoMapper;
 import com.running.business.mapper.RunAdminMapper;
-import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.pojo.RunAdminInfoExample;
 import com.running.business.service.RunAdminInfoService;
+import com.running.business.service.RunAdminService;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.AdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,9 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
 
     @Autowired
     private RunAdminMapper runAdminMapper;
+
+    @Autowired
+    private RunAdminService runAdminService;
 
     /**
      * 添加管理员信息
@@ -84,9 +87,7 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
     @Override
     public BaseResult getRunAdminInfoByID(Integer id) throws AppException {
         RunAdminInfo adminInfo = runAdminInfoMapper.selectByPrimaryKey(id);
-        if (adminInfo == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-        }
+
         return BaseResult.success(adminInfo);
     }
 
@@ -121,15 +122,7 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
      */
     @Override
     public AdminVO getAdminVOById(Integer id) throws AppException {
-        RunAdminInfo runAdminInfo = runAdminInfoMapper.selectByPrimaryKey(id);
-        if (runAdminInfo == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR);
-        }
-        RunAdmin runAdmin = runAdminMapper.selectByPrimaryKey(id);
-        AdminVO adminVO = new AdminVO();
-        adminVO.setAdminName(runAdminInfo.getAdminName());
-        adminVO.setAdminPhone(runAdminInfo.getAdminPhone());
-        adminVO.setCreateTime(runAdmin.getAdminTime());
-        return adminVO;
+        return runAdminService.getAdminVOById(id);
     }
+
 }

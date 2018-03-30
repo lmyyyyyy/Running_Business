@@ -5,20 +5,27 @@ import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.RunDeliveryInfoMapper;
 import com.running.business.pojo.RunDeliveryInfo;
+import com.running.business.pojo.RunDeliveryInfoExample;
 import com.running.business.service.RunDeliveryInfoService;
+import com.running.business.service.RunDeliveryuserService;
 import com.running.business.util.FileUploadUtil;
+import com.running.business.util.ValidateUtil;
+import com.running.business.vo.DeliveryDetailVO;
 import com.running.business.vo.DeliveryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+import java.util.List;
 
 @Service
 public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
 
     @Autowired
     private RunDeliveryInfoMapper runDeliveryInfoMapper;
+
+    @Autowired
+    private RunDeliveryuserService runDeliveryuserService;
 
     /**
      * 创建配送员信息
@@ -27,7 +34,7 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      * @return
      */
     @Override
-    public Integer saveRunDeliveryInfo(RunDeliveryInfo deliveryInfo) {
+    public Integer saveRunDeliveryInfo(RunDeliveryInfo deliveryInfo) throws AppException {
         if (deliveryInfo == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
@@ -41,7 +48,7 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      * @param deliveryInfo
      */
     @Override
-    public void updateRunDeliveryInfo(RunDeliveryInfo deliveryInfo) {
+    public void updateRunDeliveryInfo(RunDeliveryInfo deliveryInfo) throws AppException {
         if (deliveryInfo == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
@@ -54,7 +61,7 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      * @param did
      */
     @Override
-    public void deleteRunDeliveryInfoByID(Integer did) {
+    public void deleteRunDeliveryInfoByID(Integer did) throws AppException {
         RunDeliveryInfo info = runDeliveryInfoMapper.selectByPrimaryKey(did);
         if (info == null) {
             throw new AppException(ResultEnum.DEL_ERROR.getCode(), ResultEnum.DEL_ERROR.getMsg());
@@ -69,11 +76,8 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      * @return
      */
     @Override
-    public RunDeliveryInfo getRunDeliveryInfoByID(Integer did) {
+    public RunDeliveryInfo getRunDeliveryInfoByID(Integer did) throws AppException {
         RunDeliveryInfo info = runDeliveryInfoMapper.selectByPrimaryKey(did);
-        if (info == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-        }
         return info;
     }
 
@@ -84,27 +88,24 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      * @return
      */
     @Override
-    public DeliveryVO getDeliveryVOByID(Integer did) {
-        RunDeliveryInfo runDeliveryInfo = this.getRunDeliveryInfoByID(did);
-        if (runDeliveryInfo == null) {
-            throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
-        }
-        return convert2VO(runDeliveryInfo);
+    public DeliveryDetailVO getDeliveryVOByID(Integer did) throws AppException {
+        return runDeliveryuserService.queryDeliveryDetailVO(did);
     }
 
     /**
      * 上传配送员头像
+     *
      * @param file
      * @param did
      * @return
      */
     @Override
-    public BaseResult uploadDeliveryImg(MultipartFile file, Integer did) {
+    public BaseResult uploadDeliveryImg(MultipartFile file, Integer did) throws AppException {
         try {
             String filePath = FileUploadUtil.uploadFile(file, "deliveryPhoto");
             RunDeliveryInfo runDeliveryInfo = runDeliveryInfoMapper.selectByPrimaryKey(did);
             runDeliveryInfo.setPhoto(filePath);
-            runDeliveryInfoMapper.insert(runDeliveryInfo);
+            runDeliveryInfoMapper.updateByPrimaryKeySelective(runDeliveryInfo);
         } catch (Exception e) {
             return BaseResult.fail("配送员头像图片上传异常");
         }
@@ -112,12 +113,32 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
     }
 
     /**
+     * 检查系统生成昵称的唯一性，true为不存在可以使用，false为已存在不可使用
+     *
+     * @param name
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public boolean checkNameUnique(String name) throws AppException {
+        RunDeliveryInfoExample example = new RunDeliveryInfoExample();
+        RunDeliveryInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo("游客_" + name);
+        List<RunDeliveryInfo> list = runDeliveryInfoMapper.selectByExample(example);
+        if (ValidateUtil.isValid(list)) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * 转VO
      *
      * @param runDeliveryInfo
      * @return
      */
-    public DeliveryVO convert2VO(RunDeliveryInfo runDeliveryInfo) {
+    public DeliveryVO convert2VO(RunDeliveryInfo runDeliveryInfo) throws AppException {
         DeliveryVO deliveryVO = new DeliveryVO();
         deliveryVO.setDid(runDeliveryInfo.getDid());
         deliveryVO.setAddressId(runDeliveryInfo.getAddressId());

@@ -504,7 +504,14 @@ public class RunUserController extends BaseController {
         return BaseResult.success(runUserCouponService.pageRunUserCouponByUID(uid, status, page, size, orderField, orderType));
     }
 
-    @ApiOperation(value = "分页获取优惠券(刘明宇)", notes = "分页获取优惠券", response = BaseResult.class)
+    /**
+     * 用户头像上传
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "用户头像上传(孙晓东)", notes = "用户头像上传", response = BaseResult.class)
     @RequestMapping(value = "/uploadUserImg", method = RequestMethod.POST)
     public BaseResult uploadUserImg(MultipartFile file, HttpServletRequest request) {
         BaseResult result = null;

@@ -70,9 +70,7 @@ public class RunDeliveryDistanceServiceImpl implements RunDeliveryDistanceServic
     @Override
     public RunDeliveryDistance getRunDeliveryDistanceByDID(Integer did) throws AppException {
         RunDeliveryDistance distance = runDeliveryDistanceMapper.selectByPrimaryKey(did);
-        if (distance == null) {
-            throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-        }
+
         return distance;
     }
 }

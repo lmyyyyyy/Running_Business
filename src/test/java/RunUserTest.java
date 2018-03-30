@@ -4,6 +4,7 @@ import com.running.business.common.BaseResult;
 import com.running.business.mapper.JedisClient;
 import com.running.business.pojo.RunUser;
 import com.running.business.service.RunUserService;
+import com.running.business.vo.UserVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,10 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void getAllUser(){
-		int currpage = 1;
+		/*int currpage = 1;
 		PageHelper.startPage(currpage, 10);
-		PageInfo<RunUser> result = runUserService.pageAllRunUser(1, 20, "desc");
-		List<RunUser> list = result.getList();
+		PageInfo<UserVO> result = runUserService.pageAllRunUser(1, 20, "desc");
+		List<UserVO> list = result.getList();
 		PageInfo<RunUser> page = new PageInfo<RunUser>(list);
 		System.out.println(page.getPages());
 		System.out.println(page.getTotal());
@@ -71,7 +72,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		for (RunUser user : page.getList()) {
 			System.out.println(user.getUserphone());
 			System.out.println(user.getPassword());
-		}
+		}*/
 	}
 	
 	@Test

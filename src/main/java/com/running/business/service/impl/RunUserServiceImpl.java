@@ -6,16 +6,30 @@ import com.running.business.common.BaseResult;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.UserDTO;
+import com.running.business.enums.IsDeleteEnum;
+import com.running.business.enums.PersonGenderEnum;
+import com.running.business.enums.PersonStatusEnum;
 import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
 import com.running.business.mapper.JedisClient;
 import com.running.business.mapper.RunUserMapper;
 import com.running.business.pojo.RunUser;
+import com.running.business.pojo.RunUserAddress;
+import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserExample;
 import com.running.business.pojo.RunUserExample.Criteria;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.HeartBeatService;
+import com.running.business.service.RefundApplyService;
+import com.running.business.service.RefundRecordService;
+import com.running.business.service.ReportRecordService;
+import com.running.business.service.RunOrderPayService;
+import com.running.business.service.RunOrderService;
+import com.running.business.service.RunUserAddressService;
+import com.running.business.service.RunUserBalanceService;
+import com.running.business.service.RunUserCouponService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
 import com.running.business.service.SSOService;
 import com.running.business.util.CookieUtils;
@@ -23,6 +37,8 @@ import com.running.business.util.JsonUtils;
 import com.running.business.util.Run_StringUtil;
 import com.running.business.util.UserUtil;
 import com.running.business.util.ValidateUtil;
+import com.running.business.vo.UserDetailVO;
+import com.running.business.vo.UserVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +67,34 @@ public class RunUserServiceImpl implements RunUserService {
      */
     @Autowired
     private RunUserMapper runUserMapper;
+
+    @Autowired
+    private RunUserAddressService runUserAddressService;
+
+    @Autowired
+    private RunUserBalanceService runUserBalanceService;
+
+    @Autowired
+    private RunOrderService runOrderService;
+
+    @Autowired
+    private RefundApplyService refundApplyService;
+
+    @Autowired
+    private RefundRecordService refundRecordService;
+
+    @Autowired
+    private ReportRecordService reportRecordService;
+
+    @Autowired
+    private RunOrderPayService runOrderPayService;
+
+    @Autowired
+    private RunUserCouponService runUserCouponService;
+
+    @Autowired
+    private RunUserPreferenceService runUserPreferenceService;
+
     @Autowired
     private SSOService ssoService;
 
@@ -270,32 +314,44 @@ public class RunUserServiceImpl implements RunUserService {
     }
 
     /**
-     * 分页获取所有未被删除的用户列表
+     * 分页获取的用户列表
      *
-     * @return 如果没有数据，返回错误码"1",错误码1001008，错误信息"我也是有底线的"
-     * 如果成功返回所有符合条件的信息
+     * @param status
+     * @param isDelete
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
      */
     @Override
-    public PageInfo<RunUser> pageAllRunUser(Integer page, Integer size, String orderType) throws AppException {
+    public PageInfo<UserVO> pageAllRunUser(Boolean status, Boolean isDelete, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
         if (size == null || size <= 0) {
             size = 20;
         }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "add_time";
+        }
         if (orderType == null || "".equals(orderType)) {
             orderType = "DESC";
         }
         RunUserExample example = new RunUserExample();
-        List<RunUser> list;
-        example.setOrderByClause("update_time " + orderType);
-        Criteria criteria = example.createCriteria();
-        criteria.andIsDeleteEqualTo(false);
+        RunUserExample.Criteria criteria = example.createCriteria();
+        if (status != null) {
+            criteria.andUserStatusEqualTo(status);
+        }
+        if (isDelete != null) {
+            criteria.andIsDeleteEqualTo(isDelete);
+        }
+        example.setOrderByClause(" " + orderField + " " + orderType);
         PageHelper.startPage(page, size);
-        list = runUserMapper.selectByExample(example);
-        PageInfo<RunUser> pageInfo = new PageInfo<>(list);
-
-        return pageInfo;
+        List<RunUser> list = runUserMapper.selectByExample(example);
+        List<UserVO> vos = this.convertUsers2VOs(list);
+        return new PageInfo<>(vos);
     }
 
     /**
@@ -397,6 +453,173 @@ public class RunUserServiceImpl implements RunUserService {
         criteria.andUserStatusEqualTo(true);
         example.setOrderByClause(" update_time desc");
         List<RunUser> list = runUserMapper.selectByExample(example);
-        return list.stream().map(user ->user.getUid()).collect(Collectors.toSet());
+        return list.stream().map(user -> user.getUid()).collect(Collectors.toSet());
+    }
+
+    /**
+     * 根据用户id获取用户详细信息
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public UserDetailVO queryUserDetailVO(Integer uid) throws AppException {
+        RunUser user = runUserMapper.selectByPrimaryKey(uid);
+        if (user == null) {
+            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
+        }
+        return this.convertUser2DetailVO(user);
+    }
+
+    /**
+     * 用户集合转VOs
+     *
+     * @param users
+     * @return
+     * @throws AppException
+     */
+    public List<UserVO> convertUsers2VOs(List<RunUser> users) throws AppException {
+        if (users == null || users.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<UserVO> vos = new ArrayList<>(users.size());
+        for (RunUser user : users) {
+            if (user == null) {
+                continue;
+            }
+            UserVO userVO = convertUser2VO(user);
+            if (userVO == null) {
+                continue;
+            }
+            vos.add(userVO);
+        }
+        return vos;
+    }
+
+    /**
+     * 用户转VO
+     *
+     * @param user
+     * @return
+     * @throws AppException
+     */
+    public UserVO convertUser2VO(RunUser user) throws AppException {
+        if (user == null) {
+            return null;
+        }
+        UserVO vo = new UserVO();
+        vo.setUid(user.getUid());
+        vo.setUserStatus(user.getUserStatus());
+        vo.setUserphone(user.getUserphone());
+        vo.setUpdateTime(user.getUpdateTime());
+        vo.setPassword(user.getPassword());
+        vo.setIsDelete(user.getIsDelete());
+        vo.setAddTime(user.getAddTime());
+        vo.setUserStatusDesc(user.getUserStatus() ? PersonStatusEnum.ONLINE.getDesc() : PersonStatusEnum.NOT_ONLINE.getDesc());
+        vo.setIsDeleteDesc(user.getIsDelete() ? IsDeleteEnum.DELETE.getDesc() : IsDeleteEnum.NOT_DELETE.getDesc());
+        RunUserInfo info = runUserInfoService.getRunUserInfoById(user.getUid());
+        if (info != null) {
+            vo.setUserGender(info.getUserGender());
+            vo.setUserGenderDesc(info.getUserGender() ? PersonGenderEnum.MAN.getDesc() : PersonGenderEnum.WOMAN.getDesc());
+            vo.setReportedTimes(info.getReportedTimes());
+            vo.setUserPhone(info.getUserPhone());
+            vo.setUserName(info.getUserName());
+            vo.setUserPhoto(info.getUserPhoto());
+            vo.setUserPoint(info.getUserPoint());
+        }
+        vo.setUserAddress(info.getUserAddressId());
+        RunUserAddress address = (RunUserAddress) runUserAddressService.getRunUserAddressByID(user.getUid()).getData();
+        if (address != null) {
+            vo.setUserAddressDesc(address.getUserAddress());
+        }
+        RunUserBalance balance = runUserBalanceService.getRunUserBalanceByUID(user.getUid());
+        if (balance != null) {
+            vo.setBalance(balance.getUserBalance());
+        }
+        return vo;
+    }
+
+    /**
+     * 用户集合转详细VO集合
+     *
+     * @param users
+     * @return
+     * @throws AppException
+     */
+    public List<UserDetailVO> convertUsers2DetailVOs(List<RunUser> users) throws AppException {
+        if (users == null || users.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<UserDetailVO> vos = new ArrayList<>(users.size());
+        for (RunUser user : users) {
+            if (user == null) {
+                continue;
+            }
+            UserDetailVO vo = convertUser2DetailVO(user);
+            if (vo == null) {
+                continue;
+            }
+            vos.add(vo);
+        }
+        return vos;
+    }
+
+    /**
+     * 用户转详细VO
+     *
+     * @param user
+     * @return
+     * @throws AppException
+     */
+    public UserDetailVO convertUser2DetailVO(RunUser user) throws AppException {
+        if (user == null) {
+            return null;
+        }
+        UserDetailVO detailVO = new UserDetailVO();
+        detailVO.setUid(user.getUid());
+        detailVO.setUserStatus(user.getUserStatus());
+        detailVO.setUserphone(user.getUserphone());
+        detailVO.setUpdateTime(user.getUpdateTime());
+        detailVO.setPassword(user.getPassword());
+        detailVO.setIsDelete(user.getIsDelete());
+        detailVO.setAddTime(user.getAddTime());
+        detailVO.setUserStatusDesc(user.getUserStatus() ? PersonStatusEnum.ONLINE.getDesc() : PersonStatusEnum.NOT_ONLINE.getDesc());
+        detailVO.setIsDeleteDesc(user.getIsDelete() ? IsDeleteEnum.DELETE.getDesc() : IsDeleteEnum.NOT_DELETE.getDesc());
+        RunUserInfo info = runUserInfoService.getRunUserInfoById(user.getUid());
+        if (info != null) {
+            detailVO.setUserPhone(info.getUserPhone());
+            detailVO.setUserName(info.getUserName());
+            detailVO.setUserPhoto(info.getUserPhoto());
+            detailVO.setUserPoint(info.getUserPoint());
+            detailVO.setUserGender(info.getUserGender());
+            detailVO.setUserGenderDesc(info.getUserGender() ? PersonGenderEnum.MAN.getDesc() : PersonGenderEnum.WOMAN.getDesc());
+            detailVO.setReportedTimes(info.getReportedTimes());
+        }
+        detailVO.setUserAddress(info.getUserAddressId());
+        RunUserAddress address = (RunUserAddress) runUserAddressService.getRunUserAddressByID(user.getUid()).getData();
+        if (address != null) {
+            detailVO.setUserAddressDesc(address.getUserAddress());
+        }
+        RunUserBalance balance = runUserBalanceService.getRunUserBalanceByUID(user.getUid());
+        if (balance != null) {
+            detailVO.setBalance(balance.getUserBalance());
+        }
+
+        detailVO.setOrderCount(runOrderService.orderCountByUIDAndDID(user.getUid(), null));
+
+        detailVO.setPayCount(runOrderPayService.payCountByUIDOrDId(user.getUid()));
+
+        detailVO.setRefundApplyCount(refundApplyService.applyCountByUID(user.getUid()));
+
+        detailVO.setRefundRecordCount(refundRecordService.refundRecordCountByUID(user.getUid()));
+
+        detailVO.setRunUserPreferences(runUserPreferenceService.getAllUserPreferenceByUID(user.getUid()));
+
+        detailVO.setAddresses((List<RunUserAddress>) runUserAddressService.getAllRunUserAddress(user.getUid()).getData());
+
+        detailVO.setCouponVOS(runUserCouponService.queryCouponsByUID(user.getUid()));
+
+        return detailVO;
     }
 }

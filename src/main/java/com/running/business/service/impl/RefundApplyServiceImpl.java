@@ -345,7 +345,9 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         PageHelper.startPage(page, size);
         RefundApplyExample example = new RefundApplyExample();
         RefundApplyExample.Criteria criteria = example.createCriteria();
-        criteria.andUidEqualTo(uid);
+        if (uid != null && uid > 0) {
+            criteria.andUidEqualTo(uid);
+        }
         if (status != null && status >= 0) {
             criteria.andStatusEqualTo(status);
         }
@@ -422,6 +424,23 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         example.setOrderByClause(" " + orderField + " " + orderType);
         List<RefundApply> applies = refundApplyMapper.selectByExample(example);
         return new PageInfo<>(convertApplys2VOs(applies));
+    }
+
+    /**
+     * 获取当前用户的退款申请数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Integer applyCountByUID(Integer uid) throws AppException {
+        RefundApplyExample example = new RefundApplyExample();
+        RefundApplyExample.Criteria criteria = example.createCriteria();
+        if (uid != null) {
+            criteria.andUidEqualTo(uid);
+        }
+        return refundApplyMapper.countByExample(example);
     }
 
     /**

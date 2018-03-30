@@ -493,6 +493,27 @@ public class RunOrderServiceImpl implements RunOrderService {
     }
 
     /**
+     * 根据用户id或配送员id获取订单数
+     *
+     * @param uid
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Integer orderCountByUIDAndDID(Integer uid, Integer did) throws AppException {
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        if (uid != null) {
+            criteria.andUidEqualTo(uid);
+        }
+        if (did != null) {
+            criteria.andDidEqualTo(did);
+        }
+        return runOrderMapper.countByExample(example);
+    }
+
+    /**
      * 拼接滚动消息
      *
      * @return

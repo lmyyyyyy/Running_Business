@@ -71,9 +71,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 	@Override
 	public RunUserInfo getRunUserInfoById(Integer uid) throws AppException {
 		RunUserInfo userInfo = runUserInfoMapper.selectByPrimaryKey(uid);
-		if (userInfo == null) {
-			throw new AppException(ResultEnum.QUERY_ERROR.getCode(), ResultEnum.QUERY_ERROR.getMsg());
-		}
+
 		return userInfo;
 	}
 
@@ -127,7 +125,7 @@ public class RunUserInfoServiceImpl implements RunUserInfoService{
 			String filePath = FileUploadUtil.uploadFile(file, "userPhoto");
 			RunUserInfo runUserInfo = runUserInfoMapper.selectByPrimaryKey(uid);
 			runUserInfo.setUserPhone(filePath);
-			runUserInfoMapper.insert(runUserInfo);
+			runUserInfoMapper.updateByPrimaryKeySelective(runUserInfo);
 		} catch (Exception e) {
 			return BaseResult.fail();
 		}
