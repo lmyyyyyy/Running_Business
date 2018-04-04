@@ -18,18 +18,20 @@ import com.running.business.mapper.RunUserInfoMapper;
 import com.running.business.pojo.RunDeliveryAddress;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
-import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderExample;
 import com.running.business.pojo.RunOrderExample.Criteria;
 import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunUserInfo;
+import com.running.business.pojo.RunUserPreference;
+import com.running.business.service.RefundRecordService;
 import com.running.business.service.RunDeliveryAddressService;
 import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.service.RunUserPreferenceService;
 import com.running.business.util.DateUtil;
 import com.running.business.util.MapDistance;
 import com.running.business.util.ValidateUtil;
@@ -40,7 +42,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +74,12 @@ public class RunOrderServiceImpl implements RunOrderService {
 
     @Autowired
     private RunDeliveryAddressService runDeliveryAddressService;
+
+    @Autowired
+    private RefundRecordService refundRecordService;
+
+    @Autowired
+    private RunUserPreferenceService runUserPreferenceService;
 
     /**
      * 验证订单是否已被抢 false:未被抢；true:已被抢
@@ -540,6 +547,10 @@ public class RunOrderServiceImpl implements RunOrderService {
      */
     @Override
     public synchronized void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException {
+        boolean flag = runOrderPayService.checkIsPay(orderPay.getUid(), orderPay.getOrderid());
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAS_PAY);
+        }
         double money = orderPay.getOrderActualPrice();
         PaySourceTypeEnum paySourceTypeEnum = PaySourceTypeEnum.getOrderPayTypeEnum(orderPay.getPayType());
         cashier.pay(paySourceTypeEnum, money, request);
@@ -547,6 +558,42 @@ public class RunOrderServiceImpl implements RunOrderService {
         runOrderPayService.saveRunOrderPay(orderPay);
         //更新订单状态
         this.updateOrderStatus(orderPay.getOrderid(), OrderStatusEnum.PAID.getCode());
+    }
+
+    /**
+     * 保存或更新用户偏好
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @throws AppException
+     */
+    @Override
+    public void saveOrUpdatePreference(String goodType, String good, Integer uid) throws AppException {
+        if (uid == null) {
+            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
+        }
+        runUserPreferenceService.saveRunUserPreference(buildPreference(goodType, good, uid));
+    }
+
+    /**
+     * 构建用户偏好对象
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    private RunUserPreference buildPreference(String goodType, String good, Integer uid) throws AppException {
+        RunUserPreference preference = new RunUserPreference();
+        if (uid == null) {
+            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
+        }
+        preference.setUid(uid);
+        preference.setUserGoods(good);
+        preference.setUserGoodstype(goodType);
+        return preference;
     }
 
     /**
@@ -681,7 +728,7 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @return
      * @throws Exception
      */
-    public List<OrderVO> orderByOrderVO(List<OrderVO> orderVOS) throws AppException{
+    public List<OrderVO> orderByOrderVO(List<OrderVO> orderVOS) throws AppException {
         return orderVOS.stream().sorted(Comparator.comparing(OrderVO::getDistanceDesc)).collect(Collectors.toList());
     }
 

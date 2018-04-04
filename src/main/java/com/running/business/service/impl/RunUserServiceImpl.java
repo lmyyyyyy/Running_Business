@@ -180,8 +180,8 @@ public class RunUserServiceImpl implements RunUserService {
         user.setUpdateTime(new Date());
         user.setUserStatus(false);
         user.setIsDelete(false);
-        int uid = runUserMapper.insert(user);
-        return BaseResult.success(uid);
+        runUserMapper.insert(user);
+        return BaseResult.success(user.getUid());
     }
 
     /**

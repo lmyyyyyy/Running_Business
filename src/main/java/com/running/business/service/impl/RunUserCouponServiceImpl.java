@@ -103,7 +103,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
             runUserCouponMapper.insert(runUserCoupon);
 
             //通知当前用户
-            systemWebSocketHandler.sendMessageToUser(user.getUserphone(), new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
+            //systemWebSocketHandler.sendMessageToUser(user.getUserphone(), new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
         }
         //通知所有在线用户
         //initHandler().sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
@@ -239,7 +239,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
         }
         Long currentTime = System.currentTimeMillis();
         criteria.andExpiredTimeGreaterThanOrEqualTo(DateUtil.ms2Date(currentTime));
-        criteria.andBeginTimeLessThanOrEqualTo(DateUtil.ms2Date(currentTime));
+        //criteria.andBeginTimeLessThanOrEqualTo(DateUtil.ms2Date(currentTime));
         example.setOrderByClause(" " + orderField + " " + orderType);
         List<RunUserCoupon> coupons = runUserCouponMapper.selectByExample(example);
         return new PageInfo<>(convertCoupons2VOs(coupons));

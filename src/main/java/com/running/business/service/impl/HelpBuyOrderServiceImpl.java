@@ -9,6 +9,7 @@ import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderExample;
 import com.running.business.sdk.OrderServiceStrategy;
 import com.running.business.service.HelpBuyOrderService;
+import com.running.business.service.RunOrderService;
 import com.running.business.util.Run_StringUtil;
 import com.running.business.util.ValidateUtil;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +30,9 @@ public class HelpBuyOrderServiceImpl implements HelpBuyOrderService, OrderServic
 
     @Autowired
     private RunOrderMapper runOrderMapper;
+
+    @Autowired
+    private RunOrderService runOrderService;
 
     @Override
     public Map<String, Object> saveHelpBuyOrder(RunOrder order, Integer uid) throws AppException {
@@ -52,6 +55,7 @@ public class HelpBuyOrderServiceImpl implements HelpBuyOrderService, OrderServic
         order.setUpdateTime(new Date());
         LOGGER.info("{} 订单入库", LOG_PREFIX);
         runOrderMapper.insert(order);
+        runOrderService.saveOrUpdatePreference(order.getGoods(), order.getRemark(), uid);
         Map<String, Object> map = new HashMap<>();
         map.put("result", order);
         LOGGER.info("{}返回结果{}", LOG_PREFIX, map);

@@ -86,8 +86,8 @@ public class RunAdminServiceImpl implements RunAdminService {
         admin.setUpdateTime(new Date());
         admin.setStatus(false);
         admin.setIsDelete(false);
-        Integer adminId = runAdminMapper.insert(admin);
-        return BaseResult.success(adminId);
+        runAdminMapper.insert(admin);
+        return BaseResult.success(admin.getAdminId());
     }
 
     /**

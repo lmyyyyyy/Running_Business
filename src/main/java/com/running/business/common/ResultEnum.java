@@ -94,9 +94,11 @@ public enum ResultEnum {
     ORDER_ID_IS_ERROR("4001004", "订单号异常"),
     ORDER_STATUS_IS_ERROR("4001005", "订单状态异常"),
     ORDER_HAVEN_BEEN_GRABED("4001006", "手慢了一步,订单被抢了"),
+    ORDER_HAS_REFUNDED("4001007", "该订单已退过款"),
 
     //订单支付相关异常
     ORDER_PAY_INFO_EMPTY("4002001", "订单支付信息为空"),
+    ORDER_HAS_PAY("4002002", "该订单已经支付过了"),
 
     //心跳相关异常
     HEARTBEAT_INFO_EMPTY("5001001", "心跳为空"),

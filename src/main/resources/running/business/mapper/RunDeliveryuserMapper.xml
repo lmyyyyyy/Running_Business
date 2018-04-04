@@ -107,7 +107,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="did">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_deliveryuser (did, userphone, password, 
       add_time, update_time, status, 
       available, is_delete, credits, 

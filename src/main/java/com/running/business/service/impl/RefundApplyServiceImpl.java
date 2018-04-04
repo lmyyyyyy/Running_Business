@@ -115,7 +115,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         }
         runOrderService.updateOrderStatus(runOrder.getOrderid(), OrderStatusEnum.REFUND_APPLY.getCode());
         Long currentTime = System.currentTimeMillis();
-        Long diffTime = (currentTime - runOrder.getAddTime().getTime()) / 1000 * 60 * 60 * 24;
+        Long diffTime = (currentTime - runOrder.getAddTime().getTime()) / (1000 * 60 * 60 * 24);
         if (diffTime > 7) {
             throw new AppException(ResultEnum.REFUND_APPLY_TIME_ERROR);
         }
@@ -152,9 +152,13 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @throws AppException
      */
     @Override
-    public void updateApplyStatus(RefundDTO refundDTO) throws AppException{
+    public void updateApplyStatus(RefundDTO refundDTO) throws AppException {
         if (refundDTO.getId() == null || refundDTO.getId() <= 0) {
             throw new AppException(ResultEnum.REFUND_ID_IS_ERROR);
+        }
+        boolean flag = refundRecordService.checkIsRefunded(refundDTO.getUid(), refundDTO.getOrderId());
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAS_REFUNDED);
         }
         RefundApply apply = this.queryApplyByID(refundDTO.getId());
         apply.setOrderid(refundDTO.getOrderId());
@@ -208,7 +212,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @param refundDTO
      * @throws AppException
      */
-    public void saveRefundRecord(RefundApply apply, RefundDTO refundDTO) throws AppException{
+    public void saveRefundRecord(RefundApply apply, RefundDTO refundDTO) throws AppException {
         RefundRecord refundRecord = new RefundRecord();
         refundRecord.setUid(refundDTO.getUid());
         refundRecord.setOrderid(refundDTO.getOrderId());
@@ -336,7 +340,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -375,7 +379,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -411,7 +415,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -450,7 +454,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @return
      * @throws AppException
      */
-    public List<RefundApplyVO> convertApplys2VOs(List<RefundApply> applies) throws AppException{
+    public List<RefundApplyVO> convertApplys2VOs(List<RefundApply> applies) throws AppException {
         if (applies == null || applies.isEmpty()) {
             return new ArrayList<>();
         }

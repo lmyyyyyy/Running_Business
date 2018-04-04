@@ -4,18 +4,17 @@ package com.running.business.enums;
  * @author liumingyu
  * @create 2018-02-03 下午8:54
  */
-public enum CouponStatusEnum {
+public enum PushInfoStatusEnum {
 
-    UNAVALIBALE(0, "不可用"),
-    AVALIBALE(1, "可用"),
-    EXPIRE(2, "已过期")
+    UNAVALIBALE(0, "不推送"),
+    AVALIBALE(1, "推送")
     ;
 
     private Integer code;
 
     private String desc;
 
-    CouponStatusEnum(Integer code, String desc) {
+    PushInfoStatusEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -43,15 +42,15 @@ public enum CouponStatusEnum {
      * @param code
      * @return
      */
-    public static CouponStatusEnum getCouponStatusEnum(Integer code) {
+    public static PushInfoStatusEnum getPushInfoStatusEnum(Integer code) {
 
         if (code == null) {
             return null;
         }
-        CouponStatusEnum returnEnum = null;
-        for (CouponStatusEnum couponStatusEnum : CouponStatusEnum.values()) {
-            if (code.equals(couponStatusEnum.getCode())) {
-                returnEnum = couponStatusEnum;
+        PushInfoStatusEnum returnEnum = null;
+        for (PushInfoStatusEnum pushInfoStatusEnum : PushInfoStatusEnum.values()) {
+            if (code.equals(pushInfoStatusEnum.getCode())) {
+                returnEnum = pushInfoStatusEnum;
                 break;
             }
         }

@@ -111,8 +111,8 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         user.setAvailable(false);
         user.setCredits(0);
         user.setReviewPhoto(null);
-        Integer did = runDeliveryuserMapper.insert(user);
-        return did;
+        runDeliveryuserMapper.insert(user);
+        return user.getDid();
     }
 
     /**

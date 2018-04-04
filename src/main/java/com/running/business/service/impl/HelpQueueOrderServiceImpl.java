@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
+@Service("helpQueueOrderService")
 public class HelpQueueOrderServiceImpl implements HelpQueueOrderService, OrderServiceStrategy {
 
     @Autowired

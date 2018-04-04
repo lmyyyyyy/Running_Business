@@ -12,6 +12,16 @@ import com.running.business.vo.RefundRecordVO;
 public interface RefundRecordService {
 
     /**
+     * 检查是否退款过 true：退过；false：没退过
+     *
+     * @param uid
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    boolean checkIsRefunded(Integer uid, String orderId) throws AppException;
+
+    /**
      * 保存退款记录
      *
      * @param refundRecord

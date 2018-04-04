@@ -1333,6 +1333,7 @@ public class RunAdminController extends BaseController {
         Integer adminId = requestUtil.getAdminId(request);
         LOGGER.info("{} 更新退款申请状态（同意或拒绝） status = {}, id = {}, orderId = {}, adminId = {}", LOG_PREFIX, refundDTO.getStatus(), refundDTO.getId(), refundDTO.getOrderId(), adminId);
         try {
+            refundDTO.setOperatorId(adminId);
             refundApplyService.updateApplyStatus(refundDTO);
         } catch (AppException ae) {
             LOGGER.error("{} 更新退款申请状态（同意或拒绝）失败 status = {}, id = {}, orderId = {}, adminId = {}, error = {}", LOG_PREFIX, refundDTO.getStatus(), refundDTO.getId(), refundDTO.getOrderId(), adminId, ae);

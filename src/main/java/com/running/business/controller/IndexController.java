@@ -346,8 +346,8 @@ public class IndexController extends BaseController {
                     name = RandomUtil.generateRandomDigitString(5);
                     count++;
                 }
-                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 info.setName("游客_" + name);
+                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 RunDeliveryDistance distance = new RunDeliveryDistance();
                 distance.setDid(did);
                 distance.setSendDistance(Double.valueOf(Config.ORDER_DISTANCE));
@@ -377,7 +377,7 @@ public class IndexController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/delivery/check/card/id", method = RequestMethod.GET)
+    @RequestMapping(value = "/delivery/check/card/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "验证配送员身份证号格式(刘明宇)", notes = "验证配送员身份证号格式", response = BaseResult.class)
     public BaseResult checkCard(@PathVariable Integer id, @RequestParam("card") String card, HttpServletRequest request) throws Exception {
         if (card == null || "".equals(card)) {

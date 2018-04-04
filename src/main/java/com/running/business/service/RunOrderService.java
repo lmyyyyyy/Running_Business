@@ -169,4 +169,14 @@ public interface RunOrderService {
      * @throws AppException
      */
     void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException;
+
+    /**
+     * 保存或更新用户偏好
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @throws AppException
+     */
+    void saveOrUpdatePreference(String goodType, String good, Integer uid) throws AppException;
 }

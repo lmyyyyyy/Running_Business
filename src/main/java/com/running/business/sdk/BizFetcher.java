@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * 服务执行引擎责任链
+ * 服务执行引擎
  *
  * @author liumingyu
  * @create 2018-01-14 下午4:36
