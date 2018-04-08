@@ -315,7 +315,7 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
     }
 
     /**
-     * 范围查询，根据执行时间查询startTime到endTime中间的日志
+     * 范围查询，根据执行时间查询beginTime到endTime中间的日志
      * @param beginTime
      * @param endTime
      * @return
