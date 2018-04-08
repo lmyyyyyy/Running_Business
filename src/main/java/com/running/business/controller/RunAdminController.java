@@ -11,12 +11,14 @@ import com.running.business.interceptor.PermissionInterceptor;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
 import com.running.business.pojo.RunDeliveryBalance;
+import com.running.business.pojo.RunDeliveryBalanceRecord;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunUser;
 import com.running.business.pojo.RunUserBalance;
+import com.running.business.pojo.RunUserBalanceRecord;
 import com.running.business.pojo.RunUserCoupon;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RefundApplyService;
@@ -25,6 +27,7 @@ import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunAdminService;
 import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryBalanceRecordService;
 import com.running.business.service.RunDeliveryBalanceService;
 import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
@@ -32,6 +35,7 @@ import com.running.business.service.RunDeliveryuserService;
 import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserAddressService;
+import com.running.business.service.RunUserBalanceRecordService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserCouponService;
 import com.running.business.service.RunUserInfoService;
@@ -41,6 +45,7 @@ import com.running.business.util.JsonUtils;
 import com.running.business.util.RandomUtil;
 import com.running.business.util.RegexUtils;
 import com.running.business.util.RequestUtil;
+import com.running.business.util.Run_StringUtil;
 import com.running.business.vo.AdminVO;
 import com.running.business.vo.DeliveryDetailVO;
 import com.running.business.vo.OrderVO;
@@ -147,6 +152,12 @@ public class RunAdminController extends BaseController {
     @Autowired
     private static SystemWebSocketHandler systemWebSocketHandler;
 
+    @Autowired
+    private RunUserBalanceRecordService runUserBalanceRecordService;
+
+    @Autowired
+    private RunDeliveryBalanceRecordService runDeliveryBalanceRecordService;
+
     //============================管理员begin===========================
 
     /**
@@ -173,7 +184,8 @@ public class RunAdminController extends BaseController {
         if (!RegexUtils.checkMobile(admin.getAdminUsername())) {
             return BaseResult.fail(ResultEnum.USER_PHONE_REGEX_IS_NOT);
         }
-        LOGGER.info("{}添加管理员，账号为：{}", new Object[]{admin.getAdminId(), admin.getAdminUsername()});
+        Integer adminId = requestUtil.getAdminId(request);
+        LOGGER.info("{}添加管理员，账号为：{}", new Object[]{adminId, admin.getAdminUsername()});
         BaseResult result = null;
         try {
             result = runAdminService.checkAdmin(admin.getAdminUsername());
@@ -260,12 +272,8 @@ public class RunAdminController extends BaseController {
             LOGGER.error(LOG_PREFIX + "管理员注销失败 token = {}, error = {}", new Object[]{token, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        if (StringUtils.isBlank(callback)) {
-            return result;
-        } else {
-            response.sendRedirect(callback);
-            return null;
-        }
+        return result;
+
     }
 
     /**
@@ -439,9 +447,6 @@ public class RunAdminController extends BaseController {
         BaseResult result;
         try {
             result = runAdminService.deleteRunAdminByID(id);
-            if (result.getCode().equals("200")) {
-                runAdminInfoService.deleteRunAdminInfoByID(id);
-            }
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "删除管理员失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -494,37 +499,39 @@ public class RunAdminController extends BaseController {
     }
 
     /**
-     * 更新管理员信息(操作别人)
+     * 更新其他管理员信息(操作别人)
      *
      * @param userAdminfo
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/others/info", method = RequestMethod.PUT)
-    @ApiOperation(value = "更新管理员信息(刘明宇)", notes = "更新管理员信息", response = BaseResult.class)
+    @ApiOperation(value = "更新其他管理员信息(刘明宇)", notes = "更新其他管理员信息", response = BaseResult.class)
     public BaseResult updateOtherAdminInfo(@RequestBody RunAdminInfo userAdminfo, HttpServletRequest request) throws Exception {
         if (!permissionInterceptor.isInvoke(request)) {
             return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
         }
-        LOGGER.info("更新管理员信息", userAdminfo.getAdminPhone());
+        LOGGER.info("更新其他管理员信息", userAdminfo.getAdminPhone());
         Integer adminId = null;
         BaseResult result;
         try {
             if (userAdminfo == null) {
                 return BaseResult.fail(ResultEnum.USER_INFO_ISEMPTY);
             }
+            if (userAdminfo.getAdminId() == null) {
+                return BaseResult.fail(ResultEnum.ADMIN_ID_ERROR);
+            }
             adminId = requestUtil.getAdminId(request);
-            userAdminfo.setAdminId(adminId);
+
             result = runAdminInfoService.updateRunAdminInfo(userAdminfo);
         } catch (AppException ae) {
-            LOGGER.error(LOG_PREFIX + "更新管理员信息失败 adminId = {}, error = {}", new Object[]{adminId, ae});
+            LOGGER.error(LOG_PREFIX + "更新其他管理员信息失败 adminId = {}, error = {}", new Object[]{adminId, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return result;
     }
 
     /**
-     * \
      * 分页获取管理员信息
      *
      * @param status
@@ -539,8 +546,8 @@ public class RunAdminController extends BaseController {
      */
     @ApiOperation(value = "分页获取管理员信息(刘明宇)", notes = "分页获取管理员信息", response = BaseResult.class)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public BaseResult pageAdmins(@RequestParam(value = "status", required = false, defaultValue = "false") Boolean status,
-                                 @RequestParam(value = "isDelete", required = false, defaultValue = "false") Boolean isDelete,
+    public BaseResult pageAdmins(@RequestParam(value = "status", required = false) Boolean status,
+                                 @RequestParam(value = "isDelete", required = false) Boolean isDelete,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                  @RequestParam(value = "orderField", required = false, defaultValue = "admin_time") String orderField,
@@ -600,6 +607,7 @@ public class RunAdminController extends BaseController {
                 runUserInfo.setUserPhoto("/img/default.jpg");
                 runUserInfo.setUserPoint(0);
                 runUserInfo.setUserGender(false);
+                runUserInfo.setReportedTimes(0);
                 String name = RandomUtil.generateRandomDigitString(5);
                 int count = 0;
                 while (!runUserInfoService.checkNameUnique(name)) {
@@ -660,13 +668,13 @@ public class RunAdminController extends BaseController {
         BaseResult result;
         try {
             result = runUserService.deleteUser(id);
-            if (result.getCode().equals("200")) {
+            /*if (result.getCode().equals("200")) {
                 runUserInfoService.deleteRunUserInfo(id);
                 runUserAddressService.deleteAllRunUserAddressByUID(id);
                 runUserPreferenceService.deleteAllRunUserPreferenceByUID(id);
                 runUserCouponService.deleteAllRunUserCoupon(id);
                 runUserBalanceService.deleteRunUserBalance(id);
-            }
+            }*/
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "删除用户失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -771,9 +779,16 @@ public class RunAdminController extends BaseController {
             balance.setUpdateTime(new Date());
             runUserBalanceService.saveRunUserBalance(balance);
         }
+        RunUserBalanceRecord balanceRecord = new RunUserBalanceRecord();
+        balanceRecord.setOldBalance(balance.getUserBalance());
         balance.setUserBalance(balance.getUserBalance() + amount);
         balance.setUid(uid);
         runUserBalanceService.updateRunUserBalance(balance);
+        balanceRecord.setUid(balance.getUid());
+        balanceRecord.setType(false);
+        balanceRecord.setNewBalance(balance.getUserBalance());
+        balanceRecord.setAmount(amount);
+        runUserBalanceRecordService.saveRunUserBalanceRecord(balanceRecord);
         return BaseResult.success();
     }
 
@@ -866,7 +881,7 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/users/fefunds/{uid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/refunds/{uid}", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取退款记录(刘明宇)", notes = "分页获取退款记录", response = BaseResult.class)
     public BaseResult pageRefundRecord(@PathVariable Integer uid,
                                        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
@@ -974,8 +989,8 @@ public class RunAdminController extends BaseController {
                     name = RandomUtil.generateRandomDigitString(5);
                     count++;
                 }
-                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 info.setName("游客_" + name);
+                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 RunDeliveryDistance distance = new RunDeliveryDistance();
                 distance.setDid(did);
                 distance.setSendDistance(Double.valueOf(Config.ORDER_DISTANCE));
@@ -1037,10 +1052,10 @@ public class RunAdminController extends BaseController {
         LOGGER.info("{} 根据id删除配送员 id = {}", new Object[]{operator, id});
         try {
             runDeliveryuserService.deleteRunDeliveryuser(id);
-            runDeliveryInfoService.deleteRunDeliveryInfoByID(id);
+            /*runDeliveryInfoService.deleteRunDeliveryInfoByID(id);
             runDeliveryBalanceService.deleteRunDeliveryBalanceByDID(id);
             runDeliveryAddressService.deleteAllRunDeliveryAddressByDID(id);
-            runDeliveryDistanceService.deleteRunDeliveryDistanceByDID(id);
+            runDeliveryDistanceService.deleteRunDeliveryDistanceByDID(id);*/
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "根据id删除配送员失败 operator = {}, id = {}, error = {}", new Object[]{operator, id, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -1109,7 +1124,7 @@ public class RunAdminController extends BaseController {
             if (!flag) {
                 return BaseResult.fail(ResultEnum.PWD_ERROR);
             }
-            user.setPassword(newPassword);
+            user.setPassword(Run_StringUtil.MD5(newPassword));
             runDeliveryuserService.updateRunDeliveryuser(user);
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "update pwd is error username = {}, newPassword = {}, error = {}", new Object[]{user.getUserphone(), newPassword, ae});
@@ -1145,9 +1160,16 @@ public class RunAdminController extends BaseController {
             balance.setUpdateTime(new Date());
             runDeliveryBalanceService.saveRunDeliveryBalance(balance);
         }
+        RunDeliveryBalanceRecord balanceRecord = new RunDeliveryBalanceRecord();
+        balanceRecord.setOldBalance(balance.getDeliveryBalance());
         balance.setDeliveryBalance(balance.getDeliveryBalance() + amount);
         balance.setDid(did);
         runDeliveryBalanceService.updateRunDeliveryBalance(balance);
+        balanceRecord.setNewBalance(balance.getDeliveryBalance());
+        balanceRecord.setAmount(amount);
+        balanceRecord.setType(false);
+        balanceRecord.setDid(did);
+        runDeliveryBalanceRecordService.saveRunDeliveryRecord(balanceRecord);
         return BaseResult.success();
     }
 
@@ -1165,7 +1187,7 @@ public class RunAdminController extends BaseController {
     @ApiOperation(value = "分页获取所有的配送员列表(刘明宇)", notes = "分页获取所有的配送员列表", response = BaseResult.class)
     public BaseResult pageDeliverys(@RequestParam(value = "status", required = false) Boolean status,
                                     @RequestParam(value = "isDelete", required = false) Boolean isDelete,
-                                    @RequestParam(value = "able", required = false) Boolean able,
+                                    @RequestParam(value = "able", required = false) Integer able,
                                     @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                     @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                     @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
@@ -1198,7 +1220,7 @@ public class RunAdminController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/deliverys/able", method = RequestMethod.GET)
-    @ApiOperation(value = "分页获取所有的配送员列表(刘明宇)", notes = "分页获取所有的配送员列表", response = BaseResult.class)
+    @ApiOperation(value = "分页获取所有的需要审核的配送员列表(刘明宇)", notes = "分页获取所有的需要审核的配送员列表", response = BaseResult.class)
     public BaseResult pageAbleDeliverys(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                         @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                         @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
@@ -1208,19 +1230,19 @@ public class RunAdminController extends BaseController {
             LOGGER.error("{} 当前用户没有权限进行操作 operator = {}", LOG_PREFIX, operator);
             return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
         }
-        LOGGER.info("{} 分页获取所有的配送员列表 operator = {}", new Object[]{LOG_PREFIX, operator});
+        LOGGER.info("{} 分页获取所有的需要审核的配送员列表 operator = {}", new Object[]{LOG_PREFIX, operator});
         PageInfo<RunDeliveryuser> pageInfo;
         try {
             pageInfo = runDeliveryuserService.pageAbleRunDeliveryuser(page, size, orderType);
         } catch (AppException ae) {
-            LOGGER.error("{} 分页获取所有的配送员列表失败 operator = {}, error = {}", LOG_PREFIX, operator, ae);
+            LOGGER.error("{} 分页获取所有的需要审核的配送员列表失败 operator = {}, error = {}", LOG_PREFIX, operator, ae);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return BaseResult.success(pageInfo);
     }
 
     /**
-     * 审核配送员账号 0:false:禁用 ; 1:true:启用
+     * 审核配送员账号 0:审核中; 1:不通过 ; 2:通过
      *
      * @param did
      * @param able
@@ -1228,10 +1250,10 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/deliverys/able", method = RequestMethod.PUT)
+    @RequestMapping(value = "/deliverys/able/{did}", method = RequestMethod.PUT)
     @ApiOperation(value = "审核配送员账号(刘明宇)", notes = "审核配送员账号", response = BaseResult.class)
-    public BaseResult ableDelivery(@PathVariable Integer did,
-                                   @RequestParam(value = "able", required = true, defaultValue = "ture") Boolean able,
+    public BaseResult ableDelivery(@PathVariable("did") Integer did,
+                                   @RequestParam(value = "able", required = true, defaultValue = "2") Integer able,
                                    HttpServletRequest request) throws AppException {
         if (!permissionInterceptor.isInvoke(request)) {
             return BaseResult.fail(ResultEnum.PERMISSION_ERROR);
@@ -1266,7 +1288,7 @@ public class RunAdminController extends BaseController {
 
 
     /**
-     * 根据订单状态分页查询退款申请 (管理员查询)
+     * 根据退款申请状态分页查询退款申请 (管理员查询)
      *
      * @param status
      * @param page
@@ -1277,8 +1299,8 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/refunds", method = RequestMethod.GET)
-    @ApiOperation(value = "根据订单状态分页查询退款申请(管理员查询)(刘明宇)", notes = "根据订单状态分页查询退款申请", response = BaseResult.class)
+    @RequestMapping(value = "/refunds/apply", method = RequestMethod.GET)
+    @ApiOperation(value = "根据退款申请状态分页查询退款申请(管理员查询)(刘明宇)", notes = "根据退款申请状态分页查询退款申请", response = BaseResult.class)
     public BaseResult pageRefundApplys(@RequestParam(value = "onlyme", required = false, defaultValue = "false") boolean onlyme,
                                        @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
                                        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
@@ -1287,16 +1309,16 @@ public class RunAdminController extends BaseController {
                                        @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                        HttpServletRequest request) throws AppException {
         Integer adminId = requestUtil.getAdminId(request);
-        LOGGER.info("{} 根据订单状态分页查询退款申请 adminId = {}", LOG_PREFIX, adminId);
+        LOGGER.info("{} 根据退款申请状态分页查询退款申请 adminId = {}", LOG_PREFIX, adminId);
         PageInfo<RefundApplyVO> applyVOs;
         try {
             if (onlyme) {
-                applyVOs = refundApplyService.pageApplysByOperatorId(adminId, page, size, orderField, orderType);
+                applyVOs = refundApplyService.pageApplysByOperatorId(adminId, status, page, size, orderField, orderType);
             } else {
                 applyVOs = refundApplyService.pageApplys(status, page, size, orderField, orderType);
             }
         } catch (AppException ae) {
-            LOGGER.error("{} 根据订单状态分页查询退款申请失败 adminId = {}, error = {}", LOG_PREFIX, adminId, ae);
+            LOGGER.error("{} 根据退款申请状态分页查询退款申请失败 adminId = {}, error = {}", LOG_PREFIX, adminId, ae);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return BaseResult.success(applyVOs);
@@ -1400,7 +1422,7 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/fefunds", method = RequestMethod.GET)
+    @RequestMapping(value = "/refunds", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取自己操作的退款记录(刘明宇)", notes = "分页获取自己操作的退款记录", response = BaseResult.class)
     public BaseResult pageRefundRecord(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                        @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
@@ -1432,7 +1454,7 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/report/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询投诉信息(刘明宇)", notes = "根据id查询投诉信息", response = BaseResult.class)
     public BaseResult queryReportById(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
         LOGGER.info("{} 根据id查询投诉信息 id = {}", LOG_PREFIX, id);
@@ -1466,11 +1488,9 @@ public class RunAdminController extends BaseController {
                                  HttpServletRequest request) throws AppException {
         LOGGER.info("{} 根据用户id或配送员id 和 主动投诉方分页查询投诉记录, uid = {}, did = {}, activeSide = {}, page = {}, size = {}", LOG_PREFIX, uid, did, activeSide, page, size);
         PageInfo<ReportRecordVO> pageInfo;
-        if (uid == null || uid <= 0) {
-            pageInfo = reportRecordService.pageRecordByActiveAndDID(did, activeSide, page, size, orderField, orderType);
-        } else {
-            pageInfo = reportRecordService.pageRecordByActiveAndUID(uid, activeSide, page, size, orderField, orderType);
-        }
+
+        pageInfo = reportRecordService.pageRecordByActiveAndDIDOrUID(uid, did, activeSide, page, size, orderField, orderType);
+
         return BaseResult.success(pageInfo);
     }
 
@@ -1482,7 +1502,7 @@ public class RunAdminController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/report", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/report/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "根据投诉id删除记录(刘明宇)", notes = "根据投诉id删除记录", response = BaseResult.class)
     public BaseResult deleteReportByID(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
         LOGGER.info("{} 根据投诉id删除记录 id = {}", LOG_PREFIX, id);
@@ -1498,8 +1518,6 @@ public class RunAdminController extends BaseController {
      * @param page
      * @param size
      * @param status
-     * @param orderField
-     * @param orderType
      * @param request
      * @return
      * @throws AppException
@@ -1509,11 +1527,9 @@ public class RunAdminController extends BaseController {
     public BaseResult pageCoupons(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                   @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
                                   @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
-                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
-                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                   HttpServletRequest request) throws AppException {
         LOGGER.info("{} 分页获取优惠券", LOG_PREFIX);
-        return BaseResult.success(runUserCouponService.pageRunUserCouponByStatus(status, page, size, orderField, orderType));
+        return BaseResult.success(runUserCouponService.pageRunUserCouponByStatus(status, page, size));
     }
 
     /**
@@ -1572,6 +1588,7 @@ public class RunAdminController extends BaseController {
         return BaseResult.success();
     }
 
+
     /**
      * 更新优惠券
      *
@@ -1589,6 +1606,39 @@ public class RunAdminController extends BaseController {
         LOGGER.info("{} 更新优惠券", LOG_PREFIX);
         runUserCouponService.updateRunUserCoupon(coupon);
         return BaseResult.success();
+    }
+
+    /**
+     * 分页查询订单列表
+     *
+     * @param keyword
+     * @param type
+     * @param did
+     * @param uid
+     * @param status
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
+    @ApiOperation(value = "分页查询订单列表(刘明宇)", notes = "分页查询订单列表（分页）", response = BaseResult.class)
+    public BaseResult pageOrders(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                 @RequestParam(value = "type", required = false, defaultValue = "-1") Integer type,
+                                 @RequestParam(value = "did", required = false, defaultValue = "-1") Integer did,
+                                 @RequestParam(value = "uid", required = false, defaultValue = "-1") Integer uid,
+                                 @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                 @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                 @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
+                                 HttpServletRequest request) throws AppException {
+        LOGGER.info("{} 分页查询订单列表 keyword = {}, type = {}, did = {}, uid = {}, status = {}, page = {}, size = {}", LOG_PREFIX, keyword, type, did, uid, size, page, size);
+        PageInfo<OrderVO> pageInfo = runOrderService.pageOrders(keyword, type, did, uid, status, page, size, orderField, orderType);
+        return BaseResult.success(pageInfo);
     }
 
     /**

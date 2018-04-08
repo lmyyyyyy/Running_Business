@@ -97,7 +97,7 @@ public interface RunDeliveryuserService {
      * @return
      * @throws AppException
      */
-    PageInfo<DeliveryDetailVO> pageAllRunDeliveryuser(Boolean status, Boolean isDelete, Boolean able, Integer page, Integer size, String orderField, String orderType) throws AppException;
+    PageInfo<DeliveryDetailVO> pageAllRunDeliveryuser(Boolean status, Boolean isDelete, Integer able, Integer page, Integer size, String orderField, String orderType) throws AppException;
 
     /**
      *
@@ -178,7 +178,16 @@ public interface RunDeliveryuserService {
      * @param available
      * @throws AppException
      */
-    void updateAvailable(Integer did, boolean available) throws AppException;
+    void updateAvailable(Integer did, Integer available) throws AppException;
+
+    /**
+     * 重新申请审核账号
+     *
+     * @param did
+     * @param available
+     * @throws AppException
+     */
+    void updateResetAvailable(Integer did, Integer available) throws AppException;
 
     /**
      * 根据配送员id查询普通VO

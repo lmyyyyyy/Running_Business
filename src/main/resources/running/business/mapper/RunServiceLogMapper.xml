@@ -146,6 +146,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_service_log (id, class_name, method_name, 
       time_cost, operator_id, operator_name, 
       invoke_status, add_time, update_time, 
@@ -158,6 +161,9 @@
       #{errorMessage,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.monitor.pojo.RunServiceLogWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_service_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -406,7 +412,7 @@
     insert into run_service_log (class_name, method_name,
     time_cost, operator_id, operator_name,
     invoke_status, add_time, update_time,
-    method_param, return_value, error_message,parent_id
+    method_param, return_value, error_message, parent_id
     )
     values
     <foreach collection="list" item="item" separator=",">

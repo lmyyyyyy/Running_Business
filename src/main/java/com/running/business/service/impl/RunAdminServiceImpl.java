@@ -197,6 +197,7 @@ public class RunAdminServiceImpl implements RunAdminService {
         RunAdminExample example = new RunAdminExample();
         RunAdminExample.Criteria criteria = example.createCriteria();
         criteria.andAdminUsernameEqualTo(userName);
+        criteria.andIsDeleteEqualTo(false);
         List<RunAdmin> runAdmins = runAdminMapper.selectByExample(example);
         if (ValidateUtil.isValid(runAdmins)) {
             return BaseResult.fail(ResultEnum.TELTPHONE_USED);
@@ -455,7 +456,6 @@ public class RunAdminServiceImpl implements RunAdminService {
         if (runAdmin == null) {
             return null;
         }
-        RunAdminInfo info = runAdminInfoMapper.selectByPrimaryKey(runAdmin.getAdminId());
         AdminVO adminVO = new AdminVO();
         adminVO.setUpdateTime(runAdmin.getUpdateTime());
         adminVO.setAdminUsername(runAdmin.getAdminUsername());
@@ -465,9 +465,12 @@ public class RunAdminServiceImpl implements RunAdminService {
         adminVO.setIsDelete(runAdmin.getIsDelete());
         adminVO.setStatusDesc(runAdmin.getStatus() ? PersonStatusEnum.ONLINE.getDesc() : PersonStatusEnum.NOT_ONLINE.getDesc());
         adminVO.setIsDeleteDesc(runAdmin.getIsDelete() ? IsDeleteEnum.DELETE.getDesc() : IsDeleteEnum.NOT_DELETE.getDesc());
-        adminVO.setAdminName(info.getAdminName());
-        adminVO.setAdminPhone(info.getAdminPhone());
         adminVO.setAdminTime(runAdmin.getAdminTime());
+        RunAdminInfo info = runAdminInfoMapper.selectByPrimaryKey(runAdmin.getAdminId());
+        if (info != null) {
+            adminVO.setAdminName(info.getAdminName());
+            adminVO.setAdminPhone(info.getAdminPhone());
+        }
         return adminVO;
     }
 

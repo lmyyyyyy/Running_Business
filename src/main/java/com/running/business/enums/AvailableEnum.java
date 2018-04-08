@@ -8,24 +8,25 @@ package com.running.business.enums;
  */
 public enum AvailableEnum {
 
-    CAN(true, "启用"),
-    CAN_NOT(false, "禁用")
+    NULL(0, "审核中"),
+    CAN_NOT(1, "禁用"),
+    CAN(2, "启用")
     ;
 
-    private Boolean code;
+    private Integer code;
 
     private String desc;
 
-    AvailableEnum(Boolean code, String desc) {
+    AvailableEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public Boolean getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(Boolean code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
@@ -44,7 +45,7 @@ public enum AvailableEnum {
      * @param code
      * @return
      */
-    public static AvailableEnum getUserTypeEnum(Boolean code) {
+    public static AvailableEnum getUserTypeEnum(Integer code) {
 
         if (code == null) {
             return null;

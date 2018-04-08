@@ -54,8 +54,8 @@ public class DeliveryDetailVO extends RunDeliveryuser {
 
     private Integer orderCount;
 
-    private PageInfo<RunDeliveryBalanceRecord> balanceRecordPageInfo = new PageInfo<>();
+    private PageInfo<RunDeliveryBalanceRecord> balanceRecordPageInfo;
 
-    private List<RunDeliveryAddress> addressList = new ArrayList<>();
+    private List<RunDeliveryAddress> addressList;
 
 }

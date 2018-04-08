@@ -54,7 +54,11 @@ public class LogUtil {
         if (!currentServiceLog.get().isEmpty()) {
             RunServiceLog top = currentServiceLog.get().peek();
             runServiceLog.setTop(false);
-            runServiceLog.setParentId(top.getId());
+            if (top.getId() == null) {
+                runServiceLog.setParentId(0);
+            } else {
+                runServiceLog.setParentId(top.getId());
+            }
             runServiceLog.setParent(top);
         } else {
             runServiceLog.setTop(true);

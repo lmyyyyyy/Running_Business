@@ -91,6 +91,9 @@ public class RunUserInfoServiceImpl implements RunUserInfoService {
      */
     @Override
     public RunUserInfo getRunUserInfoById(Integer uid) throws AppException {
+        if (uid == null) {
+            return null;
+        }
         RunUserInfo userInfo = runUserInfoMapper.selectByPrimaryKey(uid);
 
         return userInfo;

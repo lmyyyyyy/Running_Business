@@ -57,7 +57,7 @@ public class LocationUtil {
     }
     public static void main(String args[]) {
 
-        Map<String, String> map = LocationUtil.getLatitude("北京 美团大众总部");
+        Map<String, String> map = LocationUtil.getLatitude("北京 施耐德");
         if (null != map) {
             System.out.println(map.get("lng"));
             System.out.println(map.get("lat"));

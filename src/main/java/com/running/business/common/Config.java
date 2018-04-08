@@ -37,7 +37,7 @@ public class Config {
     public static final Integer HEART_BEAT_FRONT_TIME = 60;
 
     //拼接多长时间内的订单信息（秒）
-    public static final Integer ROLLING_INFO_TIME = 8640;
+    public static final Integer ROLLING_INFO_TIME = 86400;
 
     //是否打印日志
     public static final Boolean METHOD_LOG_PRINT_SWITCH = true;

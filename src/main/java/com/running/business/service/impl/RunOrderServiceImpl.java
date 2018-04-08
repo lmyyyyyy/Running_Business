@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.controller.RunOrderController;
 import com.running.business.dto.InfoDTO;
 import com.running.business.enums.DistanceMinutesRelationEnum;
 import com.running.business.enums.OrderPayTypeEnum;
@@ -34,8 +35,11 @@ import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserPreferenceService;
 import com.running.business.util.DateUtil;
 import com.running.business.util.MapDistance;
+import com.running.business.util.Run_StringUtil;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.OrderVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +53,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class RunOrderServiceImpl implements RunOrderService {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(RunOrderServiceImpl.class);
+
+    private static final String LOG_PREFIX = "【订单模块】 ";
 
     @Autowired
     private RunOrderMapper runOrderMapper;
@@ -103,6 +111,45 @@ public class RunOrderServiceImpl implements RunOrderService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 生成订单ID(去重)
+     *
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public String generatorOrderId() throws AppException {
+        String orderId = null;
+        List<RunOrder> list = null;
+        while (list != null && list.size() != 0) {
+            orderId = Run_StringUtil.getOrderId();
+            RunOrderExample example = new RunOrderExample();
+            RunOrderExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderidEqualTo(orderId);
+            list = runOrderMapper.selectByExample(example);
+        }
+        return orderId;
+    }
+
+    /**
+     * 验证订单Id是否存在
+     *
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public boolean orderIdIsExist(String orderId) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return false;
+        }
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderidEqualTo(orderId);
+        List<RunOrder> list = runOrderMapper.selectByExample(example);
+        return ValidateUtil.isValid(list);
     }
 
     @Override
@@ -226,6 +273,9 @@ public class RunOrderServiceImpl implements RunOrderService {
      */
     @Override
     public OrderVO getRunOrderByOID(String oid) throws AppException {
+        if (oid == null || "".equals(oid)) {
+            return null;
+        }
         RunOrder order = runOrderMapper.selectByPrimaryKey(oid);
         if (order == null) {
             return null;
@@ -500,6 +550,57 @@ public class RunOrderServiceImpl implements RunOrderService {
     }
 
     /**
+     * 根据配送员ID，用户ID，订单状态，关键字模糊搜索订单列表
+     *
+     * @param keyword
+     * @param type
+     * @param did
+     * @param uid
+     * @param status
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public PageInfo<OrderVO> pageOrders(String keyword, Integer type, Integer did, Integer uid, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "add_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        PageHelper.startPage(page, size);
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        if (did != null && did > 0) {
+            criteria.andDidEqualTo(did);
+        }
+        if (uid != null && uid > 0) {
+            criteria.andUidEqualTo(uid);
+        }
+        if (type != null && type >= 0) {
+            criteria.andTypeEqualTo(type);
+        }
+        if (status != null && status >= 0) {
+            criteria.andStatusEqualTo(status);
+        }
+        criteria.andGoodsLike("%" + keyword + "%");
+        example.setOrderByClause(orderField + " " + orderType);
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        List<OrderVO> orderVOS = convertOrders2VOs(orders, null, null);
+        return new PageInfo<>(orderVOS);
+    }
+
+    /**
      * 根据用户id或配送员id获取订单数
      *
      * @param uid
@@ -697,16 +798,27 @@ public class RunOrderServiceImpl implements RunOrderService {
         orderVO.setTargetTime(order.getTargetTime());
         orderVO.setTimeLong(order.getTimeLong());
         orderVO.setPayType(order.getPayType());
-        orderVO.setPayTypeDesc(OrderPayTypeEnum.getOrderPayTypeEnum(order.getPayType()).getDesc());
-        RunUserInfo runUserInfo = runUserInfoService.getRunUserInfoById(order.getUid());
-        if (runUserInfo != null) {
-            orderVO.setUserName(runUserInfo.getUserName());
-            orderVO.setUserPhone(runUserInfo.getUserPhoto());
+        OrderPayTypeEnum orderPayTypeEnum = OrderPayTypeEnum.getOrderPayTypeEnum(order.getPayType());
+        if (orderPayTypeEnum != null) {
+            orderVO.setPayTypeDesc(orderPayTypeEnum.getDesc());
         }
-        RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(order.getDid());
-        if (runDeliveryInfo != null) {
-            orderVO.setDeliveryName(runDeliveryInfo.getName());
-            orderVO.setDeliveryPhone(runDeliveryInfo.getPhone());
+        try {
+            RunUserInfo runUserInfo = runUserInfoService.getRunUserInfoById(order.getUid());
+            if (runUserInfo != null) {
+                orderVO.setUserName(runUserInfo.getUserName());
+                orderVO.setUserPhone(runUserInfo.getUserPhoto());
+            }
+        } catch (Exception e) {
+            LOGGER.error("{} 查询用户信息异常 error = {}", LOG_PREFIX, e);
+        }
+        try {
+            RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(order.getDid());
+            if (runDeliveryInfo != null) {
+                orderVO.setDeliveryName(runDeliveryInfo.getName());
+                orderVO.setDeliveryPhone(runDeliveryInfo.getPhone());
+            }
+        } catch (Exception e) {
+            LOGGER.error("{} 查询配送员信息异常 error = {}", LOG_PREFIX, e);
         }
         //预计到达时间
         if (order.getStatus() >= OrderStatusEnum.RECEIVED.getCode() && order.getStatus() <= OrderStatusEnum.SENDING.getCode()) {

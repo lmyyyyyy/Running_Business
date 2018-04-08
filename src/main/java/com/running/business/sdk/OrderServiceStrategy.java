@@ -11,4 +11,5 @@ public interface OrderServiceStrategy {
      * @return
      */
     Integer returnBizId();
+
 }

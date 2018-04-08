@@ -122,7 +122,11 @@ public class RunAdminInfoServiceImpl implements RunAdminInfoService {
      */
     @Override
     public AdminVO getAdminVOById(Integer id) throws AppException {
-        return runAdminService.getAdminVOById(id);
+        AdminVO adminVO = runAdminService.getAdminVOById(id);
+        if (adminVO == null) {
+            throw new AppException(ResultEnum.ADMIN_ID_ERROR);
+        }
+        return adminVO;
     }
 
 }

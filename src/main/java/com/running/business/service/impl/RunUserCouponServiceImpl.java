@@ -71,7 +71,7 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
             //initHandler().sendMessageToUser(user.getUserphone(), new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
         }
         //通知所有在线用户
-        systemWebSocketHandler.sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
+        //systemWebSocketHandler.sendMessageToUsers(new TextMessage("恭喜您获得了一张满" + runUserCoupon.getFull() + "减" + runUserCoupon.getSubtract() + "的优惠券"));
     }
 
     /**
@@ -251,32 +251,23 @@ public class RunUserCouponServiceImpl implements RunUserCouponService {
      * @param status
      * @param page
      * @param size
-     * @param orderField
-     * @param orderType
      * @return
      * @throws AppException
      */
     @Override
-    public PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException {
+    public PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)) {
-            orderField = "begin_time";
-        }
-        if (orderType == null || "".equals(orderType)) {
-            orderType = "DESC";
-        }
         PageHelper.startPage(page, size);
         RunUserCouponExample example = new RunUserCouponExample();
         RunUserCouponExample.Criteria criteria = example.createCriteria();
-        if (status != null || status > 0) {
+        if (status != null && status >= 0) {
             criteria.andStatusEqualTo(status);
         }
-        example.setOrderByClause(" " + orderField + " " + orderType);
         List<RunUserCoupon> coupons = runUserCouponMapper.selectByExample(example);
         return new PageInfo<>(convertCoupons2VOs(coupons));
     }

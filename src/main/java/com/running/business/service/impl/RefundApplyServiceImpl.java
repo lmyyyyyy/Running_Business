@@ -26,6 +26,7 @@ import com.running.business.service.RunUserBalanceRecordService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.util.RandomUtil;
+import com.running.business.vo.OrderVO;
 import com.running.business.vo.RefundApplyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -201,7 +202,6 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         record.setType(false);
         record.setAmount(money);
         record.setAddTime(new Date());
-        record.setNumber(RandomUtil.generateRandomDigitString(18));
         runUserBalanceRecordService.saveRunUserBalanceRecord(record);
     }
 
@@ -220,7 +220,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         refundRecord.setReason(apply.getReason());
         refundRecord.setAmount(apply.getAmount());
         refundRecord.setResponsibility(refundDTO.getResponsibility());
-        RunOrder order = runOrderService.getRunOrderByOID(refundDTO.getOrderId());
+        OrderVO order = runOrderService.getRunOrderByOID(refundRecord.getOrderid());
         if (order != null && order.getDid() != null) {
             refundRecord.setDid(order.getDid());
         }
@@ -408,7 +408,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @throws AppException
      */
     @Override
-    public PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer page, Integer size, String orderField, String orderType) throws AppException {
+    public PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
@@ -425,6 +425,9 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         RefundApplyExample example = new RefundApplyExample();
         RefundApplyExample.Criteria criteria = example.createCriteria();
         criteria.andOperatorEqualTo(operatorId);
+        if (status != null && status >= 0) {
+            criteria.andStatusEqualTo(status);
+        }
         example.setOrderByClause(" " + orderField + " " + orderType);
         List<RefundApply> applies = refundApplyMapper.selectByExample(example);
         return new PageInfo<>(convertApplys2VOs(applies));
@@ -481,7 +484,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      */
     public RefundApplyVO convertApply2VO(RefundApply apply) throws AppException {
         if (apply == null) {
-            return null;
+            return new RefundApplyVO();
         }
         RefundApplyVO vo = new RefundApplyVO();
         vo.setId(apply.getId());
