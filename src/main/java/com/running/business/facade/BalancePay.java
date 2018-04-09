@@ -51,7 +51,6 @@ public class BalancePay {
         record.setNewBalance(balance.getUserBalance());
         record.setAmount(money);
         record.setAddTime(new Date());
-        record.setNumber(RandomUtil.generateRandomDigitString(18));
         record.setType(true);
         runUserBalanceRecordService.saveRunUserBalanceRecord(record);
         this.stort2MyBankCard(money);

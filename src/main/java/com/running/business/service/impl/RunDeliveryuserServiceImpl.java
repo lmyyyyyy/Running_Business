@@ -7,6 +7,7 @@ import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.UserDTO;
 import com.running.business.enums.AvailableEnum;
+import com.running.business.enums.DeliveryLevelEnum;
 import com.running.business.enums.IsDeleteEnum;
 import com.running.business.enums.PersonGenderEnum;
 import com.running.business.enums.PersonStatusEnum;
@@ -104,15 +105,15 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
         user.setPassword(Run_StringUtil.MD5(user.getPassword()));
-        user.setAddTime(new Date());
-        user.setUpdateTime(new Date());
-        user.setStatus(false);
-        user.setIsDelete(false);
-        user.setAvailable(false);
-        user.setCredits(0);
+        user.setAddTime(user.getAddTime() == null ? new Date() : user.getAddTime());
+        user.setUpdateTime(user.getUpdateTime() == null ? new Date() : user.getUpdateTime());
+        user.setStatus(user.getStatus() == null ? false : user.getStatus());
+        user.setIsDelete(user.getIsDelete() == null ? false : user.getIsDelete());
+        user.setAvailable(user.getAvailable() == null ? 0 : user.getAvailable());
+        user.setCredits(user.getCredits() == null ? 0 : user.getCredits());
         user.setReviewPhoto(null);
-        Integer did = runDeliveryuserMapper.insert(user);
-        return did;
+        runDeliveryuserMapper.insert(user);
+        return user.getDid();
     }
 
     /**
@@ -256,10 +257,10 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         if (deliveryuser == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
-        if (!deliveryuser.getAvailable()) {
+        /*if (!deliveryuser.getAvailable()) {
             throw new AppException(ResultEnum.DELIVERY_IS_NOT_AVAILABLE);
-        }
-        if (deliveryuser.getCredits() <= 0) {
+        }*/
+        if (deliveryuser.getCredits() < 0) {
             throw new AppException(ResultEnum.DELIVERY_CREDITS_IS_TOO_LOW);
         }
         deliveryuser.setStatus(true);
@@ -303,7 +304,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
      * @throws AppException
      */
     @Override
-    public PageInfo<DeliveryDetailVO> pageAllRunDeliveryuser(Boolean status, Boolean isDelete, Boolean able, Integer page, Integer size, String orderField, String orderType) throws AppException {
+    public PageInfo<DeliveryDetailVO> pageAllRunDeliveryuser(Boolean status, Boolean isDelete, Integer able, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
@@ -327,7 +328,10 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
             criteria.andStatusEqualTo(status);
         }
         if (able != null) {
-            criteria.andAvailableEqualTo(able);
+            AvailableEnum availableEnum = AvailableEnum.getUserTypeEnum(able);
+            if (availableEnum != null) {
+                criteria.andAvailableEqualTo(able);
+            }
         }
         PageHelper.startPage(page, size);
         list = runDeliveryuserMapper.selectByExample(example);
@@ -359,7 +363,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         RunDeliveryuserExample example = new RunDeliveryuserExample();
         example.setOrderByClause("add_time " + orderType);
         Criteria criteria = example.createCriteria();
-        criteria.andAvailableEqualTo(false);
+        criteria.andAvailableEqualTo(AvailableEnum.NULL.getCode());
         criteria.andIsDeleteEqualTo(false);
         criteria.andReviewPhotoIsNotNull();
         PageHelper.startPage(page, size);
@@ -450,7 +454,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
     public List<RunDeliveryuser> getRunDeliveryuserByStatus(boolean status) throws AppException {
         RunDeliveryuserExample example = new RunDeliveryuserExample();
         Criteria criteria = example.createCriteria();
-        criteria.andAvailableEqualTo(true);
+        criteria.andAvailableEqualTo(AvailableEnum.CAN.getCode());
         criteria.andIsDeleteEqualTo(false);
         criteria.andStatusEqualTo(status);
         List<RunDeliveryuser> deliveryusers = runDeliveryuserMapper.selectByExample(example);
@@ -511,7 +515,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         if (deliveryuser == null) {
             throw new AppException(ResultEnum.DELIVERY_ID_IS_ERROR);
         }
-        return deliveryuser.getAvailable();
+        return deliveryuser.getAvailable().equals(AvailableEnum.CAN);
     }
 
     /**
@@ -522,7 +526,25 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
      * @throws AppException
      */
     @Override
-    public void updateAvailable(Integer did, boolean available) throws AppException {
+    public void updateAvailable(Integer did, Integer available) throws AppException {
+        RunDeliveryuser deliveryuser = new RunDeliveryuser();
+        deliveryuser.setDid(did);
+        deliveryuser.setAvailable(available);
+        if (available.equals(AvailableEnum.CAN)) {
+            deliveryuser.setCredits(100);
+        }
+        runDeliveryuserMapper.updateByPrimaryKeySelective(deliveryuser);
+    }
+
+    /**
+     * 重新申请审核账号
+     *
+     * @param did
+     * @param available
+     * @throws AppException
+     */
+    @Override
+    public void updateResetAvailable(Integer did, Integer available) throws AppException {
         RunDeliveryuser deliveryuser = new RunDeliveryuser();
         deliveryuser.setDid(did);
         deliveryuser.setAvailable(available);
@@ -615,7 +637,10 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
             deliveryVO.setPhoto(runDeliveryInfo.getPhoto());
             deliveryVO.setPhone(runDeliveryInfo.getPhone());
             deliveryVO.setName(runDeliveryInfo.getName());
-            deliveryVO.setLevel(runDeliveryInfo.getLevel());
+            DeliveryLevelEnum levelEnum = DeliveryLevelEnum.getDeliveryLevelEnum(runDeliveryInfo.getPoint());
+            if (levelEnum != null) {
+                deliveryVO.setLevel(levelEnum.getLevel());
+            }
             deliveryVO.setGender(runDeliveryInfo.getGender());
             deliveryVO.setGenderDesc(PersonGenderEnum.getUserTypeEnum(runDeliveryInfo.getGender()).getDesc());
             deliveryVO.setCard(runDeliveryInfo.getCard());
@@ -631,7 +656,10 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         deliveryVO.setIsDelete(deliveryuser.getIsDelete());
         deliveryVO.setIsDeleteDesc(deliveryuser.getIsDelete() ? IsDeleteEnum.DELETE.getDesc() : IsDeleteEnum.NOT_DELETE.getDesc());
         deliveryVO.setAvailable(deliveryuser.getAvailable());
-        deliveryVO.setAvailableDesc(deliveryuser.getAvailable() ? AvailableEnum.CAN.getDesc() : AvailableEnum.CAN_NOT.getDesc());
+        AvailableEnum availableEnum = AvailableEnum.getUserTypeEnum(deliveryuser.getAvailable());
+        if (availableEnum != null) {
+            deliveryVO.setAvailableDesc(availableEnum.getDesc());
+        }
 
         RunDeliveryBalance balance = runDeliveryBalanceService.getRunDeliveryBalanceByDID(deliveryuser.getDid());
         if (balance != null) {

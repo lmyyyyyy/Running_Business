@@ -103,7 +103,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunAdmin" useGeneratedKeys="true" keyColumn="admin_id" keyProperty="adminId">
+  <insert id="insert" parameterType="com.running.business.pojo.RunAdmin">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="adminId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_admin (admin_id, admin_username, admin_password, 
       status, admin_time, update_time, 
       is_delete)

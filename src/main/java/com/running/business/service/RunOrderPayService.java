@@ -7,8 +7,25 @@ import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderPay;
 
 public interface RunOrderPayService {
-	
+
+	/**
+	 * 检查该订单是否支付过true:支付过；false:未支付过
+	 *
+	 * @param uid
+	 * @param orderId
+	 * @return
+	 * @throws AppException
+	 */
+	boolean checkIsPay(Integer uid, String orderId) throws AppException;
+
+	/**
+	 * 保存支付记录
+	 *
+	 * @param pay
+	 * @throws AppException
+	 */
 	void saveRunOrderPay(RunOrderPay pay) throws AppException;
+
 	void updateRunOrderPay(RunOrderPay pay) throws AppException;
 	void deleteRunOrderPayByID(Integer id) throws AppException;
 	void deleteRunOrderPayByOID(String oid) throws AppException;

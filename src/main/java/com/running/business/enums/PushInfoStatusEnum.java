@@ -1,23 +1,20 @@
 package com.running.business.enums;
 
 /**
- * 是否禁用枚举
- *
  * @author liumingyu
- * @create 2018-01-13 下午9:55
+ * @create 2018-02-03 下午8:54
  */
-public enum AvailableEnum {
+public enum PushInfoStatusEnum {
 
-    NULL(0, "审核中"),
-    CAN_NOT(1, "禁用"),
-    CAN(2, "启用")
+    UNAVALIBALE(0, "不推送"),
+    AVALIBALE(1, "推送")
     ;
 
     private Integer code;
 
     private String desc;
 
-    AvailableEnum(Integer code, String desc) {
+    PushInfoStatusEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -45,15 +42,15 @@ public enum AvailableEnum {
      * @param code
      * @return
      */
-    public static AvailableEnum getUserTypeEnum(Integer code) {
+    public static PushInfoStatusEnum getPushInfoStatusEnum(Integer code) {
 
         if (code == null) {
             return null;
         }
-        AvailableEnum returnEnum = null;
-        for (AvailableEnum userTypeEnum : AvailableEnum.values()) {
-            if (code.equals(userTypeEnum.getCode())) {
-                returnEnum = userTypeEnum;
+        PushInfoStatusEnum returnEnum = null;
+        for (PushInfoStatusEnum pushInfoStatusEnum : PushInfoStatusEnum.values()) {
+            if (code.equals(pushInfoStatusEnum.getCode())) {
+                returnEnum = pushInfoStatusEnum;
                 break;
             }
         }

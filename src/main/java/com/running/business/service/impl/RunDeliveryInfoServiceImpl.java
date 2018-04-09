@@ -52,7 +52,7 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
         if (deliveryInfo == null) {
             throw new AppException(ResultEnum.DELIVERY_INFO_ISEMPTY);
         }
-        runDeliveryInfoMapper.updateByPrimaryKey(deliveryInfo);
+        runDeliveryInfoMapper.updateByPrimaryKeySelective(deliveryInfo);
     }
 
     /**
@@ -77,6 +77,9 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
      */
     @Override
     public RunDeliveryInfo getRunDeliveryInfoByID(Integer did) throws AppException {
+        if (did == null) {
+            return null;
+        }
         RunDeliveryInfo info = runDeliveryInfoMapper.selectByPrimaryKey(did);
         return info;
     }
@@ -109,7 +112,7 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
         } catch (Exception e) {
             return BaseResult.fail("配送员头像图片上传异常");
         }
-        return BaseResult.success("配送员头像图片上传异常");
+        return BaseResult.success();
     }
 
     /**
@@ -129,6 +132,23 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 更新配送员积分
+     *
+     * @param did
+     * @param point
+     * @throws AppException
+     */
+    @Override
+    public void updateDeliveryPoint(Integer did, Integer point) throws AppException {
+        RunDeliveryInfo info = this.getRunDeliveryInfoByID(did);
+        if (info == null) {
+            return;
+        }
+        info.setPoint(info.getPoint() + point);
+        this.updateRunDeliveryInfo(info);
     }
 
 

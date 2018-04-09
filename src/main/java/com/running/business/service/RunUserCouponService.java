@@ -87,10 +87,8 @@ public interface RunUserCouponService {
      * @param status
      * @param page
      * @param size
-     * @param orderField
-     * @param orderType
      * @return
      * @throws AppException
      */
-    PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException;
+    PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size) throws AppException;
 }

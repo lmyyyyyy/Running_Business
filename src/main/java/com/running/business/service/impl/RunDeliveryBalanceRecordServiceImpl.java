@@ -9,6 +9,7 @@ import com.running.business.mapper.RunDeliveryBalanceRecordMapper;
 import com.running.business.pojo.RunDeliveryBalanceRecord;
 import com.running.business.pojo.RunDeliveryBalanceRecordExample;
 import com.running.business.service.RunDeliveryBalanceRecordService;
+import com.running.business.util.RandomUtil;
 import com.running.business.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class RunDeliveryBalanceRecordServiceImpl implements RunDeliveryBalanceRe
 			throw new AppException(ResultEnum.DELIVERY_BALANCE_RECORD_EMPTY);
 		}
 		record.setAddTime(new Date());
+		record.setNumber(RandomUtil.generateRandomDigitString(18));
 		runDeliveryRecordMapper.insert(record);
 	}
 

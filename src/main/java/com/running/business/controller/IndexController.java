@@ -4,6 +4,8 @@ import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.DeliveryLevelEnum;
+import com.running.business.enums.DistanceMinutesMoneyEnum;
 import com.running.business.enums.HelpBuyGoodsEnum;
 import com.running.business.enums.HelpQueueTypeEnum;
 import com.running.business.enums.HelpSendGoodsEnum;
@@ -29,8 +31,12 @@ import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.IdcardValidator;
+import com.running.business.util.LocationUtil;
+import com.running.business.util.MapDistance;
 import com.running.business.util.RandomUtil;
 import com.running.business.util.RegexUtils;
+import com.running.business.vo.DistanceVO;
+import com.running.business.vo.LocationVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -332,7 +339,7 @@ public class IndexController extends BaseController {
                 info.setPhoto("/img/default.jpg");
                 info.setGender(false);
                 info.setPoint(0);
-                info.setLevel("一条腿");
+                info.setLevel(DeliveryLevelEnum.ONE.getLevel());
                 info.setPhone(user.getUserphone());
                 info.setReportedTimes(0);
                 info.setAddressId(-1);
@@ -346,8 +353,8 @@ public class IndexController extends BaseController {
                     name = RandomUtil.generateRandomDigitString(5);
                     count++;
                 }
-                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 info.setName("游客_" + name);
+                runDeliveryInfoService.saveRunDeliveryInfo(info);
                 RunDeliveryDistance distance = new RunDeliveryDistance();
                 distance.setDid(did);
                 distance.setSendDistance(Double.valueOf(Config.ORDER_DISTANCE));
@@ -377,7 +384,7 @@ public class IndexController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/delivery/check/card/id", method = RequestMethod.GET)
+    @RequestMapping(value = "/delivery/check/card/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "验证配送员身份证号格式(刘明宇)", notes = "验证配送员身份证号格式", response = BaseResult.class)
     public BaseResult checkCard(@PathVariable Integer id, @RequestParam("card") String card, HttpServletRequest request) throws Exception {
         if (card == null || "".equals(card)) {
@@ -538,6 +545,103 @@ public class IndexController extends BaseController {
         LOGGER.info("{} 跳到代排队页面", LOG_PREFIX);
         List<String> queues = HelpQueueTypeEnum.getAllQueue();
         return BaseResult.success(queues);
+    }
+
+    /**
+     * 初始化排队时长
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/time/longs", method = RequestMethod.GET)
+    @ApiOperation(value = "初始化排队时长(刘明宇)", notes = "初始化排队时长", response = BaseResult.class)
+    public BaseResult initTimeLongs() throws Exception {
+        LOGGER.info("初始化排队时长");
+        List<Long> timeLongs = new ArrayList<>();
+        for (DistanceMinutesMoneyEnum distanceMinutesRelationEnum : DistanceMinutesMoneyEnum.values()) {
+            timeLongs.add(distanceMinutesRelationEnum.getMs() / 1000 / 60);
+        }
+        return BaseResult.success(timeLongs);
+    }
+
+    /**
+     * 根据地址名查询地址信息
+     *
+     * @param address
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/location", method = RequestMethod.GET)
+    @ApiOperation(value = "根据地址名查询地址信息(刘明宇)", notes = "根据地址名查询地址信息", response = BaseResult.class)
+    public BaseResult queryAddrInfoByAddr(@RequestParam(value = "address") String address) throws Exception {
+        LOGGER.info("根据地址名查询地址信息 address = {}", address);
+        LocationVO locationVO;
+        try {
+            locationVO = LocationUtil.getLocationVO(address);
+        } catch (AppException ae) {
+            LOGGER.error("根据地址名查询地址信息失败 address = {}, error = {}", address, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(locationVO);
+    }
+
+    /**
+     * 根据经纬度／排队时长 计算距离和金额
+     *
+     * @param sourceLng
+     * @param sourceLat
+     * @param targetLng
+     * @param targetLat
+     * @param timeLong
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/distance/money", method = RequestMethod.GET)
+    @ApiOperation(value = "根据经纬度／排队时长 计算距离和金额(刘明宇)", notes = "根据经纬度／排队时长 计算距离和金额", response = BaseResult.class)
+    public BaseResult queryDistanceVO(@RequestParam(value = "sourceLng") String sourceLng,
+                                      @RequestParam(value = "sourceLat") String sourceLat,
+                                      @RequestParam(value = "targetLng", required = false, defaultValue = "") String targetLng,
+                                      @RequestParam(value = "targetLat", required = false, defaultValue = "") String targetLat,
+                                      @RequestParam(value = "timeLong", required = false, defaultValue = "0") Long timeLong) throws Exception {
+        LOGGER.info("根据经纬度／排队时长 计算距离和金额 sourceLng = {}, sourceLat = {}, targetLng = {}, targetLat = {}, timeLong = {}", sourceLng, sourceLat, targetLng, targetLat, timeLong);
+        DistanceVO distanceVO = new DistanceVO();
+        distanceVO.setSourceLng(sourceLng);
+        distanceVO.setSourceLat(sourceLat);
+        distanceVO.setTargetLng(targetLng);
+        distanceVO.setTargetLat(targetLat);
+        if (targetLng == null || "".equals(targetLng) || targetLat == null || "".equals(targetLat)) {
+            distanceVO.setMinutes(timeLong);
+            DistanceMinutesMoneyEnum minutesMoneyEnum = DistanceMinutesMoneyEnum.getDistanceEnumByMs(timeLong);
+            if (minutesMoneyEnum != null) {
+                distanceVO.setMoney(minutesMoneyEnum.getMoney());
+                return BaseResult.success(distanceVO);
+            } else {
+                return BaseResult.fail(ResultEnum.ORDER_AMOUNT_CAL_ERROR);
+            }
+        }
+        if (timeLong != 0) {
+            return BaseResult.fail(ResultEnum.ORDER_TIME_LONG_ERROR);
+        }
+        Double meter = -1d;
+        try {
+            meter = Double.valueOf(MapDistance.getDistance(sourceLat, sourceLng, targetLat, targetLng));
+        } catch (Exception e) {
+            LOGGER.error("计算订单距离异常 sourceLat = {}, sourceLng = {}, targetLat = {}, targetLng = {}, timeLong = {}, meter = {}", sourceLat, sourceLng, targetLat, targetLng, timeLong, meter);
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_CAL_ERROR);
+        }
+        if (meter <= 0 || meter == null) {
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_CAL_ERROR);
+        }
+        if (meter > DistanceMinutesMoneyEnum.TOP.getMax()) {
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_TOO_MAX);
+        }
+        distanceVO.setDistance(meter);
+        DistanceMinutesMoneyEnum minutesMoneyEnum = DistanceMinutesMoneyEnum.getOrderTypeEnum(meter);
+        if (minutesMoneyEnum != null) {
+            distanceVO.setMinutes(minutesMoneyEnum.getMs() / 1000 / 60);
+            distanceVO.setMoney(minutesMoneyEnum.getMoney());
+        }
+        return BaseResult.success(distanceVO);
     }
 
 }

@@ -49,6 +49,30 @@ public class RefundRecordServiceImpl implements RefundRecordService {
     private RunOrderPayService runOrderPayService;
 
     /**
+     * 检查是否退款过 true：退过；false：没退过
+     *
+     * @param uid
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public boolean checkIsRefunded(Integer uid, String orderId) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RefundRecordExample example = new RefundRecordExample();
+        RefundRecordExample.Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        criteria.andOrderidEqualTo(orderId);
+        List<RefundRecord> refundRecords = refundRecordMapper.selectByExample(example);
+        if (refundRecords == null || refundRecords.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 保存退款记录
      *
      * @param refundRecord

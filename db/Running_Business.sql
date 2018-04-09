@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `running_business`.`run_deliveryuser` (
   `add_time` DATETIME NOT NULL COMMENT '创建时间',
   `update_time` DATETIME NOT NULL COMMENT '更新时间',
   `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '状态0:不在线，1:在线',
-  `available` TINYINT(1) NULL DEFAULT 0 COMMENT '0:禁用，1:启用',
+  `available` INT NULL COMMENT DEFAULT 0 '0:审核中，1:禁用，2:启用',
   `is_delete` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
   `credits` INT NULL DEFAULT 100 COMMENT '信用额度',
   `review_photo` VARCHAR(45) NULL COMMENT '审核照片',

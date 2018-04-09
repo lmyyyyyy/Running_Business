@@ -48,6 +48,7 @@ public class RunInfoServiceImpl implements RunInfoService {
      */
     @Override
     public void batchSaveRunInfo(List<InfoDTO> infoDTOS) throws AppException {
+
         if (infoDTOS == null || infoDTOS.size() == 0) {
             return;
         }
@@ -222,7 +223,7 @@ public class RunInfoServiceImpl implements RunInfoService {
         RunInfoExample.Criteria criteria = example.createCriteria();
         example.setOrderByClause(" add_time DESC");
         Long endTime = System.currentTimeMillis();
-        Long beginTime = endTime - 104400 * 1000L;
+        Long beginTime = endTime - 86400 * 1000L;
         criteria.andAddTimeBetween(DateUtil.ms2Date(beginTime), DateUtil.ms2Date(endTime));
         return runInfoMapper.selectByExample(example);
     }

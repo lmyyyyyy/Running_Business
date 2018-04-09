@@ -22,6 +22,7 @@ import com.running.business.service.RunOrderService;
 import com.running.business.util.IdcardValidator;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RequestUtil;
+import com.running.business.util.Run_StringUtil;
 import com.running.business.vo.DeliveryDetailVO;
 import com.running.business.vo.RefundRecordVO;
 import io.swagger.annotations.Api;
@@ -93,9 +94,9 @@ public class RunDeliveryController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/check/card/id", method = RequestMethod.GET)
+    @RequestMapping(value = "/check/card/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "验证配送员身份证号格式(刘明宇)", notes = "验证配送员身份证号格式", response = BaseResult.class)
-    public BaseResult checkCard(@PathVariable Integer id, String card, HttpServletRequest request) throws Exception {
+    public BaseResult checkCard(@PathVariable Integer id, @RequestParam(value = "card") String card, HttpServletRequest request) throws Exception {
         if (card == null || "".equals(card)) {
             LOGGER.error("{} 身份证号不能为空 id = {}", LOG_PREFIX, id);
             return BaseResult.fail(ResultEnum.DELIVERY_CARD_REGEX_IS_NOT_PASS);
@@ -163,12 +164,13 @@ public class RunDeliveryController extends BaseController {
             LOGGER.error(LOG_PREFIX + "用户注销失败 token = {}, error = {}", new Object[]{token, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
-        if (StringUtils.isBlank(callback)) {
+        /*if (StringUtils.isBlank(callback)) {
             return result;
         } else {
             response.sendRedirect(callback);
             return null;
-        }
+        }*/
+        return result;
     }
 
     /**
@@ -238,7 +240,7 @@ public class RunDeliveryController extends BaseController {
             if (!flag) {
                 return BaseResult.fail(ResultEnum.PWD_ERROR);
             }
-            user.setPassword(newPassword);
+            user.setPassword(Run_StringUtil.MD5(newPassword));
             runDeliveryuserService.updateRunDeliveryuser(user);
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "update pwd is error username = {}, newPassword = {}, error = {}", new Object[]{user.getUserphone(), newPassword, ae});
@@ -271,6 +273,27 @@ public class RunDeliveryController extends BaseController {
     }
 
     /**
+     * 重新申请审核账号
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/reset/able", method = RequestMethod.PUT)
+    @ApiOperation(value = "重新申请审核账号(刘明宇)", notes = "重新申请审核账号", response = BaseResult.class)
+    public BaseResult resetAbleDelivery(HttpServletRequest request) throws Exception {
+        Integer did = requestUtil.getDeliveryId(request);
+        LOGGER.info("{} 重新申请审核账号 did = {}", LOG_PREFIX, did);
+        try {
+            runDeliveryuserService.updateResetAvailable(did, 0);
+        } catch (AppException ae) {
+            LOGGER.error("{} 重新申请审核账号失败 did = {}", LOG_PREFIX, did);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
      * 更新配送员信息
      *
      * @param userInfo
@@ -289,7 +312,7 @@ public class RunDeliveryController extends BaseController {
             if (userInfo == null) {
                 return BaseResult.fail(ResultEnum.DELIVERY_INFO_ISEMPTY);
             }
-            did = requestUtil.getUserId(request);
+            did = requestUtil.getDeliveryId(request);
             userInfo.setDid(did);
             runDeliveryInfoService.updateRunDeliveryInfo(userInfo);
         } catch (AppException ae) {
@@ -313,7 +336,7 @@ public class RunDeliveryController extends BaseController {
         Integer did = null;
         List<RunDeliveryAddress> runDeliveryAddresses;
         try {
-            did = requestUtil.getUserId(request);
+            did = requestUtil.getDeliveryId(request);
             runDeliveryAddresses = runDeliveryAddressService.getAllRunDeliveryAddressByDID(did);
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "获取配送员所有的地址信息失败 uid = {}, error = {}", new Object[]{did, ae});
@@ -371,7 +394,7 @@ public class RunDeliveryController extends BaseController {
     }
 
     /**
-     * 更新当前地址
+     * 设为当前地址
      *
      * @param id
      * @param request
@@ -379,7 +402,7 @@ public class RunDeliveryController extends BaseController {
      * @throws AppException
      */
     @RequestMapping(value = "/address/{id}", method = RequestMethod.PUT)
-    @ApiOperation(value = "更新当前地址(刘明宇)", notes = "更新当前地址", response = BaseResult.class)
+    @ApiOperation(value = "设为当前地址(刘明宇)", notes = "设为当前地址", response = BaseResult.class)
     public BaseResult updateCurrAddr(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
         if (id == null || id < 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
@@ -447,7 +470,7 @@ public class RunDeliveryController extends BaseController {
      * @throws AppException
      */
     @ApiOperation(value = "配送员更新订单状态(刘明宇)", notes = "配送员更新订单状态", response = BaseResult.class)
-    @RequestMapping(value = "/modify/OrderStatus", method = RequestMethod.PUT)
+    @RequestMapping(value = "/modify/order/status", method = RequestMethod.PUT)
     public BaseResult updateOrderStatus(@RequestParam(value = "status", required = true) Integer status,
                                         @RequestParam(value = "orderId", required = true) String orderId,
                                         HttpServletRequest request) throws AppException {

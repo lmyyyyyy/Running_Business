@@ -145,6 +145,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.running.business.monitor.pojo.RunMapperLogWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_mapper_log (id, serivce_log_id, target_table_name, 
       operate_type, influence_row, invoke_status, 
       add_time, update_time, time_cost, 
@@ -157,6 +160,9 @@
       #{errorMessage,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.monitor.pojo.RunMapperLogWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_mapper_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

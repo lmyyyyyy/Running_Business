@@ -9,7 +9,7 @@
       <arg column="add_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="status" jdbcType="BIT" javaType="java.lang.Boolean" />
-      <arg column="available" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="available" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="is_delete" jdbcType="BIT" javaType="java.lang.Boolean" />
       <arg column="credits" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="review_photo" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -107,17 +107,23 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
+  <insert id="insert" parameterType="com.running.business.pojo.RunDeliveryuser" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="did">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_deliveryuser (did, userphone, password, 
       add_time, update_time, status, 
       available, is_delete, credits, 
       review_photo)
     values (#{did,jdbcType=INTEGER}, #{userphone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}, 
-      #{available,jdbcType=BIT}, #{isDelete,jdbcType=BIT}, #{credits,jdbcType=INTEGER}, 
+      #{available,jdbcType=INTEGER}, #{isDelete,jdbcType=BIT}, #{credits,jdbcType=INTEGER}, 
       #{reviewPhoto,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.running.business.pojo.RunDeliveryuser" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="did">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into run_deliveryuser
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="did != null" >
@@ -171,7 +177,7 @@
         #{status,jdbcType=BIT},
       </if>
       <if test="available != null" >
-        #{available,jdbcType=BIT},
+        #{available,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=BIT},
@@ -190,7 +196,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" keyColumn="did" keyProperty="record.did">
+  <update id="updateByExampleSelective" parameterType="map" >
     update run_deliveryuser
     <set >
       <if test="record.did != null" >
@@ -212,7 +218,7 @@
         status = #{record.status,jdbcType=BIT},
       </if>
       <if test="record.available != null" >
-        available = #{record.available,jdbcType=BIT},
+        available = #{record.available,jdbcType=INTEGER},
       </if>
       <if test="record.isDelete != null" >
         is_delete = #{record.isDelete,jdbcType=BIT},
@@ -228,7 +234,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" keyProperty="did" keyColumn="did">
+  <update id="updateByExample" parameterType="map" >
     update run_deliveryuser
     set did = #{record.did,jdbcType=INTEGER},
       userphone = #{record.userphone,jdbcType=VARCHAR},
@@ -236,7 +242,7 @@
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=BIT},
-      available = #{record.available,jdbcType=BIT},
+      available = #{record.available,jdbcType=INTEGER},
       is_delete = #{record.isDelete,jdbcType=BIT},
       credits = #{record.credits,jdbcType=INTEGER},
       review_photo = #{record.reviewPhoto,jdbcType=VARCHAR}
@@ -244,7 +250,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryuser" keyProperty="did" keyColumn="did">
+  <update id="updateByPrimaryKeySelective" parameterType="com.running.business.pojo.RunDeliveryuser" >
     update run_deliveryuser
     <set >
       <if test="userphone != null" >
@@ -263,7 +269,7 @@
         status = #{status,jdbcType=BIT},
       </if>
       <if test="available != null" >
-        available = #{available,jdbcType=BIT},
+        available = #{available,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=BIT},
@@ -277,14 +283,14 @@
     </set>
     where did = #{did,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryuser" keyProperty="did" keyColumn="did">
+  <update id="updateByPrimaryKey" parameterType="com.running.business.pojo.RunDeliveryuser" >
     update run_deliveryuser
     set userphone = #{userphone,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=BIT},
-      available = #{available,jdbcType=BIT},
+      available = #{available,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=BIT},
       credits = #{credits,jdbcType=INTEGER},
       review_photo = #{reviewPhoto,jdbcType=VARCHAR}

@@ -8,7 +8,7 @@ import java.util.Map;
  * @create 2018-02-27 下午5:20
  */
 public class MapDistance {
-    private static double EARTH_RADIUS = 6378.137;
+    private static double EARTH_RADIUS = 6378137;
 
     private static double rad(double d) {
         return d * Math.PI / 180.0;
@@ -17,10 +17,10 @@ public class MapDistance {
     /**
      * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
      * 参数为String类型
-     * @param lat1Str 用户经度
-     * @param lng1Str 用户纬度
-     * @param lat2Str 商家经度
-     * @param lng2Str 商家纬度
+     * @param lat1Str 用户纬度
+     * @param lng1Str 用户经度
+     * @param lat2Str 商家纬度
+     * @param lng2Str 商家经度
      * @return
      */
     public static String getDistance(String lat1Str, String lng1Str, String lat2Str, String lng2Str) {
@@ -104,7 +104,7 @@ public class MapDistance {
                 + Math.cos(radLat1) * Math.cos(radLat2)
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
-        s = Math.round(s * 10000) / 10;
+        s = Math.round(s * 10000) / 10000;
         return s;
     }
 
@@ -142,12 +142,12 @@ public class MapDistance {
     public static void main(String[] args) {
         //测试经纬度：117.11811  36.68484
         //测试经纬度2：117.00999000000002  36.66123
-        System.out.println(getDistance("117.11811","36.68484","117.00999000000002","36.66123"));
+        System.out.println(getDistance("39.929986","116.395645","39.90403","116.407526"));
 
         System.out.println(getAround("117.11811", "36.68484", "13000"));
         //117.01028712333508(Double), 117.22593287666493(Double),
         //36.44829619896034(Double), 36.92138380103966(Double)
-        System.out.println(getDistanceOfMeter(117.12934410641854, 36.69384900922716, 117.10687589358146, 36.675830990772845));
+        System.out.println(getDistanceOfMeter(40.008600, 116.487560, 40.000985, 116.486266));
         double[] a = getRectangle(117.11811, 36.68484, 1000);
         for (int i=0; i<a.length; i ++) {
             System.out.println(a[i]);
