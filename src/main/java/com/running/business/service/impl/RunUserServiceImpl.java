@@ -150,7 +150,7 @@ public class RunUserServiceImpl implements RunUserService {
      */
     @Override
     public boolean checkPwd(String username, String password) throws AppException {
-        if (username == null || password == null || username.equals("") || password.equals("")) {
+        if (username == null || password == null || "".equals(username) || "".equals(password)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         RunUserExample example = new RunUserExample();
@@ -180,8 +180,8 @@ public class RunUserServiceImpl implements RunUserService {
         user.setUpdateTime(new Date());
         user.setUserStatus(false);
         user.setIsDelete(false);
-        int uid = runUserMapper.insert(user);
-        return BaseResult.success(uid);
+        runUserMapper.insert(user);
+        return BaseResult.success(user.getUid());
     }
 
     /**
@@ -210,7 +210,7 @@ public class RunUserServiceImpl implements RunUserService {
      */
     @Override
     public BaseResult updateUser(RunUser user) throws AppException {
-        if (user == null || user.getPassword() == null || user.getPassword().equals("")) {
+        if (user == null || user.getPassword() == null || "".equals(user.getPassword())) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
         user.setPassword(Run_StringUtil.MD5(user.getPassword()));

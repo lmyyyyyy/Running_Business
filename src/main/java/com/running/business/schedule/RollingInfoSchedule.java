@@ -28,7 +28,7 @@ public class RollingInfoSchedule {
     @Autowired
     private RunInfoService runInfoService;
 
-    @Scheduled(cron = "0 */30 * * * ? ")
+    @Scheduled(cron = "0 */5 * * * ? ")
     public void rollingInfo() {
         Long beginTime = System.currentTimeMillis();
         LOGGER.info("{} 开始", LOG_PREFIX);
@@ -37,6 +37,7 @@ public class RollingInfoSchedule {
             LOGGER.warn("{} 没有订单记录 任务停止", LOG_PREFIX);
             return;
         }
+        runInfoService.deleteAllRunInfo();
         runInfoService.batchSaveRunInfo(infoDTOS);
         LOGGER.info("{} 结束, 耗时[{}]秒", LOG_PREFIX, (System.currentTimeMillis() - beginTime) * 1000);
     }

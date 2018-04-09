@@ -15,7 +15,7 @@ public class RunDeliveryuser {
 
     private Boolean status;
 
-    private Boolean available;
+    private Integer available;
 
     private Boolean isDelete;
 
@@ -23,7 +23,7 @@ public class RunDeliveryuser {
 
     private String reviewPhoto;
 
-    public RunDeliveryuser(Integer did, String userphone, String password, Date addTime, Date updateTime, Boolean status, Boolean available, Boolean isDelete, Integer credits, String reviewPhoto) {
+    public RunDeliveryuser(Integer did, String userphone, String password, Date addTime, Date updateTime, Boolean status, Integer available, Boolean isDelete, Integer credits, String reviewPhoto) {
         this.did = did;
         this.userphone = userphone;
         this.password = password;
@@ -88,11 +88,11 @@ public class RunDeliveryuser {
         this.status = status;
     }
 
-    public Boolean getAvailable() {
+    public Integer getAvailable() {
         return available;
     }
 
-    public void setAvailable(Boolean available) {
+    public void setAvailable(Integer available) {
         this.available = available;
     }
 

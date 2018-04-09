@@ -71,4 +71,13 @@ public interface RunUserInfoService {
 	 * @return
 	 */
 	BaseResult uploadUserImg(MultipartFile file, Integer uid);
+
+	/**
+	 * 设置用户的默认地址
+	 *
+	 * @param uid
+	 * @param addrId
+	 * @throws AppException
+	 */
+	void updateUserAddr(Integer uid, Integer addrId) throws AppException;
 }

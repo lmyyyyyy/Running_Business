@@ -8,6 +8,8 @@ import com.running.business.monitor.pojo.RunServiceLogWithBLOBs;
 import com.running.business.monitor.service.RunMethodLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
  * @create 2018-01-21 下午3:41
  */
 @Service
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class RunMethodLogServiceImpl implements RunMethodLogService {
 
     @Autowired
@@ -48,7 +51,10 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
     @Override
     public void updateServiceLog(RunServiceLogWithBLOBs runServiceLogWithBLOBs) throws AppException {
         if (runServiceLogWithBLOBs == null) {
-
+            return;
+        }
+        if (runServiceLogWithBLOBs.getId() == null || runServiceLogWithBLOBs.getId() == 0) {
+            return;
         }
         runServiceLogMapper.updateByPrimaryKeySelective(runServiceLogWithBLOBs);
     }

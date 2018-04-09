@@ -8,7 +8,7 @@ import lombok.Data;
  * @create 2017-12-03 下午7:17
  */
 @Data
-public class UserVO extends RunUser{
+public class UserVO extends RunUser {
 
     private String userStatusDesc;
 

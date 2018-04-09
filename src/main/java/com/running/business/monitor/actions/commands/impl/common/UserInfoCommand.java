@@ -31,10 +31,10 @@ public class UserInfoCommand extends AbstractCommand {
         ActionContext actionContext = getActionContext();
         UserDTO userDTO = UserUtil.getUser();
         if (userDTO != null) {
-            actionContext.setUserName(userDTO.getName() == null ? "" : userDTO.getName());
+            actionContext.setUserName(userDTO.getName() == null ? "系统" : userDTO.getName());
             actionContext.setOperatorId(userDTO.getId() == null ? 0 : userDTO.getId());
         } else {
-            actionContext.setUserName("");
+            actionContext.setUserName("系统");
             actionContext.setOperatorId(0);
         }
     }

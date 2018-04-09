@@ -101,5 +101,6 @@
         <table tableName="refund_record" domainObjectName="RefundRecord"></table>
         <table tableName="refund_apply" domainObjectName="RefundApply"></table>
         <table tableName="report_record" domainObjectName="ReportRecord"></table>-->
+        <table tableName="run_deliveryuser" domainObjectName="RunDeliveryuser" ></table>
     </context>
 </generatorConfiguration>

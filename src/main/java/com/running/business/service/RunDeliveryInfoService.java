@@ -65,4 +65,13 @@ public interface RunDeliveryInfoService {
      * @throws AppException
      */
     boolean checkNameUnique(String name) throws AppException;
+
+    /**
+     * 更新配送员积分
+     *
+     * @param did
+     * @param point
+     * @throws AppException
+     */
+    void updateDeliveryPoint(Integer did, Integer point) throws AppException;
 }

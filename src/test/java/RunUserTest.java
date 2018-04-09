@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @WebAppConfiguration
@@ -38,7 +39,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 			System.out.println(result.getError().getErrorCode());
 		}
 	}*/
-	
+
 	@Test
 	public void addUser() {
 		RunUser user = new RunUser();
@@ -47,7 +48,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		user.setAddTime(new Date());
 		runUserService.saveUser(user);
 	}
-	
+
 	@Test
 	public void getUser() {
 		BaseResult result = runUserService.getRunUser(5);
@@ -57,7 +58,7 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		System.out.println(user.getPassword());
 		System.out.println(user.getAddTime());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void getAllUser(){
@@ -74,13 +75,13 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 			System.out.println(user.getPassword());
 		}*/
 	}
-	
+
 	@Test
 	public void delUser() {
 		BaseResult result = runUserService.deleteUser(2);
 		System.out.println(result.getCode());
 	}
-	
+
 	@Test
 	public void updateUser() {
 		BaseResult result = runUserService.getRunUser(4);
@@ -102,5 +103,26 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
         }
     }
 
+    @Test
+    public void tets() throws Exception {
+		Long currentTime = System.currentTimeMillis();
+		String f = "2018-03-30 17:33:36";
+		Date date ;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		date = format.parse(f);
+		System.out.println("date : " + date.toString());
+		System.out.println("diff : " + (currentTime - date.getTime()));
+		Long diffTime = (currentTime - date.getTime()) / (1000 * 60 * 60 * 24);
+		if (diffTime > 7) {
+			System.out.println(diffTime + " 大于7天");
+		}
+		System.out.println(diffTime);
+	}
+
+	@Test
+	public void test() throws Exception {
+		Double a = 2.56;
+		System.out.println(new Double(a+0.5).intValue());
+	}
 
 }
