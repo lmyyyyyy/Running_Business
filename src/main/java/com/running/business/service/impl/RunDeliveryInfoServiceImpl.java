@@ -134,6 +134,23 @@ public class RunDeliveryInfoServiceImpl implements RunDeliveryInfoService {
         return true;
     }
 
+    /**
+     * 更新配送员积分
+     *
+     * @param did
+     * @param point
+     * @throws AppException
+     */
+    @Override
+    public void updateDeliveryPoint(Integer did, Integer point) throws AppException {
+        RunDeliveryInfo info = this.getRunDeliveryInfoByID(did);
+        if (info == null) {
+            return;
+        }
+        info.setPoint(info.getPoint() + point);
+        this.updateRunDeliveryInfo(info);
+    }
+
 
     /**
      * 转VO

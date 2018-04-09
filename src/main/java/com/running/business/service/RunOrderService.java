@@ -68,6 +68,14 @@ public interface RunOrderService {
      */
     void updateOrderStatus(String orderId, Integer status) throws AppException;
 
+    /**
+     * 更新配送员积分
+     *
+     * @param orderId
+     * @throws AppException
+     */
+    void updateDeliveryPoint(String orderId) throws AppException;
+
     void deleteRunOrderByOID(String oid) throws AppException;
 
     void deleteAllRunOrderByUID(Integer uid) throws AppException;

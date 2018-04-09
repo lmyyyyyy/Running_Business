@@ -6,6 +6,7 @@ import com.running.business.common.CodeConstants;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.RefundDTO;
+import com.running.business.enums.DeliveryLevelEnum;
 import com.running.business.exception.AppException;
 import com.running.business.interceptor.PermissionInterceptor;
 import com.running.business.pojo.RunAdmin;
@@ -972,7 +973,7 @@ public class RunAdminController extends BaseController {
             if (did != null && did > 0) {
                 RunDeliveryInfo info = new RunDeliveryInfo();
                 info.setDid(did);
-                info.setLevel("一条腿");
+                info.setLevel(DeliveryLevelEnum.ONE.getLevel());
                 info.setPhone(user.getUserphone());
                 info.setReportedTimes(0);
                 info.setAddressId(-1);

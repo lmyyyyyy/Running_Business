@@ -7,6 +7,7 @@ import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.UserDTO;
 import com.running.business.enums.AvailableEnum;
+import com.running.business.enums.DeliveryLevelEnum;
 import com.running.business.enums.IsDeleteEnum;
 import com.running.business.enums.PersonGenderEnum;
 import com.running.business.enums.PersonStatusEnum;
@@ -636,7 +637,10 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
             deliveryVO.setPhoto(runDeliveryInfo.getPhoto());
             deliveryVO.setPhone(runDeliveryInfo.getPhone());
             deliveryVO.setName(runDeliveryInfo.getName());
-            deliveryVO.setLevel(runDeliveryInfo.getLevel());
+            DeliveryLevelEnum levelEnum = DeliveryLevelEnum.getDeliveryLevelEnum(runDeliveryInfo.getPoint());
+            if (levelEnum != null) {
+                deliveryVO.setLevel(levelEnum.getLevel());
+            }
             deliveryVO.setGender(runDeliveryInfo.getGender());
             deliveryVO.setGenderDesc(PersonGenderEnum.getUserTypeEnum(runDeliveryInfo.getGender()).getDesc());
             deliveryVO.setCard(runDeliveryInfo.getCard());

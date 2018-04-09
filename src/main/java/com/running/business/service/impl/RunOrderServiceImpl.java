@@ -5,9 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
-import com.running.business.controller.RunOrderController;
 import com.running.business.dto.InfoDTO;
-import com.running.business.enums.DistanceMinutesRelationEnum;
+import com.running.business.enums.DistanceMinutesMoneyEnum;
 import com.running.business.enums.OrderPayTypeEnum;
 import com.running.business.enums.OrderStatusEnum;
 import com.running.business.enums.OrderTypeEnum;
@@ -219,10 +218,29 @@ public class RunOrderServiceImpl implements RunOrderService {
             order.setTargetTime(new Date());
         } else if (status.equals(OrderStatusEnum.FINISH)) {
             order.setFinishTime(new Date());
+            this.updateDeliveryPoint(orderId);
         } else if (status.equals(OrderStatusEnum.RECEIVED)) {
             order.setRecvTime(new Date());
         }
         runOrderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 更新配送员积分
+     *
+     * @param orderId
+     * @throws AppException
+     */
+    @Override
+    public void updateDeliveryPoint(String orderId) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RunOrder order = runOrderMapper.selectByPrimaryKey(orderId);
+        if (order == null || order.getDid() == null || order.getPayAmout() == null) {
+            return;
+        }
+        runDeliveryInfoService.updateDeliveryPoint(order.getDid(), new Double(order.getPayAmout() + 0.5).intValue());
     }
 
     @Override
@@ -652,11 +670,16 @@ public class RunOrderServiceImpl implements RunOrderService {
         if (flag) {
             throw new AppException(ResultEnum.ORDER_HAS_PAY);
         }
-        double money = orderPay.getOrderActualPrice();
+        Double money = orderPay.getOrderActualPrice();
         PaySourceTypeEnum paySourceTypeEnum = PaySourceTypeEnum.getOrderPayTypeEnum(orderPay.getPayType());
         cashier.pay(paySourceTypeEnum, money, request);
         //保存订单支付记录
         runOrderPayService.saveRunOrderPay(orderPay);
+        RunUserInfo userInfo = runUserInfoService.getRunUserInfoById(orderPay.getUid());
+        if (userInfo != null) {
+            userInfo.setUserPoint(userInfo.getUserPoint() + new Double(money + 0.5).intValue());
+            runUserInfoService.updateRunUserInfo(userInfo);
+        }
         //更新订单状态
         this.updateOrderStatus(orderPay.getOrderid(), OrderStatusEnum.PAID.getCode());
     }
@@ -822,7 +845,7 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         //预计到达时间
         if (order.getStatus() >= OrderStatusEnum.RECEIVED.getCode() && order.getStatus() <= OrderStatusEnum.SENDING.getCode()) {
-            Long resultTime = DistanceMinutesRelationEnum.getOrderTypeEnum(order.getDistance()).getMs();
+            Long resultTime = DistanceMinutesMoneyEnum.getOrderTypeEnum(order.getDistance()).getMs();
             resultTime += order.getAddTime().getTime();
             orderVO.setProbablyArriveTime(DateUtil.ms2Date(resultTime));
         }

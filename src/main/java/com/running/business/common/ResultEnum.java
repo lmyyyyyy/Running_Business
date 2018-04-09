@@ -47,6 +47,7 @@ public enum ResultEnum {
 
     //用户地址相关异常
     USER_ADDRESS_INFO_EMTPY("1006001", "用户地址不能为空"),
+    QUERY_ADDRESS_INFO_ERROR("1006002", "获取地址信息异常"),
 
 
     // 配送员相关异常
@@ -112,6 +113,10 @@ public enum ResultEnum {
     ORDER_TARGET_LON_ERROR("4001022", "订单目标经度异常"),
     ORDER_TARGET_LAT_ERROR("4001023", "订单目标纬度异常"),
     ORDER_PAY_TYPE_ERROR("4001024", "订单支付类型异常"),
+    ORDER_AMOUNT_CAL_ERROR("4001025", "订单金额计算异常"),
+    ORDER_DISTANCE_CAL_ERROR("4001026", "订单距离计算异常"),
+    ORDER_DISTANCE_TOO_MAX("4001027", "订单距离过大,超过配送范围"),
+    ORDER_TIME_LONG_ERROR("4001028", "timelong参数异常"),
 
     //订单支付相关异常
     ORDER_PAY_INFO_EMPTY("4002001", "订单支付信息为空"),

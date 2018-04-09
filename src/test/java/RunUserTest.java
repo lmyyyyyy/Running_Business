@@ -119,5 +119,10 @@ public class RunUserTest extends AbstractTransactionalJUnit4SpringContextTests {
 		System.out.println(diffTime);
 	}
 
+	@Test
+	public void test() throws Exception {
+		Double a = 2.56;
+		System.out.println(new Double(a+0.5).intValue());
+	}
 
 }
