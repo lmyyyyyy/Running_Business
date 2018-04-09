@@ -19,7 +19,7 @@
 
 项目介绍,接口文档:[https://tower.im/projects/592a37bc742249c3ba4be4e72b9c8fcd/](https://tower.im/projects/592a37bc742249c3ba4be4e72b9c8fcd/)
 
-作者博客地址:[http://lblogg.cn/index](http://blogg.cn/index) 可留言交流
+作者博客地址:[http://lblogg.cn/home](http://lblogg.cn/home) 可留言交流
 
 ### QQ群：
 
