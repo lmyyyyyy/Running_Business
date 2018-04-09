@@ -163,4 +163,71 @@ public interface RunMethodLogService {
     List<RunServiceLogWithBLOBs> queryServiceLogByExecutionTime(Date startTime, Date endTime) throws AppException;
 
 
+    /**
+     * service方法Id查询Mapper日志
+     * @param serviceLogId
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByServiceId(Integer serviceLogId) throws AppException;
+
+    /**
+     * 操作类型查询Mapper日志
+     * @param OperateType
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByOperateType(Byte OperateType) throws AppException;
+    /**
+     * 影响行数查询Mapper日志
+     * @param InfluenceRow
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByInfluenceRow(Integer InfluenceRow) throws AppException;
+    /**
+     * 执行状态查询Mapper日志
+     * @param InvokeStatus
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByInvokeStatus(Byte InvokeStatus) throws AppException;
+    /**
+     * 方法名查询Mapper日志
+     * @param MethodName
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByMethodName(Byte MethodName) throws AppException;
+    /**
+     * 表名查询Mapper日志
+     * @param TargetTableName
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByTargetTableName(String TargetTableName) throws AppException;
+    /**
+     * sql语句查询Mapper日志
+     * @param SqlStatement
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogBySqlStatement(String SqlStatement) throws AppException;
+    /**
+     * 方法耗时查询Mapper日志
+     * @param startTime
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByMethodTime(Date startTime, Date endTime) throws AppException;
+    /**
+     * 范围查询Mapper日志
+     * @param startTime
+     * @return
+     * @throws AppException
+     */
+    List<RunMapperLogWithBLOBs> queryMapperLogByTimeCost(Long startTime, Long endTime) throws AppException;
 }
+
+
+

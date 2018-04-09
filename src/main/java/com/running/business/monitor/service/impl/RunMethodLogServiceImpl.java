@@ -1,6 +1,7 @@
 package com.running.business.monitor.service.impl;
 
 import com.running.business.exception.AppException;
+import com.running.business.monitor.pojo.RunMapperLogExample;
 import com.running.business.monitor.mapper.RunMapperLogMapper;
 import com.running.business.monitor.mapper.RunServiceLogMapper;
 import com.running.business.monitor.pojo.RunMapperLogWithBLOBs;
@@ -332,4 +333,164 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
         example.setOrderByClause(" update_time desc");
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
+
+    /**
+     * service方法Id查询Mapper日志
+     *
+     * @param serviceLogId
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByServiceId(Integer serviceLogId) throws AppException {
+        if (serviceLogId == null || serviceLogId <= 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andSerivceLogIdEqualTo(serviceLogId);
+
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+    /**
+     * 操作类型查询Mapper日志
+     *
+     * @param OperateType
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs>queryMapperLogByOperateType(Byte OperateType) throws AppException{
+        if (OperateType == null) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andOperateTypeEqualTo(OperateType);
+
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+
+    /**
+     * service方法Id查询Mapper日志
+     *
+     * @param InfluenceRow
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByInfluenceRow(Integer InfluenceRow) throws AppException {
+        if (InfluenceRow == null || InfluenceRow <= 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andInfluenceRowEqualTo(InfluenceRow);
+
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+    /**
+     * 执行状态查询Mapper日志
+     * @param InvokeStatus
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByInvokeStatus(Byte InvokeStatus) throws AppException {
+        if (InvokeStatus == null || InvokeStatus <= 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andInvokeStatusEqualTo(InvokeStatus);
+
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+    /**
+     * 方法名查询Mapper日志
+     * @param MethodName
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByMethodName(Byte MethodName) throws AppException {
+        if (MethodName == null || MethodName <= 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+    /**
+     * 表名查询Mapper日志
+     * @param TargetTableName
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByTargetTableName(String TargetTableName) throws AppException {
+        if (TargetTableName == null ) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andTargetTableNameLike(TargetTableName);
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+
+    /**
+     * sql语句查询Mapper日志
+     *
+     * @param SqlStatement
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogBySqlStatement(String SqlStatement) throws AppException {
+        return null;
+    }
+
+    /**
+     * 方法耗时查询Mapper日志
+     * @param startTime
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByMethodTime(Date startTime, Date endTime) throws AppException {
+        if (startTime == null|| endTime==null) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andAddTimeBetween(startTime,endTime);
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+    /**
+     * 范围查询Mapper日志
+     * @param startTime
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> queryMapperLogByTimeCost(Long startTime, Long endTime) throws AppException {
+        if (startTime == null|| endTime==null) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andTimeCostBetween(startTime,endTime);
+        example.setOrderByClause(" update_time desc");
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
 }
+
+
