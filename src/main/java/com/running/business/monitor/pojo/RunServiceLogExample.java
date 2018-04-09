@@ -739,17 +739,17 @@ public class RunServiceLogExample {
          * 补充方法
          */
         public Criteria andMethodParamLike(String value) {
-            addCriterion("method_param like",value,"MethodName");
+            addCriterion("method_param like", value, "methodParam");
             return (Criteria) this;
         }
 
         public Criteria andReturnValueLike(String value) {
-            addCriterion("return_value like",value,"ReturnValue");
+            addCriterion("return_value like", value, "returnValue");
             return (Criteria) this;
         }
 
         public Criteria andErrorMessageLike(String value) {
-            addCriterion("error_message like",value,"ErrorMessage");
+            addCriterion("error_message like", value, "errorMessage");
             return (Criteria) this;
         }
 

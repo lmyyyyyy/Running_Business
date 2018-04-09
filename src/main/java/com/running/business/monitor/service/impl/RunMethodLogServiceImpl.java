@@ -1,14 +1,15 @@
 package com.running.business.monitor.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.running.business.common.ResultEnum;
 import com.running.business.exception.AppException;
-import com.running.business.monitor.pojo.RunMapperLogExample;
 import com.running.business.monitor.mapper.RunMapperLogMapper;
 import com.running.business.monitor.mapper.RunServiceLogMapper;
+import com.running.business.monitor.pojo.RunMapperLogExample;
 import com.running.business.monitor.pojo.RunMapperLogWithBLOBs;
 import com.running.business.monitor.pojo.RunServiceLogExample;
 import com.running.business.monitor.pojo.RunServiceLogWithBLOBs;
 import com.running.business.monitor.service.RunMethodLogService;
-import com.running.business.common.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -125,12 +126,13 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
 
     /**
      * 根据id查询service日志
+     *
      * @param id
      * @return
      * @throws AppException
      */
     @Override
-    public RunServiceLogWithBLOBs queryServiceLogById(Integer id) throws AppException{
+    public RunServiceLogWithBLOBs queryServiceLogById(Integer id) throws AppException {
         if (id == null || id <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
@@ -139,109 +141,193 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
 
     /**
      * 根据操作者id查询service日志
+     *
      * @param oId
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogByOID(Integer oId) throws AppException{
-        if(oId == null || oId <= 0) {
+    public List<RunServiceLogWithBLOBs> pageServiceLogByOID(Integer oId, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (oId == null || oId <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
         criteria.andOperatorIdEqualTo(oId);
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 根据执行状态查询service日志
+     *
      * @param invokerStatus
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogByStatus(Integer invokerStatus) throws AppException{
+    public List<RunServiceLogWithBLOBs> pageServiceLogByStatus(Integer invokerStatus, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (invokerStatus == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
         criteria.andInvokeStatusEqualTo(invokerStatus);
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 根据父id查询service日志
+     *
      * @param pId
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogByPID(Integer pId) throws AppException{
+    public List<RunServiceLogWithBLOBs> pageServiceLogByPID(Integer pId, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (pId == null || pId <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
         criteria.andParentIdEqualTo(pId);
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 根据类名模糊查询Service日志
+     *
      * @param className
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeClassName(String className) throws AppException{
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeClassName(String className, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (className == null || "".equals(className)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andClassNameLike(className);
-        example.setOrderByClause(" update_time desc");
+        criteria.andClassNameLike("%" + className + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 根据方法名模糊查询Service日志
+     *
      * @param methodName
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeMethodName(String methodName) throws AppException{
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeMethodName(String methodName, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (methodName == null || "".equals(methodName)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andMethodNameLike(methodName);
-        example.setOrderByClause(" update_time desc");
+        criteria.andMethodNameLike("%" + methodName + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 根据操作者姓名查询Service日志
+     *
      * @param operatorName
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeOperatorName(String operatorName) throws AppException{
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeOperatorName(String operatorName, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (operatorName == null || "".equals(operatorName)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andOperatorNameLike(operatorName);
-        example.setOrderByClause(" update_time desc");
+        criteria.andOperatorNameLike("%" + operatorName + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
@@ -253,14 +339,27 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeMethodParam(String methodParam) throws AppException {
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeMethodParam(String methodParam, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (methodParam == null || "".equals(methodParam)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andMethodParamLike(methodParam);
-        example.setOrderByClause(" update_time desc");
+        criteria.andMethodParamLike("%" + methodParam + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
@@ -272,14 +371,27 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeReturnValue(String returnValue) throws AppException {
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeReturnValue(String returnValue, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (returnValue == null || "".equals(returnValue)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andReturnValueLike(returnValue);
-        example.setOrderByClause(" update_time desc");
+        criteria.andReturnValueLike("%" + returnValue + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
@@ -291,53 +403,109 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogLikeErrorMessage(String errorMessage) throws AppException {
+    public List<RunServiceLogWithBLOBs> pageServiceLogLikeErrorMessage(String errorMessage, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (errorMessage == null || "".equals(errorMessage)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andErrorMessageLike(errorMessage);
-        example.setOrderByClause(" update_time desc");
+        criteria.andErrorMessageLike("%" + errorMessage + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 范围查询，根据执行时间查询startTime到endTime中间的日志
+     *
      * @param startTime
      * @param endTime
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogByMethodTime(Long startTime,Long endTime) throws AppException{
-        if (startTime == null || startTime < 0 || endTime < startTime || endTime  == null || endTime < 0) {
+    public List<RunServiceLogWithBLOBs> pageServiceLogByMethodTime(Long startTime, Long endTime, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (startTime == null || startTime < 0 || endTime < startTime || endTime == null || endTime < 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andTimeCostBetween(startTime,endTime);
-        example.setOrderByClause(" update_time desc");
+        criteria.andTimeCostBetween(startTime, endTime);
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 范围查询，根据执行时间查询beginTime到endTime中间的日志
+     *
      * @param beginTime
      * @param endTime
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunServiceLogWithBLOBs> queryServiceLogByExecutionTime(Date beginTime, Date endTime) throws AppException {
-        if (beginTime == null || endTime  == null) {
+    public List<RunServiceLogWithBLOBs> pageServiceLogByExecutionTime(Date beginTime, Date endTime, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (beginTime == null || endTime == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunServiceLogExample example = new RunServiceLogExample();
         RunServiceLogExample.Criteria criteria = example.createCriteria();
-        criteria.andAddTimeBetween(beginTime,endTime);
-        example.setOrderByClause(" update_time desc");
+        criteria.andAddTimeBetween(beginTime, endTime);
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runServiceLogMapper.selectByExampleWithBLOBs(example);
+    }
+
+    /**
+     * 根据ID查询Mapper日志
+     *
+     * @param id
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public RunMapperLogWithBLOBs queryMapperLogByID(Integer id) throws AppException {
+        if (id == null || id < 0) {
+            throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        return runMapperLogMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -348,17 +516,31 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByServiceId(Integer serviceLogId) throws AppException {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByServiceId(Integer serviceLogId, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (serviceLogId == null || serviceLogId <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
         criteria.andSerivceLogIdEqualTo(serviceLogId);
 
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
+
     /**
      * 操作类型查询Mapper日志
      *
@@ -367,15 +549,28 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs>queryMapperLogByOperateType(Byte OperateType) throws AppException{
+    public List<RunMapperLogWithBLOBs> pageMapperLogByOperateType(Byte OperateType, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (OperateType == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
         criteria.andOperateTypeEqualTo(OperateType);
 
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
 
@@ -387,114 +582,280 @@ public class RunMethodLogServiceImpl implements RunMethodLogService {
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByInfluenceRow(Integer InfluenceRow) throws AppException {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByInfluenceRow(Integer InfluenceRow, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (InfluenceRow == null || InfluenceRow <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
         criteria.andInfluenceRowEqualTo(InfluenceRow);
 
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
+
     /**
      * 执行状态查询Mapper日志
+     *
      * @param InvokeStatus
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByInvokeStatus(Byte InvokeStatus) throws AppException {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByInvokeStatus(Byte InvokeStatus, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (InvokeStatus == null || InvokeStatus <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
         criteria.andInvokeStatusEqualTo(InvokeStatus);
 
-        example.setOrderByClause(" update_time desc");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
+
     /**
      * 方法名查询Mapper日志
-     * @param MethodName
+     *
+     * @param methodName
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByMethodName(Byte MethodName) throws AppException {
-        if (MethodName == null || MethodName <= 0) {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByMethodName(String methodName, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (methodName == null || "".equals(methodName)) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
-
-        example.setOrderByClause(" update_time desc");
+        criteria.andMethodNameLike("%" + methodName + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
+
+    /**
+     * 根据方法参数模糊查询Mapper日志
+     *
+     * @param methodParam
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> pageMapperLogByMethodParam(String methodParam, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andMethodParamLike("%" + methodParam + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+
     /**
      * 表名查询Mapper日志
+     *
      * @param TargetTableName
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByTargetTableName(String TargetTableName) throws AppException {
-        if (TargetTableName == null ) {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByTargetTableName(String TargetTableName, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (TargetTableName == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
-        criteria.andTargetTableNameLike(TargetTableName);
-        example.setOrderByClause(" update_time desc");
+        criteria.andTargetTableNameLike("%" + TargetTableName + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * sql语句查询Mapper日志
      *
-     * @param SqlStatement
+     * @param sqlStatement
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogBySqlStatement(String SqlStatement) throws AppException {
-        return null;
+    public List<RunMapperLogWithBLOBs> pageMapperLogBySqlStatement(String sqlStatement, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andSqlStatementLike("%" + sqlStatement + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
+    }
+
+    /**
+     * 根据错误信息模糊查询Mapper日志
+     *
+     * @param error
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public List<RunMapperLogWithBLOBs> pageMapperLogByError(String error, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
+        }
+        RunMapperLogExample example = new RunMapperLogExample();
+        RunMapperLogExample.Criteria criteria = example.createCriteria();
+        criteria.andErrorMessageLike("%" + error + "%");
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
+        return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
      * 方法耗时查询Mapper日志
+     *
      * @param startTime
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByMethodTime(Date startTime, Date endTime) throws AppException {
-        if (startTime == null|| endTime==null) {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByMethodTime(Date startTime, Date endTime, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (startTime == null || endTime == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
-        criteria.andAddTimeBetween(startTime,endTime);
-        example.setOrderByClause(" update_time desc");
+        criteria.andAddTimeBetween(startTime, endTime);
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
+
     /**
      * 范围查询Mapper日志
+     *
      * @param startTime
      * @return
      * @throws AppException
      */
     @Override
-    public List<RunMapperLogWithBLOBs> queryMapperLogByTimeCost(Long startTime, Long endTime) throws AppException {
-        if (startTime == null|| endTime==null) {
+    public List<RunMapperLogWithBLOBs> pageMapperLogByTimeCost(Long startTime, Long endTime, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (startTime == null || endTime == null) {
             throw new AppException(ResultEnum.INPUT_ERROR);
+        }
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 20;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "update_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderField = "DESC";
         }
         RunMapperLogExample example = new RunMapperLogExample();
         RunMapperLogExample.Criteria criteria = example.createCriteria();
-        criteria.andTimeCostBetween(startTime,endTime);
-        example.setOrderByClause(" update_time desc");
+        criteria.andTimeCostBetween(startTime, endTime);
+        PageHelper.startPage(page, size);
+        example.setOrderByClause(orderField + " " + orderType);
         return runMapperLogMapper.selectByExampleWithBLOBs(example);
     }
 }
