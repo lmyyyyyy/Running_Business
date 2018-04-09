@@ -1,5 +1,6 @@
 package com.running.business.vo;
 
+import com.running.business.pojo.RunUser;
 import lombok.Data;
 
 /**
@@ -7,8 +8,11 @@ import lombok.Data;
  * @create 2017-12-03 下午7:17
  */
 @Data
-public class UserVO {
-    private Integer uid;
+public class UserVO extends RunUser {
+
+    private String userStatusDesc;
+
+    private String isDeleteDesc;
 
     private String userPhoto;
 
@@ -16,65 +20,18 @@ public class UserVO {
 
     private Boolean userGender;
 
+    private String userGenderDesc;
+
     private String userPhone;
 
     private Integer userPoint;
 
     private Integer userAddress;
 
-    public Integer getUid() {
-        return uid;
-    }
+    private String userAddressDesc;
 
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
+    private Double balance;
 
-    public String getUserPhoto() {
-        return userPhoto;
-    }
+    private Integer reportedTimes;
 
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Boolean getUserGender() {
-        return userGender;
-    }
-
-    public void setUserGender(Boolean userGender) {
-        this.userGender = userGender;
-    }
-
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    public Integer getUserPoint() {
-        return userPoint;
-    }
-
-    public void setUserPoint(Integer userPoint) {
-        this.userPoint = userPoint;
-    }
-
-    public Integer getUserAddress() {
-        return userAddress;
-    }
-
-    public void setUserAddress(Integer userAddress) {
-        this.userAddress = userAddress;
-    }
 }

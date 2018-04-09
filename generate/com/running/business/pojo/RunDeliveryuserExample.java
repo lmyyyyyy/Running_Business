@@ -495,52 +495,52 @@ public class RunDeliveryuserExample {
             return (Criteria) this;
         }
 
-        public Criteria andAvailableEqualTo(Boolean value) {
+        public Criteria andAvailableEqualTo(Integer value) {
             addCriterion("available =", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotEqualTo(Boolean value) {
+        public Criteria andAvailableNotEqualTo(Integer value) {
             addCriterion("available <>", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableGreaterThan(Boolean value) {
+        public Criteria andAvailableGreaterThan(Integer value) {
             addCriterion("available >", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andAvailableGreaterThanOrEqualTo(Integer value) {
             addCriterion("available >=", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableLessThan(Boolean value) {
+        public Criteria andAvailableLessThan(Integer value) {
             addCriterion("available <", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableLessThanOrEqualTo(Boolean value) {
+        public Criteria andAvailableLessThanOrEqualTo(Integer value) {
             addCriterion("available <=", value, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableIn(List<Boolean> values) {
+        public Criteria andAvailableIn(List<Integer> values) {
             addCriterion("available in", values, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotIn(List<Boolean> values) {
+        public Criteria andAvailableNotIn(List<Integer> values) {
             addCriterion("available not in", values, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableBetween(Boolean value1, Boolean value2) {
+        public Criteria andAvailableBetween(Integer value1, Integer value2) {
             addCriterion("available between", value1, value2, "available");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andAvailableNotBetween(Integer value1, Integer value2) {
             addCriterion("available not between", value1, value2, "available");
             return (Criteria) this;
         }

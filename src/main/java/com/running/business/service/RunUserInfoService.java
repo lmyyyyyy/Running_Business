@@ -4,6 +4,7 @@ import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.vo.UserVO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface RunUserInfoService {
 
@@ -63,4 +64,20 @@ public interface RunUserInfoService {
 	 * @throws AppException
 	 */
 	boolean checkNameUnique(String name) throws AppException;
+
+	/**
+	 * 上传用户头像
+	 * @param file
+	 * @return
+	 */
+	BaseResult uploadUserImg(MultipartFile file, Integer uid);
+
+	/**
+	 * 设置用户的默认地址
+	 *
+	 * @param uid
+	 * @param addrId
+	 * @throws AppException
+	 */
+	void updateUserAddr(Integer uid, Integer addrId) throws AppException;
 }

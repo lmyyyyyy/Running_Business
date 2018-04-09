@@ -12,6 +12,16 @@ import com.running.business.vo.RefundRecordVO;
 public interface RefundRecordService {
 
     /**
+     * 检查是否退款过 true：退过；false：没退过
+     *
+     * @param uid
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    boolean checkIsRefunded(Integer uid, String orderId) throws AppException;
+
+    /**
      * 保存退款记录
      *
      * @param refundRecord
@@ -115,4 +125,13 @@ public interface RefundRecordService {
      * @throws AppException
      */
     PageInfo<RefundRecordVO> pageRefundByOperatorId(Integer operatorId, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
+     * 获取当前用户的退款记录数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    Integer refundRecordCountByUID(Integer uid) throws AppException;
 }

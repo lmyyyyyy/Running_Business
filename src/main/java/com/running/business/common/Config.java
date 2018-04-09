@@ -8,6 +8,10 @@ public class Config {
 
     //用户session在redis存储的key
     public static final String REDIS_USER_SESSION_KEY = "REDIS_USER_SESSION";
+    //session key
+    public static final String SESSION_USERNAME = "SESSION_USERNAME";
+    //websocket
+    public static final String WEBSOCKET_USERNAME = "WEBSOCKET_USERNAME";
     //用户session的超时时间
     public static final Integer SSO_SESSION_EXPIRE = 1800;
     //ThreadLocal副本key
@@ -33,7 +37,7 @@ public class Config {
     public static final Integer HEART_BEAT_FRONT_TIME = 60;
 
     //拼接多长时间内的订单信息（秒）
-    public static final Integer ROLLING_INFO_TIME = 8640;
+    public static final Integer ROLLING_INFO_TIME = 86400;
 
     //是否打印日志
     public static final Boolean METHOD_LOG_PRINT_SWITCH = true;
@@ -47,5 +51,12 @@ public class Config {
     public static final Boolean IS_CLEAR_SERVICE_LOG_LIST = true;
     //是否递归记录一个线程中的所有方法
     public static final Boolean SERVICE_LOG_RECURSION_SWITCH = true;
+
+    //当配送员未登录情况下，当前配送员位置距源地址的默认距离 单位：m
+    public static final Long ORDER_SOURCE_ADDRESS_DISTANCE = 2000L;
+    //当配送员未登录情况下，订单的默认距离 单位：m
+    public static final Long ORDER_DISTANCE = 2000L;
+    //当配送员未登录情况下，当前配送员位置距目标地址的默认距离 单位：m
+    public static final Long ORDER_TARGET_ADDRESS_DISTANCE = 2000L;
 
 }

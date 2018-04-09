@@ -125,5 +125,14 @@ public interface RefundApplyService {
      * @return
      * @throws AppException
      */
-    PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer page, Integer size, String orderField, String orderType) throws AppException;
+    PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
+     * 获取当前用户的退款申请数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    Integer applyCountByUID(Integer uid) throws AppException;
 }

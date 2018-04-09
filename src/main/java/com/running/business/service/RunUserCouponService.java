@@ -5,6 +5,8 @@ import com.running.business.exception.AppException;
 import com.running.business.pojo.RunUserCoupon;
 import com.running.business.vo.CouponVO;
 
+import java.util.List;
+
 public interface RunUserCouponService {
 
     /**
@@ -14,6 +16,14 @@ public interface RunUserCouponService {
      * @throws AppException
      */
     void saveRunUserCoupon(RunUserCoupon runUserCoupon) throws AppException;
+
+    /**
+     * 给固定用户列表添加优惠券
+     *
+     * @param runUserCoupon
+     * @throws AppException
+     */
+    void saveRunUserCouponByUsers(RunUserCoupon runUserCoupon, List<Integer> userIds) throws AppException;
 
     /**
      * 更新优惠券
@@ -49,6 +59,15 @@ public interface RunUserCouponService {
     CouponVO queryRunUserCouponByID(Integer id) throws AppException;
 
     /**
+     * 获取该用户下的所有可用的优惠券
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    List<CouponVO> queryCouponsByUID(Integer uid) throws AppException;
+
+    /**
      * 根据用户id分页查询优惠券
      *
      * @param uid
@@ -68,10 +87,8 @@ public interface RunUserCouponService {
      * @param status
      * @param page
      * @param size
-     * @param orderField
-     * @param orderType
      * @return
      * @throws AppException
      */
-    PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException;
+    PageInfo<CouponVO> pageRunUserCouponByStatus(Integer status, Integer page, Integer size) throws AppException;
 }

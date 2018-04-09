@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunDeliveryuser;
+import com.running.business.vo.DeliveryDetailVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +85,21 @@ public interface RunDeliveryuserService {
     String login(String phone, String password, HttpServletRequest request, HttpServletResponse response) throws AppException;
 
     /**
-     * 分页获取未被删除的配送员列表
+     * 分页获取配送员列表
+     *
+     * @param status
+     * @param isDelete
+     * @param able
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    PageInfo<DeliveryDetailVO> pageAllRunDeliveryuser(Boolean status, Boolean isDelete, Integer able, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
      *
      * @param page
      * @param size
@@ -91,7 +107,7 @@ public interface RunDeliveryuserService {
      * @return
      * @throws AppException
      */
-    PageInfo<RunDeliveryuser> pageAllRunDeliveryuser(Integer page, Integer size, String orderType) throws AppException;
+    PageInfo<RunDeliveryuser> pageAbleRunDeliveryuser(Integer page, Integer size, String orderType) throws AppException;
 
     /**
      * 检查账号和密码是否匹配 true:匹配 false:不匹配
@@ -136,4 +152,96 @@ public interface RunDeliveryuserService {
      * @throws AppException
      */
     Set<Integer> queryDeliverysByIds(Set<Integer> ids) throws AppException;
+
+
+    /**
+     * 上传配送员身份证
+     * @param file
+     * @param did
+     * @return
+     */
+    BaseResult uploadDeliveryCard(MultipartFile file, Integer did);
+
+    /**
+     * 检查配送员是否是可用状态
+     *
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    boolean checkIsAble(Integer did) throws AppException;
+
+    /**
+     * 禁用／启用 配送员
+     *
+     * @param did
+     * @param available
+     * @throws AppException
+     */
+    void updateAvailable(Integer did, Integer available) throws AppException;
+
+    /**
+     * 重新申请审核账号
+     *
+     * @param did
+     * @param available
+     * @throws AppException
+     */
+    void updateResetAvailable(Integer did, Integer available) throws AppException;
+
+    /**
+     * 根据配送员id查询普通VO
+     *
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    DeliveryDetailVO queryDeliveryVO(Integer did) throws AppException;
+
+    /**
+     * 根据配送员id查询详细VO
+     *
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    DeliveryDetailVO queryDeliveryDetailVO(Integer did) throws AppException;
+
+    /**
+     * 配送员集合转VO集合
+     *
+     * @param runDeliveryusers
+     * @return
+     * @throws AppException
+     */
+    List<DeliveryDetailVO> convertDeliverys2VOs(List<RunDeliveryuser> runDeliveryusers) throws AppException;
+
+    /**
+     * 配送员转VO
+     *
+     * @param deliveryuser
+     * @return
+     * @throws AppException
+     */
+    DeliveryDetailVO convertDelivery2VO(RunDeliveryuser deliveryuser) throws AppException;
+
+
+    /**
+     * 填充配送员VO集合
+     *
+     * @param vos
+     * @return
+     * @throws AppException
+     */
+    List<DeliveryDetailVO> fillDeliveryVOs(List<DeliveryDetailVO> vos) throws AppException;
+
+    /**
+     * 填充配送员VO
+     *
+     * @param vo
+     * @return
+     * @throws AppException
+     */
+    DeliveryDetailVO fillDeliveryVO(DeliveryDetailVO vo) throws AppException;
+
 }

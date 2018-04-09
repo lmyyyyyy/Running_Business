@@ -26,6 +26,7 @@ public enum ResultEnum {
     USER_PASSWORD_OLD_AND_NEW_IS_SAME("1001013", "新密码不能与旧密码相同"),
     USER_ID_IS_ERROR("1001014", "用户ID异常"),
     USER_IS_DELETE("1001015", "用户已被删除"),
+    USER_LIST_IS_EMTPY("1001016", "用户列表不能为空"),
 
     //用户优惠券相关异常
     USER_COUPON_INFO_EMTPY("1002001", "优惠券信息为空"),
@@ -46,6 +47,7 @@ public enum ResultEnum {
 
     //用户地址相关异常
     USER_ADDRESS_INFO_EMTPY("1006001", "用户地址不能为空"),
+    QUERY_ADDRESS_INFO_ERROR("1006002", "获取地址信息异常"),
 
 
     // 配送员相关异常
@@ -58,7 +60,7 @@ public enum ResultEnum {
     DELIVERY_PHOTO_TOO_BIG("2001007", "图片过大"),
     DELIVERY_REVIEWPHOTO_IS_NOT_PASS("2001008", "照片审核未通过"),
     DELIVERY_CARD_REGEX_IS_NOT_PASS("2001009", "身份证格式不正确"),
-    DELIVERY_IS_NOT_AVAILABLE("2001010", "账号已被禁用"),
+    DELIVERY_IS_NOT_AVAILABLE("2001010", "账号不可用"),
     DELIVERY_CREDITS_IS_TOO_LOW("2001011", "账号信用额度过低,已被禁用,如有疑问请忍着"),
     DELIVERY_REGISTER_SUCCESS("2001012", "账号注册成功,请填写真实的信息"),
     DELIVERY_CARD_CHECK_ERROR("2001013", "身份证验证异常"),
@@ -93,9 +95,32 @@ public enum ResultEnum {
     ORDER_ID_IS_ERROR("4001004", "订单号异常"),
     ORDER_STATUS_IS_ERROR("4001005", "订单状态异常"),
     ORDER_HAVEN_BEEN_GRABED("4001006", "手慢了一步,订单被抢了"),
+    ORDER_HAS_REFUNDED("4001007", "该订单已退过款"),
+    ORDER_BIZ_TYPE_ERROR("4001008", "订单业务类型异常"),
+    ORDER_GOODS_TYPE_ERROR("4001009", "订单物品类型异常"),
+    ORDER_QUEUE_TYPE_ERROR("4001010", "订单排队类型异常"),
+    ORDER_SOURCE_ADDRESS_ERROR("4001011", "订单源地址异常"),
+    ORDER_SOURCE_PHONE_ERROR("4001012", "订单源电话异常"),
+    ORDER_TARGET_ADDRESS_ERROR("4001013", "订单目标地址异常"),
+    ORDER_TARGET_PHONE_ERROR("4001014", "订单目标电话异常"),
+    ORDRE_REMARK_ERROR("4001015", "订单购买要求异常"),
+    ORDER_REQUIRE_TIME_ERROR("4001016", "订单所需时间异常"),
+    ORDER_TIME_LONT_ERROR("4001017", "订单排队时长异常"),
+    ORDER_AMOUNT_ERROR("4001018", "订单金额异常"),
+    ORDER_DISTANCE_ERROR("4001019", "订单距离异常"),
+    ORDER_SOURCE_LON_ERROR("4001020", "订单源经度异常"),
+    ORDER_SOURCE_LAT_ERROR("4001021", "订单源纬度异常"),
+    ORDER_TARGET_LON_ERROR("4001022", "订单目标经度异常"),
+    ORDER_TARGET_LAT_ERROR("4001023", "订单目标纬度异常"),
+    ORDER_PAY_TYPE_ERROR("4001024", "订单支付类型异常"),
+    ORDER_AMOUNT_CAL_ERROR("4001025", "订单金额计算异常"),
+    ORDER_DISTANCE_CAL_ERROR("4001026", "订单距离计算异常"),
+    ORDER_DISTANCE_TOO_MAX("4001027", "订单距离过大,超过配送范围"),
+    ORDER_TIME_LONG_ERROR("4001028", "timelong参数异常"),
 
     //订单支付相关异常
     ORDER_PAY_INFO_EMPTY("4002001", "订单支付信息为空"),
+    ORDER_HAS_PAY("4002002", "该订单已经支付过了"),
 
     //心跳相关异常
     HEARTBEAT_INFO_EMPTY("5001001", "心跳为空"),
@@ -143,7 +168,9 @@ public enum ResultEnum {
     NOT_HAVE_THIS_BIZID("99980006", "业务线初始化失败"),
     ACTION_CONTEXT("99980007", "ActionContext对象为空"),
     JSON_TO_ENTITY_ERROR("99980008", "json串转实体异常"),
-
+    NOT_IS_DIRECTORY("99980009", "当前不是一个目录"),
+    AMOUNT_CAN_NOT_LESS_ZERO("99980010", "充值余额不能小于等于0"),
+    SEND_MESSAGE_IS_EMPTY("99980011", "不能发送空消息")
     ;
 
     private String code;

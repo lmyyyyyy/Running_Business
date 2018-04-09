@@ -26,6 +26,7 @@ import com.running.business.service.RunUserBalanceRecordService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.util.RandomUtil;
+import com.running.business.vo.OrderVO;
 import com.running.business.vo.RefundApplyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         }
         runOrderService.updateOrderStatus(runOrder.getOrderid(), OrderStatusEnum.REFUND_APPLY.getCode());
         Long currentTime = System.currentTimeMillis();
-        Long diffTime = (currentTime - runOrder.getAddTime().getTime()) / 1000 * 60 * 60 * 24;
+        Long diffTime = (currentTime - runOrder.getAddTime().getTime()) / (1000 * 60 * 60 * 24);
         if (diffTime > 7) {
             throw new AppException(ResultEnum.REFUND_APPLY_TIME_ERROR);
         }
@@ -152,9 +153,13 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @throws AppException
      */
     @Override
-    public void updateApplyStatus(RefundDTO refundDTO) throws AppException{
+    public void updateApplyStatus(RefundDTO refundDTO) throws AppException {
         if (refundDTO.getId() == null || refundDTO.getId() <= 0) {
             throw new AppException(ResultEnum.REFUND_ID_IS_ERROR);
+        }
+        boolean flag = refundRecordService.checkIsRefunded(refundDTO.getUid(), refundDTO.getOrderId());
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAS_REFUNDED);
         }
         RefundApply apply = this.queryApplyByID(refundDTO.getId());
         apply.setOrderid(refundDTO.getOrderId());
@@ -197,7 +202,6 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         record.setType(false);
         record.setAmount(money);
         record.setAddTime(new Date());
-        record.setNumber(RandomUtil.generateRandomDigitString(18));
         runUserBalanceRecordService.saveRunUserBalanceRecord(record);
     }
 
@@ -208,7 +212,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @param refundDTO
      * @throws AppException
      */
-    public void saveRefundRecord(RefundApply apply, RefundDTO refundDTO) throws AppException{
+    public void saveRefundRecord(RefundApply apply, RefundDTO refundDTO) throws AppException {
         RefundRecord refundRecord = new RefundRecord();
         refundRecord.setUid(refundDTO.getUid());
         refundRecord.setOrderid(refundDTO.getOrderId());
@@ -216,7 +220,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         refundRecord.setReason(apply.getReason());
         refundRecord.setAmount(apply.getAmount());
         refundRecord.setResponsibility(refundDTO.getResponsibility());
-        RunOrder order = runOrderService.getRunOrderByOID(refundDTO.getOrderId());
+        OrderVO order = runOrderService.getRunOrderByOID(refundRecord.getOrderid());
         if (order != null && order.getDid() != null) {
             refundRecord.setDid(order.getDid());
         }
@@ -336,7 +340,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -345,7 +349,9 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         PageHelper.startPage(page, size);
         RefundApplyExample example = new RefundApplyExample();
         RefundApplyExample.Criteria criteria = example.createCriteria();
-        criteria.andUidEqualTo(uid);
+        if (uid != null && uid > 0) {
+            criteria.andUidEqualTo(uid);
+        }
         if (status != null && status >= 0) {
             criteria.andStatusEqualTo(status);
         }
@@ -373,7 +379,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -402,14 +408,14 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @throws AppException
      */
     @Override
-    public PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer page, Integer size, String orderField, String orderType) throws AppException {
+    public PageInfo<RefundApplyVO> pageApplysByOperatorId(Integer operatorId, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
         if (size == null || size <= 0) {
             size = 10;
         }
-        if (orderField == null || "".equals(orderField)){
+        if (orderField == null || "".equals(orderField)) {
             orderField = "add_time";
         }
         if (orderType == null || "".equals(orderType)) {
@@ -419,9 +425,29 @@ public class RefundApplyServiceImpl implements RefundApplyService {
         RefundApplyExample example = new RefundApplyExample();
         RefundApplyExample.Criteria criteria = example.createCriteria();
         criteria.andOperatorEqualTo(operatorId);
+        if (status != null && status >= 0) {
+            criteria.andStatusEqualTo(status);
+        }
         example.setOrderByClause(" " + orderField + " " + orderType);
         List<RefundApply> applies = refundApplyMapper.selectByExample(example);
         return new PageInfo<>(convertApplys2VOs(applies));
+    }
+
+    /**
+     * 获取当前用户的退款申请数
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Integer applyCountByUID(Integer uid) throws AppException {
+        RefundApplyExample example = new RefundApplyExample();
+        RefundApplyExample.Criteria criteria = example.createCriteria();
+        if (uid != null) {
+            criteria.andUidEqualTo(uid);
+        }
+        return refundApplyMapper.countByExample(example);
     }
 
     /**
@@ -431,7 +457,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      * @return
      * @throws AppException
      */
-    public List<RefundApplyVO> convertApplys2VOs(List<RefundApply> applies) throws AppException{
+    public List<RefundApplyVO> convertApplys2VOs(List<RefundApply> applies) throws AppException {
         if (applies == null || applies.isEmpty()) {
             return new ArrayList<>();
         }
@@ -458,7 +484,7 @@ public class RefundApplyServiceImpl implements RefundApplyService {
      */
     public RefundApplyVO convertApply2VO(RefundApply apply) throws AppException {
         if (apply == null) {
-            return null;
+            return new RefundApplyVO();
         }
         RefundApplyVO vo = new RefundApplyVO();
         vo.setId(apply.getId());

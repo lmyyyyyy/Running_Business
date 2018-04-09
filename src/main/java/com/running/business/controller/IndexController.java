@@ -2,26 +2,41 @@ package com.running.business.controller;
 
 import com.running.business.common.BaseResult;
 import com.running.business.common.CodeConstants;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.DeliveryLevelEnum;
+import com.running.business.enums.DistanceMinutesMoneyEnum;
 import com.running.business.enums.HelpBuyGoodsEnum;
 import com.running.business.enums.HelpQueueTypeEnum;
 import com.running.business.enums.HelpSendGoodsEnum;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunAdmin;
 import com.running.business.pojo.RunAdminInfo;
+import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryBalance;
+import com.running.business.pojo.RunDeliveryDistance;
+import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunDeliveryuser;
 import com.running.business.pojo.RunUser;
 import com.running.business.pojo.RunUserBalance;
 import com.running.business.pojo.RunUserInfo;
 import com.running.business.service.RunAdminInfoService;
 import com.running.business.service.RunAdminService;
+import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryBalanceService;
+import com.running.business.service.RunDeliveryDistanceService;
+import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunDeliveryuserService;
 import com.running.business.service.RunUserBalanceService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.IdcardValidator;
+import com.running.business.util.LocationUtil;
+import com.running.business.util.MapDistance;
 import com.running.business.util.RandomUtil;
 import com.running.business.util.RegexUtils;
+import com.running.business.vo.DistanceVO;
+import com.running.business.vo.LocationVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +82,15 @@ public class IndexController extends BaseController {
 
     @Autowired
     private RunDeliveryuserService runDeliveryuserService;
+
+    @Autowired
+    private RunDeliveryInfoService runDeliveryInfoService;
+
+    @Autowired
+    private RunDeliveryBalanceService runDeliveryBalanceService;
+
+    @Autowired
+    private RunDeliveryDistanceService runDeliveryDistanceService;
 
     @Autowired
     private RunAdminService runAdminService;
@@ -126,7 +152,7 @@ public class IndexController extends BaseController {
      * @param user 用户实体
      * @return
      */
-    @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户(刘明宇)", notes = "添加用户", response = BaseResult.class)
     public BaseResult register(@RequestBody RunUser user) throws Exception {
         if (user.getUserphone() == null || "".equals(user.getUserphone().trim())
@@ -188,7 +214,7 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/users/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/users/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunUser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (user.getUserphone() == null || user.getUserphone().trim().equals("")
@@ -199,6 +225,10 @@ public class IndexController extends BaseController {
         BaseResult result = null;
         try {
             result = runUserService.login(user.getUserphone(), user.getPassword(), request, response);
+            if(result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
+                HttpSession session = request.getSession();
+                session.setAttribute(Config.SESSION_USERNAME, user.getUserphone());
+            }
         } catch (AppException ae) {
             LOGGER.error(LOG_PREFIX + "登录失败- user = {}, error = {}" + new Object[]{user, ae});
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -246,7 +276,7 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/delivery/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/delivery/login", method = RequestMethod.POST)
     @ApiOperation(value = "配送员登录(刘明宇)", notes = "配送员登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunDeliveryuser user, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (user == null) {
@@ -279,7 +309,7 @@ public class IndexController extends BaseController {
      * @param user 用户实体
      * @return
      */
-    @RequestMapping(value = "/delivery", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/delivery", method = RequestMethod.POST)
     @ApiOperation(value = "添加配送员(刘明宇)", notes = "添加配送员", response = BaseResult.class)
     public BaseResult register(@RequestBody RunDeliveryuser user) throws Exception {
         if (user == null) {
@@ -303,6 +333,41 @@ public class IndexController extends BaseController {
                 return BaseResult.fail(ResultEnum.TELTPHONE_DELIVERY);
             }
             did = runDeliveryuserService.saveRunDeliveryuser(user);
+            if (did != null && did > 0) {
+                RunDeliveryInfo info = new RunDeliveryInfo();
+                info.setDid(did);
+                info.setPhoto("/img/default.jpg");
+                info.setGender(false);
+                info.setPoint(0);
+                info.setLevel(DeliveryLevelEnum.ONE.getLevel());
+                info.setPhone(user.getUserphone());
+                info.setReportedTimes(0);
+                info.setAddressId(-1);
+                info.setCard("");
+                String name = RandomUtil.generateRandomDigitString(5);
+                int count = 0;
+                while (!runDeliveryInfoService.checkNameUnique(name)) {
+                    if (count >= 5) {
+                        return BaseResult.fail(ResultEnum.Number_THAN_BIG);
+                    }
+                    name = RandomUtil.generateRandomDigitString(5);
+                    count++;
+                }
+                info.setName("游客_" + name);
+                runDeliveryInfoService.saveRunDeliveryInfo(info);
+                RunDeliveryDistance distance = new RunDeliveryDistance();
+                distance.setDid(did);
+                distance.setSendDistance(Double.valueOf(Config.ORDER_DISTANCE));
+                distance.setDeliveryDistance(Double.valueOf(Config.ORDER_SOURCE_ADDRESS_DISTANCE));
+                distance.setViewOrderDistance(Double.valueOf(Config.ORDER_TARGET_ADDRESS_DISTANCE));
+                distance.setUpdateTime(new Date());
+                runDeliveryDistanceService.saveRunDeliveryDistance(distance);
+                RunDeliveryBalance balance = new RunDeliveryBalance();
+                balance.setDid(did);
+                balance.setUpdateTime(new Date());
+                balance.setDeliveryBalance(0.0);
+                runDeliveryBalanceService.saveRunDeliveryBalance(balance);
+            }
         } catch (AppException ae) {
             LOGGER.error("{} 注册配送员失败 user = {}", LOG_PREFIX, user);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
@@ -319,7 +384,7 @@ public class IndexController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/delivery/check/card/id", method = RequestMethod.GET)
+    @RequestMapping(value = "/delivery/check/card/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "验证配送员身份证号格式(刘明宇)", notes = "验证配送员身份证号格式", response = BaseResult.class)
     public BaseResult checkCard(@PathVariable Integer id, @RequestParam("card") String card, HttpServletRequest request) throws Exception {
         if (card == null || "".equals(card)) {
@@ -352,7 +417,7 @@ public class IndexController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/admins", method = RequestMethod.POST, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/admins", method = RequestMethod.POST)
     @ApiOperation(value = "添加管理员(刘明宇)", notes = "添加管理员", response = BaseResult.class)
     public BaseResult insertAdmin(@RequestBody RunAdmin admin, HttpServletRequest request) throws Exception {
         if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
@@ -407,8 +472,8 @@ public class IndexController extends BaseController {
      * @param response 响应
      * @return
      */
-    @RequestMapping(value = "/admins/login", method = RequestMethod.POST, produces = CodeConstants.AJC_UTF8)
-    @ApiOperation(value = "用户登录(刘明宇)", notes = "用户登录", response = BaseResult.class)
+    @RequestMapping(value = "/admins/login", method = RequestMethod.POST)
+    @ApiOperation(value = "管理员登录(刘明宇)", notes = "管理员登录", response = BaseResult.class)
     public BaseResult login(@RequestBody RunAdmin admin, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (admin.getAdminUsername() == null || admin.getAdminUsername().trim().equals("")
                 || admin.getAdminPassword() == null || admin.getAdminPassword().trim().equals("")) {
@@ -480,6 +545,103 @@ public class IndexController extends BaseController {
         LOGGER.info("{} 跳到代排队页面", LOG_PREFIX);
         List<String> queues = HelpQueueTypeEnum.getAllQueue();
         return BaseResult.success(queues);
+    }
+
+    /**
+     * 初始化排队时长
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/time/longs", method = RequestMethod.GET)
+    @ApiOperation(value = "初始化排队时长(刘明宇)", notes = "初始化排队时长", response = BaseResult.class)
+    public BaseResult initTimeLongs() throws Exception {
+        LOGGER.info("初始化排队时长");
+        List<Long> timeLongs = new ArrayList<>();
+        for (DistanceMinutesMoneyEnum distanceMinutesRelationEnum : DistanceMinutesMoneyEnum.values()) {
+            timeLongs.add(distanceMinutesRelationEnum.getMs() / 1000 / 60);
+        }
+        return BaseResult.success(timeLongs);
+    }
+
+    /**
+     * 根据地址名查询地址信息
+     *
+     * @param address
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/location", method = RequestMethod.GET)
+    @ApiOperation(value = "根据地址名查询地址信息(刘明宇)", notes = "根据地址名查询地址信息", response = BaseResult.class)
+    public BaseResult queryAddrInfoByAddr(@RequestParam(value = "address") String address) throws Exception {
+        LOGGER.info("根据地址名查询地址信息 address = {}", address);
+        LocationVO locationVO;
+        try {
+            locationVO = LocationUtil.getLocationVO(address);
+        } catch (AppException ae) {
+            LOGGER.error("根据地址名查询地址信息失败 address = {}, error = {}", address, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success(locationVO);
+    }
+
+    /**
+     * 根据经纬度／排队时长 计算距离和金额
+     *
+     * @param sourceLng
+     * @param sourceLat
+     * @param targetLng
+     * @param targetLat
+     * @param timeLong
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/distance/money", method = RequestMethod.GET)
+    @ApiOperation(value = "根据经纬度／排队时长 计算距离和金额(刘明宇)", notes = "根据经纬度／排队时长 计算距离和金额", response = BaseResult.class)
+    public BaseResult queryDistanceVO(@RequestParam(value = "sourceLng") String sourceLng,
+                                      @RequestParam(value = "sourceLat") String sourceLat,
+                                      @RequestParam(value = "targetLng", required = false, defaultValue = "") String targetLng,
+                                      @RequestParam(value = "targetLat", required = false, defaultValue = "") String targetLat,
+                                      @RequestParam(value = "timeLong", required = false, defaultValue = "0") Long timeLong) throws Exception {
+        LOGGER.info("根据经纬度／排队时长 计算距离和金额 sourceLng = {}, sourceLat = {}, targetLng = {}, targetLat = {}, timeLong = {}", sourceLng, sourceLat, targetLng, targetLat, timeLong);
+        DistanceVO distanceVO = new DistanceVO();
+        distanceVO.setSourceLng(sourceLng);
+        distanceVO.setSourceLat(sourceLat);
+        distanceVO.setTargetLng(targetLng);
+        distanceVO.setTargetLat(targetLat);
+        if (targetLng == null || "".equals(targetLng) || targetLat == null || "".equals(targetLat)) {
+            distanceVO.setMinutes(timeLong);
+            DistanceMinutesMoneyEnum minutesMoneyEnum = DistanceMinutesMoneyEnum.getDistanceEnumByMs(timeLong);
+            if (minutesMoneyEnum != null) {
+                distanceVO.setMoney(minutesMoneyEnum.getMoney());
+                return BaseResult.success(distanceVO);
+            } else {
+                return BaseResult.fail(ResultEnum.ORDER_AMOUNT_CAL_ERROR);
+            }
+        }
+        if (timeLong != 0) {
+            return BaseResult.fail(ResultEnum.ORDER_TIME_LONG_ERROR);
+        }
+        Double meter = -1d;
+        try {
+            meter = Double.valueOf(MapDistance.getDistance(sourceLat, sourceLng, targetLat, targetLng));
+        } catch (Exception e) {
+            LOGGER.error("计算订单距离异常 sourceLat = {}, sourceLng = {}, targetLat = {}, targetLng = {}, timeLong = {}, meter = {}", sourceLat, sourceLng, targetLat, targetLng, timeLong, meter);
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_CAL_ERROR);
+        }
+        if (meter <= 0 || meter == null) {
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_CAL_ERROR);
+        }
+        if (meter > DistanceMinutesMoneyEnum.TOP.getMax()) {
+            return BaseResult.fail(ResultEnum.ORDER_DISTANCE_TOO_MAX);
+        }
+        distanceVO.setDistance(meter);
+        DistanceMinutesMoneyEnum minutesMoneyEnum = DistanceMinutesMoneyEnum.getOrderTypeEnum(meter);
+        if (minutesMoneyEnum != null) {
+            distanceVO.setMinutes(minutesMoneyEnum.getMs() / 1000 / 60);
+            distanceVO.setMoney(minutesMoneyEnum.getMoney());
+        }
+        return BaseResult.success(distanceVO);
     }
 
 }

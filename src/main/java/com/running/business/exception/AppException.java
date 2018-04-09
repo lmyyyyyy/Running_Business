@@ -29,8 +29,8 @@ public class AppException extends RuntimeException{
 	}
 
 	public AppException(ResultEnum resultEnum) {
-		super(resultEnum.getCode());
-		this.errorCode = resultEnum.getMsg();
+		super(resultEnum.getMsg());
+		this.errorCode = resultEnum.getCode();
 	}
 	
 	public String getErrorCode() {

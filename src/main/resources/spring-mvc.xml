@@ -3,10 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
                         http://www.springframework.org/schema/context    
-                        http://www.springframework.org/schema/context/spring-context-3.1.xsd    
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/websocket
+                        http://www.springframework.org/schema/websocket/spring-websocket.xsd
                         http://www.springframework.org/schema/mvc    
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
     <!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
@@ -32,12 +35,17 @@
                 <property name="defultLogin" value="/index" />
             </bean>
         </mvc:interceptor>
-        <!--<mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.running.business.interceptor.HandShakeInterceptor">
-            </bean>
-        </mvc:interceptor>-->
     </mvc:interceptors>
+    <!-- 配置好处理器 -->
+    <bean id="websocketHandler" class="com.running.business.websocket.SystemWebSocketHandler"/>
+    <!-- 配置拦截器 -->
+    <websocket:handlers>
+        <websocket:mapping path="/websocket/socketServer.do" handler="websocketHandler"/><!-- 连接的URL -->
+        <websocket:handshake-interceptors>
+            <bean class="com.running.business.interceptor.HandShakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs></websocket:sockjs>
+    </websocket:handlers>
     <!--<import resource="spring-jedis.xml"/>-->
     <!--<import resource="spring-task.xml"/>-->
     <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
@@ -110,6 +118,7 @@
     <!-- 文件解析器 -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
     </bean>
     <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
     <bean

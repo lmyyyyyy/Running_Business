@@ -3,6 +3,7 @@ package com.running.business.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.ResultEnum;
+import com.running.business.controller.RunAdminController;
 import com.running.business.enums.ReportLevelEnum;
 import com.running.business.enums.UserTypeEnum;
 import com.running.business.exception.AppException;
@@ -15,6 +16,8 @@ import com.running.business.service.ReportRecordService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunUserInfoService;
 import com.running.business.vo.ReportRecordVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,10 @@ import java.util.List;
  */
 @Service
 public class ReportRecordServiceImpl implements ReportRecordService {
+
+    private Logger LOGGER = LoggerFactory.getLogger(RunAdminController.class);
+
+    private static final String LOG_PREFIX = "【投诉记录模块】 ";
 
     @Autowired
     private ReportRecordMapper reportRecordMapper;
@@ -197,9 +204,10 @@ public class ReportRecordServiceImpl implements ReportRecordService {
     }
 
     /**
-     * 根据用户id和主动投诉方查询该用户的投诉和被投诉记录
+     * 根据用户id和配送员ID和主动投诉方查询该用户的投诉和被投诉记录
      *
      * @param uid
+     * @param did
      * @param activeSide
      * @param page
      * @param size
@@ -209,10 +217,7 @@ public class ReportRecordServiceImpl implements ReportRecordService {
      * @throws AppException
      */
     @Override
-    public PageInfo<ReportRecordVO> pageRecordByActiveAndUID(Integer uid, Integer activeSide, Integer page, Integer size, String orderField, String orderType) throws AppException {
-        if (uid == null || uid <= 0) {
-            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
-        }
+    public PageInfo<ReportRecordVO> pageRecordByActiveAndDIDOrUID(Integer uid, Integer did, Integer activeSide, Integer page, Integer size, String orderField, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
@@ -231,7 +236,10 @@ public class ReportRecordServiceImpl implements ReportRecordService {
         if (uid != null && uid > 0) {
             criteria.andUidEqualTo(uid);
         }
-        if (activeSide != null && activeSide > 0) {
+        if (did != null && did > 0) {
+            criteria.andDidEqualTo(did);
+        }
+        if (activeSide != null && activeSide >= 0) {
             criteria.andActiveSideEqualTo(activeSide);
         }
         example.setOrderByClause(" " + orderField + " " + orderType);
@@ -253,9 +261,7 @@ public class ReportRecordServiceImpl implements ReportRecordService {
      */
     @Override
     public PageInfo<ReportRecordVO> pageRecordByActiveAndDID(Integer did, Integer activeSide, Integer page, Integer size, String orderField, String orderType) throws AppException {
-        if (did == null || did <= 0) {
-            throw new AppException(ResultEnum.DELIVERY_ID_IS_ERROR);
-        }
+
         if (page == null || page <= 0) {
             page = 1;
         }
@@ -328,18 +334,26 @@ public class ReportRecordServiceImpl implements ReportRecordService {
         vo.setLevelDesc(ReportLevelEnum.getReportLevelEnum(reportRecord.getLevel()).getDesc());
         vo.setActiveSide(reportRecord.getActiveSide());
         vo.setActiveSideDesc(UserTypeEnum.getUserTypeEnum(reportRecord.getActiveSide()).getDesc());
-        RunUserInfo info = runUserInfoService.getRunUserInfoById(reportRecord.getUid());
-        if (info == null) {
-            return vo;
+        try {
+            RunUserInfo info = runUserInfoService.getRunUserInfoById(reportRecord.getUid());
+            if (info == null) {
+                return vo;
+            }
+            vo.setUserPhone(info.getUserPhone());
+            vo.setUserName(info.getUserName());
+        } catch (Exception e) {
+            LOGGER.error("{} 查询用户信息异常 error = {}", LOG_PREFIX, e);
         }
-        vo.setUserPhone(info.getUserPhone());
-        vo.setUserName(info.getUserName());
-        RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(reportRecord.getDid());
-        if (reportRecord == null) {
-            return vo;
+        try {
+            RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(reportRecord.getDid());
+            if (reportRecord == null) {
+                return vo;
+            }
+            vo.setDeliveryPhone(runDeliveryInfo.getPhone());
+            vo.setDeliveryName(runDeliveryInfo.getName());
+        } catch (Exception e) {
+            LOGGER.error("{} 查询配送员信息异常 error = {}", LOG_PREFIX, e);
         }
-        vo.setDeliveryPhone(runDeliveryInfo.getPhone());
-        vo.setDeliveryName(runDeliveryInfo.getName());
         return vo;
     }
 }

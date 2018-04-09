@@ -11,7 +11,9 @@ import com.running.business.facade.Cashier;
 import com.running.business.pojo.RefundApply;
 import com.running.business.pojo.ReportRecord;
 import com.running.business.pojo.RunUser;
+import com.running.business.pojo.RunUserAddress;
 import com.running.business.pojo.RunUserInfo;
+import com.running.business.sdk.common.Request;
 import com.running.business.service.RefundApplyService;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.ReportRecordService;
@@ -24,6 +26,7 @@ import com.running.business.service.RunUserPreferenceService;
 import com.running.business.service.RunUserService;
 import com.running.business.util.JsonUtils;
 import com.running.business.util.RequestUtil;
+import com.running.business.util.ValidateUtil;
 import com.running.business.vo.RefundRecordVO;
 import com.running.business.vo.UserVO;
 import io.swagger.annotations.Api;
@@ -39,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
@@ -271,13 +275,62 @@ public class RunUserController extends BaseController {
     }
 
     /**
+     * 添加用户地址
+     *
+     * @param address
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/address", method = RequestMethod.POST)
+    @ApiOperation(value = "添加用户地址(刘明宇)", notes = "添加用户地址", response = BaseResult.class)
+    public BaseResult saveAddr(@RequestBody RunUserAddress address, HttpServletRequest request) throws Exception {
+        if (address == null) {
+            return BaseResult.fail(ResultEnum.USER_ADDRESS_INFO_EMTPY);
+        }
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 添加用户地址 uid = {}, address = [{}]", LOG_PREFIX, uid, address);
+        try {
+            address.setUid(uid);
+            runUserAddressService.saveRunUserAddress(address);
+        } catch (AppException ae) {
+            logger.error("{} 添加用户地址失败 uid = {}, address = [{}]", LOG_PREFIX, uid, address);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+    /**
+     * 设置默认地址
+     *
+     * @param addrId
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/address/{addrId}", method = RequestMethod.POST)
+    @ApiOperation(value = "设置默认地址(刘明宇)", notes = "设置默认地址", response = BaseResult.class)
+    public BaseResult updateUserAddrId(@PathVariable("addrId") Integer addrId, HttpServletRequest request) throws Exception {
+        Integer uid = requestUtil.getUserId(request);
+        logger.info("{} 设置默认地址 addressId = {}, uid = {}", LOG_PREFIX, addrId, uid);
+        try {
+            runUserInfoService.updateUserAddr(uid, addrId);
+        } catch (AppException ae) {
+            logger.error("{} 设置默认地址失败, addressId = {}, uid = {}, error = {}", LOG_PREFIX, addrId, uid, ae);
+            return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
+        }
+        return BaseResult.success();
+    }
+
+
+    /**
      * 获取用户所有的地址信息
      *
      * @param request
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/address", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/address", method = RequestMethod.GET)
     @ApiOperation(value = "获取用户所有的地址信息(刘明宇)", notes = "获取用户所有的地址信息", response = BaseResult.class)
     public BaseResult getAllUserAddr(HttpServletRequest request) throws Exception {
         logger.info("获取该用户的所有地址信息");
@@ -301,7 +354,7 @@ public class RunUserController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/address/{id}", method = RequestMethod.GET, consumes = CodeConstants.AJC_UTF8, produces = CodeConstants.AJC_UTF8)
+    @RequestMapping(value = "/address/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id获取当前地址信息(刘明宇)", notes = "根据id获取当前地址信息", response = BaseResult.class)
     public BaseResult getUserAddrById(@PathVariable("id") Integer id, HttpServletRequest request) throws Exception {
         logger.info("根据id获取当前地址信息", id);
@@ -406,7 +459,7 @@ public class RunUserController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/fefunds", method = RequestMethod.GET)
+    @RequestMapping(value = "/refunds", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取退款记录(刘明宇)", notes = "分页获取退款记录", response = BaseResult.class)
     public BaseResult pageRefundRecord(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                        @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
@@ -495,7 +548,7 @@ public class RunUserController extends BaseController {
     public BaseResult pageCoupons(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                   @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
                                   @RequestParam(value = "status", required = false, defaultValue = "-1") Integer status,
-                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                  @RequestParam(value = "orderField", required = false, defaultValue = "begin_time") String orderField,
                                   @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType,
                                   HttpServletRequest request) throws AppException {
         Integer uid = requestUtil.getUserId(request);
@@ -503,4 +556,23 @@ public class RunUserController extends BaseController {
         return BaseResult.success(runUserCouponService.pageRunUserCouponByUID(uid, status, page, size, orderField, orderType));
     }
 
+    /**
+     * 用户头像上传
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "用户头像上传(孙晓东)", notes = "用户头像上传", response = BaseResult.class)
+    @RequestMapping(value = "/uploadUserImg", method = RequestMethod.POST)
+    public BaseResult uploadUserImg(MultipartFile file, HttpServletRequest request) {
+        BaseResult result = null;
+        Integer uid = requestUtil.getUserId(request);
+        try {
+            result = runUserInfoService.uploadUserImg(file, uid);
+        } catch (AppException e) {
+            logger.error("{} 用户头像上传异常 uid = {}", LOG_PREFIX, uid, e);
+        }
+        return result;
+    }
 }

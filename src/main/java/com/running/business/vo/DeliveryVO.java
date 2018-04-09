@@ -1,5 +1,6 @@
 package com.running.business.vo;
 
+import com.running.business.pojo.RunDeliveryuser;
 import lombok.Data;
 
 /**
@@ -7,9 +8,13 @@ import lombok.Data;
  * @create 2018-01-14 下午2:54
  */
 @Data
-public class DeliveryVO {
+public class DeliveryVO extends RunDeliveryuser {
 
-    private Integer did;
+    private String statusDesc;
+
+    private String isDeleteDesc;
+
+    private String availableDesc;
 
     private String photo;
 
@@ -19,13 +24,20 @@ public class DeliveryVO {
 
     private Boolean gender;
 
+    private String genderDesc;
+
     private String phone;
 
     private Integer addressId;
+
+    private String addressDesc;
 
     private Integer point;
 
     private String level;
 
     private Integer reportedTimes;
+
+    private Double balance;
+
 }

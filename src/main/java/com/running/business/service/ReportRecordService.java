@@ -71,9 +71,10 @@ public interface ReportRecordService {
     PageInfo<ReportRecordVO> pageRecordByDID(Integer did, Integer page, Integer size, String orderField, String orderType) throws AppException;
 
     /**
-     * 根据用户id和主动投诉方查询该用户的投诉和被投诉记录
+     * 根据用户id和配送员ID和主动投诉方查询该用户的投诉和被投诉记录
      *
      * @param uid
+     * @param did
      * @param activeSide
      * @param page
      * @param size
@@ -82,7 +83,7 @@ public interface ReportRecordService {
      * @return
      * @throws AppException
      */
-    PageInfo<ReportRecordVO> pageRecordByActiveAndUID(Integer uid, Integer activeSide, Integer page, Integer size, String orderField, String orderType) throws AppException;
+    PageInfo<ReportRecordVO> pageRecordByActiveAndDIDOrUID(Integer uid, Integer did, Integer activeSide, Integer page, Integer size, String orderField, String orderType) throws AppException;
 
     /**
      * 根据配送员id和主动投诉方查询该配送员的投诉和被投诉记录

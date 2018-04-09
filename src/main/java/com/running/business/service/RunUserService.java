@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
 import com.running.business.exception.AppException;
 import com.running.business.pojo.RunUser;
+import com.running.business.vo.UserDetailVO;
+import com.running.business.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,15 +91,18 @@ public interface RunUserService {
     BaseResult login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws AppException;
 
     /**
-     * 分页获取未被删除的用户列表
+     * 分页获取的用户列表
      *
+     * @param status
+     * @param isDelete
      * @param page
      * @param size
+     * @param orderField
      * @param orderType
      * @return
      * @throws AppException
      */
-    PageInfo<RunUser> pageAllRunUser(Integer page, Integer size, String orderType) throws AppException;
+    PageInfo<UserVO> pageAllRunUser(Boolean status, Boolean isDelete, Integer page, Integer size, String orderField, String orderType) throws AppException;
 
     /**
      * 根据token获取用户信息
@@ -142,5 +147,14 @@ public interface RunUserService {
      * @throws AppException
      */
     Set<Integer> queryUsersByIds(Set<Integer> ids) throws AppException;
+
+    /**
+     * 根据用户id获取用户详细信息
+     *
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    UserDetailVO queryUserDetailVO(Integer uid) throws AppException;
 
 }

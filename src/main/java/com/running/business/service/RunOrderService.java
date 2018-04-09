@@ -23,6 +23,23 @@ public interface RunOrderService {
      */
     boolean checkGrab(String orderId, Integer did) throws AppException;
 
+    /**
+     * 生成订单ID(去重)
+     *
+     * @return
+     * @throws AppException
+     */
+    String generatorOrderId() throws AppException;
+
+    /**
+     * 验证订单Id是否存在
+     *
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    boolean orderIdIsExist(String orderId) throws AppException;
+
     void saveRunOrder(RunOrder order) throws AppException;
 
     /**
@@ -50,6 +67,14 @@ public interface RunOrderService {
      * @throws AppException
      */
     void updateOrderStatus(String orderId, Integer status) throws AppException;
+
+    /**
+     * 更新配送员积分
+     *
+     * @param orderId
+     * @throws AppException
+     */
+    void updateDeliveryPoint(String orderId) throws AppException;
 
     void deleteRunOrderByOID(String oid) throws AppException;
 
@@ -113,6 +138,11 @@ public interface RunOrderService {
     /**
      * 模糊分页 查询已支付可抢订单列表
      *
+     * @param type
+     * @param did
+     * @param longitude
+     * @param latitude
+     * @param good
      * @param keyword
      * @param page
      * @param size
@@ -120,7 +150,7 @@ public interface RunOrderService {
      * @return
      * @throws AppException
      */
-    PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException;
+    PageInfo<OrderVO> pageRunOrderByPaid(Integer type, Integer did, Double longitude, Double latitude, String good, String keyword, Integer page, Integer size, String orderType) throws AppException;
 
     BaseResult getAllRunOrder() throws AppException;
 
@@ -139,6 +169,33 @@ public interface RunOrderService {
     PageInfo<OrderVO> pageOrderByUIDAndStatus(String keyword, Integer id, Integer status, Integer page, Integer size, String orderType) throws AppException;
 
     /**
+     * 根据配送员ID，用户ID，订单状态，关键字模糊搜索订单列表
+     *
+     * @param keyword
+     * @param type
+     * @param did
+     * @param uid
+     * @param status
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    PageInfo<OrderVO> pageOrders(String keyword, Integer type, Integer did, Integer uid, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException;
+
+    /**
+     * 根据用户id或配送员id获取订单数
+     *
+     * @param uid
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    Integer orderCountByUIDAndDID(Integer uid, Integer did) throws AppException;
+
+    /**
      * 拼接滚动消息
      *
      * @return
@@ -154,4 +211,14 @@ public interface RunOrderService {
      * @throws AppException
      */
     void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException;
+
+    /**
+     * 保存或更新用户偏好
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @throws AppException
+     */
+    void saveOrUpdatePreference(String goodType, String good, Integer uid) throws AppException;
 }

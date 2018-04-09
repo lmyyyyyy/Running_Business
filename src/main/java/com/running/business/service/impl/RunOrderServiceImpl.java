@@ -3,9 +3,10 @@ package com.running.business.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.running.business.common.BaseResult;
+import com.running.business.common.Config;
 import com.running.business.common.ResultEnum;
 import com.running.business.dto.InfoDTO;
-import com.running.business.enums.DistanceMinutesRelationEnum;
+import com.running.business.enums.DistanceMinutesMoneyEnum;
 import com.running.business.enums.OrderPayTypeEnum;
 import com.running.business.enums.OrderStatusEnum;
 import com.running.business.enums.OrderTypeEnum;
@@ -14,31 +15,47 @@ import com.running.business.exception.AppException;
 import com.running.business.facade.Cashier;
 import com.running.business.mapper.RunOrderMapper;
 import com.running.business.mapper.RunUserInfoMapper;
+import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunOrder;
 import com.running.business.pojo.RunOrderExample;
 import com.running.business.pojo.RunOrderExample.Criteria;
 import com.running.business.pojo.RunOrderPay;
 import com.running.business.pojo.RunUserInfo;
+import com.running.business.pojo.RunUserPreference;
+import com.running.business.service.RefundRecordService;
+import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunOrderPayService;
 import com.running.business.service.RunOrderService;
 import com.running.business.service.RunUserInfoService;
+import com.running.business.service.RunUserPreferenceService;
 import com.running.business.util.DateUtil;
+import com.running.business.util.MapDistance;
+import com.running.business.util.Run_StringUtil;
 import com.running.business.util.ValidateUtil;
 import com.running.business.vo.OrderVO;
-import com.sun.org.apache.xpath.internal.operations.Or;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RunOrderServiceImpl implements RunOrderService {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(RunOrderServiceImpl.class);
+
+    private static final String LOG_PREFIX = "【订单模块】 ";
 
     @Autowired
     private RunOrderMapper runOrderMapper;
@@ -57,6 +74,19 @@ public class RunOrderServiceImpl implements RunOrderService {
 
     @Autowired
     private RunOrderPayService runOrderPayService;
+
+    @Autowired
+    private RunDeliveryDistanceService runDeliveryDistanceService;
+
+
+    @Autowired
+    private RunDeliveryAddressService runDeliveryAddressService;
+
+    @Autowired
+    private RefundRecordService refundRecordService;
+
+    @Autowired
+    private RunUserPreferenceService runUserPreferenceService;
 
     /**
      * 验证订单是否已被抢 false:未被抢；true:已被抢
@@ -80,6 +110,45 @@ public class RunOrderServiceImpl implements RunOrderService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 生成订单ID(去重)
+     *
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public String generatorOrderId() throws AppException {
+        String orderId = null;
+        List<RunOrder> list = null;
+        while (list != null && list.size() != 0) {
+            orderId = Run_StringUtil.getOrderId();
+            RunOrderExample example = new RunOrderExample();
+            RunOrderExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderidEqualTo(orderId);
+            list = runOrderMapper.selectByExample(example);
+        }
+        return orderId;
+    }
+
+    /**
+     * 验证订单Id是否存在
+     *
+     * @param orderId
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public boolean orderIdIsExist(String orderId) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            return false;
+        }
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderidEqualTo(orderId);
+        List<RunOrder> list = runOrderMapper.selectByExample(example);
+        return ValidateUtil.isValid(list);
     }
 
     @Override
@@ -149,10 +218,29 @@ public class RunOrderServiceImpl implements RunOrderService {
             order.setTargetTime(new Date());
         } else if (status.equals(OrderStatusEnum.FINISH)) {
             order.setFinishTime(new Date());
+            this.updateDeliveryPoint(orderId);
         } else if (status.equals(OrderStatusEnum.RECEIVED)) {
             order.setRecvTime(new Date());
         }
         runOrderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 更新配送员积分
+     *
+     * @param orderId
+     * @throws AppException
+     */
+    @Override
+    public void updateDeliveryPoint(String orderId) throws AppException {
+        if (orderId == null || "".equals(orderId)) {
+            throw new AppException(ResultEnum.ORDER_ID_IS_ERROR);
+        }
+        RunOrder order = runOrderMapper.selectByPrimaryKey(orderId);
+        if (order == null || order.getDid() == null || order.getPayAmout() == null) {
+            return;
+        }
+        runDeliveryInfoService.updateDeliveryPoint(order.getDid(), new Double(order.getPayAmout() + 0.5).intValue());
     }
 
     @Override
@@ -203,11 +291,14 @@ public class RunOrderServiceImpl implements RunOrderService {
      */
     @Override
     public OrderVO getRunOrderByOID(String oid) throws AppException {
+        if (oid == null || "".equals(oid)) {
+            return null;
+        }
         RunOrder order = runOrderMapper.selectByPrimaryKey(oid);
         if (order == null) {
             return null;
         }
-        return convertOrder2VO(order);
+        return convertOrder2VO(order, null, null);
     }
 
     /**
@@ -344,32 +435,82 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         example.setOrderByClause(" add_time " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
+        List<OrderVO> list = convertOrders2VOs(orders, null, null);
         return new PageInfo<>(list);
     }
 
+    /**
+     * 模糊分页 查询已支付可抢订单列表
+     *
+     * @param type
+     * @param did
+     * @param longitude
+     * @param latitude
+     * @param good
+     * @param keyword
+     * @param page
+     * @param size
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
     @Override
-    public PageInfo<OrderVO> pageRunOrderByPaid(String keyword, Integer page, Integer size, String orderType) throws AppException {
+    public PageInfo<OrderVO> pageRunOrderByPaid(Integer type, Integer did, Double longitude, Double latitude, String good, String keyword, Integer page, Integer size, String orderType) throws AppException {
         if (page == null || page <= 0) {
             page = 1;
         }
         if (size == null || size <= 0) {
-            size = 10;
+            size = 20;
         }
         if (orderType == null || "".equals(orderType)) {
             orderType = "DESC";
+        }
+        RunDeliveryDistance distance = null;
+        RunDeliveryInfo info = null;
+        RunDeliveryAddress address = null;
+        if (did != null) {
+            /*info = runDeliveryInfoService.getRunDeliveryInfoByID(did);
+            if (info != null && info.getAddressId() != null) {
+                address = runDeliveryAddressService.getRunDeliveryAddressByID(info.getAddressId());
+            }*/
+            distance = runDeliveryDistanceService.getRunDeliveryDistanceByDID(did);
         }
         PageHelper.startPage(page, size);
         RunOrderExample example = new RunOrderExample();
         RunOrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusEqualTo(OrderStatusEnum.PAID.getCode());
+        if (good != null && !"".equals(good.trim())) {
+            criteria.andGoodsEqualTo(good);
+        }
         if (keyword != null && !"".equals(keyword.trim())) {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
-        example.setOrderByClause(" add_time " + orderType);
+        double[] range;
+        if (longitude != null && latitude != null) {
+            if (distance != null) {
+                range = MapDistance.getRectangle(longitude, latitude, distance.getSendDistance().longValue());
+
+                criteria.andDistanceLessThanOrEqualTo(distance.getDeliveryDistance());
+            } else {
+                range = MapDistance.getRectangle(longitude, latitude, Config.ORDER_TARGET_ADDRESS_DISTANCE);
+
+                criteria.andDistanceLessThanOrEqualTo(Double.valueOf(Config.ORDER_DISTANCE));
+            }
+            if (type != -1) {
+                criteria.andSourceLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andSourceLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+                criteria.andTypeEqualTo(type);
+            } else {
+                criteria.andSourceLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andSourceLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+                criteria.andRecvLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andRecvLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+            }
+        }
+        example.setOrderByClause(" add_time " + orderType + ", distance " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
-        return new PageInfo<>(list);
+        List<OrderVO> list = convertOrders2VOs(orders, longitude, latitude);
+        return new PageInfo<>(orderByOrderVO(list));
     }
 
     @Override
@@ -422,8 +563,80 @@ public class RunOrderServiceImpl implements RunOrderService {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
-        List<OrderVO> list = convertOrders2VOs(orders);
+        List<OrderVO> list = convertOrders2VOs(orders, null, null);
         return new PageInfo<>(list);
+    }
+
+    /**
+     * 根据配送员ID，用户ID，订单状态，关键字模糊搜索订单列表
+     *
+     * @param keyword
+     * @param type
+     * @param did
+     * @param uid
+     * @param status
+     * @param page
+     * @param size
+     * @param orderField
+     * @param orderType
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public PageInfo<OrderVO> pageOrders(String keyword, Integer type, Integer did, Integer uid, Integer status, Integer page, Integer size, String orderField, String orderType) throws AppException {
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+        if (size == null || size <= 0) {
+            size = 10;
+        }
+        if (orderField == null || "".equals(orderField)) {
+            orderField = "add_time";
+        }
+        if (orderType == null || "".equals(orderType)) {
+            orderType = "DESC";
+        }
+        PageHelper.startPage(page, size);
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        if (did != null && did > 0) {
+            criteria.andDidEqualTo(did);
+        }
+        if (uid != null && uid > 0) {
+            criteria.andUidEqualTo(uid);
+        }
+        if (type != null && type >= 0) {
+            criteria.andTypeEqualTo(type);
+        }
+        if (status != null && status >= 0) {
+            criteria.andStatusEqualTo(status);
+        }
+        criteria.andGoodsLike("%" + keyword + "%");
+        example.setOrderByClause(orderField + " " + orderType);
+        List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        List<OrderVO> orderVOS = convertOrders2VOs(orders, null, null);
+        return new PageInfo<>(orderVOS);
+    }
+
+    /**
+     * 根据用户id或配送员id获取订单数
+     *
+     * @param uid
+     * @param did
+     * @return
+     * @throws AppException
+     */
+    @Override
+    public Integer orderCountByUIDAndDID(Integer uid, Integer did) throws AppException {
+        RunOrderExample example = new RunOrderExample();
+        RunOrderExample.Criteria criteria = example.createCriteria();
+        if (uid != null) {
+            criteria.andUidEqualTo(uid);
+        }
+        if (did != null) {
+            criteria.andDidEqualTo(did);
+        }
+        return runOrderMapper.countByExample(example);
     }
 
     /**
@@ -453,13 +666,58 @@ public class RunOrderServiceImpl implements RunOrderService {
      */
     @Override
     public synchronized void pay(RunOrderPay orderPay, HttpServletRequest request) throws AppException {
-        double money = orderPay.getOrderActualPrice();
+        boolean flag = runOrderPayService.checkIsPay(orderPay.getUid(), orderPay.getOrderid());
+        if (flag) {
+            throw new AppException(ResultEnum.ORDER_HAS_PAY);
+        }
+        Double money = orderPay.getOrderActualPrice();
         PaySourceTypeEnum paySourceTypeEnum = PaySourceTypeEnum.getOrderPayTypeEnum(orderPay.getPayType());
         cashier.pay(paySourceTypeEnum, money, request);
         //保存订单支付记录
         runOrderPayService.saveRunOrderPay(orderPay);
+        RunUserInfo userInfo = runUserInfoService.getRunUserInfoById(orderPay.getUid());
+        if (userInfo != null) {
+            userInfo.setUserPoint(userInfo.getUserPoint() + new Double(money + 0.5).intValue());
+            runUserInfoService.updateRunUserInfo(userInfo);
+        }
         //更新订单状态
         this.updateOrderStatus(orderPay.getOrderid(), OrderStatusEnum.PAID.getCode());
+    }
+
+    /**
+     * 保存或更新用户偏好
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @throws AppException
+     */
+    @Override
+    public void saveOrUpdatePreference(String goodType, String good, Integer uid) throws AppException {
+        if (uid == null) {
+            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
+        }
+        runUserPreferenceService.saveRunUserPreference(buildPreference(goodType, good, uid));
+    }
+
+    /**
+     * 构建用户偏好对象
+     *
+     * @param goodType
+     * @param good
+     * @param uid
+     * @return
+     * @throws AppException
+     */
+    private RunUserPreference buildPreference(String goodType, String good, Integer uid) throws AppException {
+        RunUserPreference preference = new RunUserPreference();
+        if (uid == null) {
+            throw new AppException(ResultEnum.USER_ID_IS_ERROR);
+        }
+        preference.setUid(uid);
+        preference.setUserGoods(good);
+        preference.setUserGoodstype(goodType);
+        return preference;
     }
 
     /**
@@ -503,7 +761,7 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @return
      * @throws AppException
      */
-    public List<OrderVO> convertOrders2VOs(List<RunOrder> orders) throws AppException {
+    public List<OrderVO> convertOrders2VOs(List<RunOrder> orders, Double longitude, Double latitude) throws AppException {
         if (orders == null || orders.size() == 0) {
             return new ArrayList<>();
         }
@@ -512,7 +770,7 @@ public class RunOrderServiceImpl implements RunOrderService {
             if (order == null) {
                 continue;
             }
-            OrderVO orderVO = convertOrder2VO(order);
+            OrderVO orderVO = convertOrder2VO(order, longitude, latitude);
             if (orderVO == null) {
                 continue;
             }
@@ -527,7 +785,7 @@ public class RunOrderServiceImpl implements RunOrderService {
      * @param order
      * @return
      */
-    public OrderVO convertOrder2VO(RunOrder order) {
+    public OrderVO convertOrder2VO(RunOrder order, Double longitude, Double latitude) {
         if (order == null) {
             return null;
         }
@@ -563,20 +821,50 @@ public class RunOrderServiceImpl implements RunOrderService {
         orderVO.setTargetTime(order.getTargetTime());
         orderVO.setTimeLong(order.getTimeLong());
         orderVO.setPayType(order.getPayType());
-        orderVO.setPayTypeDesc(OrderPayTypeEnum.getOrderPayTypeEnum(order.getPayType()).getDesc());
-        RunUserInfo runUserInfo = runUserInfoService.getRunUserInfoById(order.getUid());
-        if (runUserInfo != null) {
-            orderVO.setUserName(runUserInfo.getUserName());
-            orderVO.setUserPhone(runUserInfo.getUserPhoto());
+        OrderPayTypeEnum orderPayTypeEnum = OrderPayTypeEnum.getOrderPayTypeEnum(order.getPayType());
+        if (orderPayTypeEnum != null) {
+            orderVO.setPayTypeDesc(orderPayTypeEnum.getDesc());
         }
-        RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(order.getDid());
-        if (runDeliveryInfo != null) {
-            orderVO.setDeliveryName(runDeliveryInfo.getName());
-            orderVO.setDeliveryPhone(runDeliveryInfo.getPhone());
+        try {
+            RunUserInfo runUserInfo = runUserInfoService.getRunUserInfoById(order.getUid());
+            if (runUserInfo != null) {
+                orderVO.setUserName(runUserInfo.getUserName());
+                orderVO.setUserPhone(runUserInfo.getUserPhoto());
+            }
+        } catch (Exception e) {
+            LOGGER.error("{} 查询用户信息异常 error = {}", LOG_PREFIX, e);
         }
-        Long resultTime = DistanceMinutesRelationEnum.getOrderTypeEnum(order.getDistance()).getMs();
-        orderVO.setProbablyArriveTime(DateUtil.ms2Date(resultTime));
+        try {
+            RunDeliveryInfo runDeliveryInfo = runDeliveryInfoService.getRunDeliveryInfoByID(order.getDid());
+            if (runDeliveryInfo != null) {
+                orderVO.setDeliveryName(runDeliveryInfo.getName());
+                orderVO.setDeliveryPhone(runDeliveryInfo.getPhone());
+            }
+        } catch (Exception e) {
+            LOGGER.error("{} 查询配送员信息异常 error = {}", LOG_PREFIX, e);
+        }
+        //预计到达时间
+        if (order.getStatus() >= OrderStatusEnum.RECEIVED.getCode() && order.getStatus() <= OrderStatusEnum.SENDING.getCode()) {
+            Long resultTime = DistanceMinutesMoneyEnum.getOrderTypeEnum(order.getDistance()).getMs();
+            resultTime += order.getAddTime().getTime();
+            orderVO.setProbablyArriveTime(DateUtil.ms2Date(resultTime));
+        }
+        if (longitude != null && latitude != null) {
+            Double distanceDesc = MapDistance.getDistanceOfMeter(longitude, latitude, Double.valueOf(order.getSourceLongitude()), Double.valueOf(order.getSourceLatitude()));
+            orderVO.setDistanceDesc(distanceDesc);
+        }
         return orderVO;
+    }
+
+    /**
+     * 按照距离排序
+     *
+     * @param orderVOS
+     * @return
+     * @throws Exception
+     */
+    public List<OrderVO> orderByOrderVO(List<OrderVO> orderVOS) throws AppException {
+        return orderVOS.stream().sorted(Comparator.comparing(OrderVO::getDistanceDesc)).collect(Collectors.toList());
     }
 
 }

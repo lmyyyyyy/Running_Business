@@ -8,6 +8,7 @@ import com.running.business.pojo.RunInfo;
 import com.running.business.pojo.RunPushInfo;
 import com.running.business.service.RunInfoService;
 import com.running.business.service.RunPushInfoService;
+import com.running.business.util.FileUploadUtil;
 import com.running.business.util.RequestUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -74,7 +76,7 @@ public class RunInfoController extends BaseController {
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询滚动信息(刘明宇)", notes = "根据id查询滚动信息", response = BaseResult.class)
     public BaseResult queryInfoById(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
         if (id == null || id <= 0) {
@@ -175,7 +177,7 @@ public class RunInfoController extends BaseController {
     }
 
     /**
-     * 删除滚动信息
+     * 根据ID删除滚动信息
      *
      * @param id
      * @param request
@@ -183,16 +185,16 @@ public class RunInfoController extends BaseController {
      * @throws AppException
      */
     @RequestMapping(value = "/info/{id}", method = RequestMethod.DELETE)
-    @ApiOperation(value = "删除滚动信息(刘明宇)", notes = "删除滚动信息", response = BaseResult.class)
+    @ApiOperation(value = "根据ID删除滚动信息(刘明宇)", notes = "根据ID删除滚动信息", response = BaseResult.class)
     public BaseResult deleteInfo(@PathVariable("id") Integer id, HttpServletRequest request) throws AppException {
         if (id == null || id <= 0) {
             throw new AppException(ResultEnum.INPUT_ERROR);
         }
-        LOGGER.info("{} 删除滚动信息 id = {}", LOG_PREFIX, id);
+        LOGGER.info("{} 根据ID删除滚动信息 id = {}", LOG_PREFIX, id);
         try {
             runInfoService.deleteRunInfoByID(id);
         } catch (AppException ae) {
-            LOGGER.error("{} 删除滚动信息失败 id = {}", LOG_PREFIX, id);
+            LOGGER.error("{} 根据ID删除滚动信息失败 id = {}", LOG_PREFIX, id);
             return BaseResult.fail(ae.getErrorCode(), ae.getMessage());
         }
         return BaseResult.success();
@@ -236,6 +238,9 @@ public class RunInfoController extends BaseController {
         LOGGER.info("{} 添加推送信息 id = {}", LOG_PREFIX, id);
         try {
             pushInfo.setOperator(id);
+            //todo 添加推送图片
+            //String filePath = FileUploadUtil.uploadFile(file, "pushPhoto");
+            //pushInfo.setPushPhoto(filePath);
             runPushInfoService.saveRunPushInfo(pushInfo);
         } catch (AppException ae) {
             LOGGER.error("{} 添加推送信息失败 id = {}, info = {}, error = {}", LOG_PREFIX, id, pushInfo, ae);

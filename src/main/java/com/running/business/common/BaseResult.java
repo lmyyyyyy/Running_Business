@@ -68,7 +68,7 @@ public class BaseResult implements Serializable {
         return new BaseResult(pageInfo);
     }
 
-    public static BaseResult success() {
+    public static BaseResult  success() {
         return new BaseResult(ResultEnum.SUCCESS.getCode());
     }
 
