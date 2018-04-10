@@ -371,7 +371,7 @@ public class MonitorController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/query/mapperLog/TargetTableName", method = RequestMethod.GET)
+    @RequestMapping(value = "/query/mapperLog/targetTableName", method = RequestMethod.GET)
     @ApiOperation(value = "根据表名模糊查询mapper日志(巨延生)", notes = "根据表名模糊查询mapper日志", response = BaseResult.class)
     public BaseResult queryMapperLogByTargetTableName(@RequestParam(value = "targetTableName") String targetTableName,
                                                       @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
