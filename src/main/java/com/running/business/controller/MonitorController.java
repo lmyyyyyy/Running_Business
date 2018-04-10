@@ -323,45 +323,47 @@ public class MonitorController extends BaseController {
     /**
      * 根据操作类型查询mapper日志
      *
-     * @param OperateType
+     * @param operateType
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/query/mapper/log/operateType", method = RequestMethod.GET)
     @ApiOperation(value = "根据操作类型查询mapper日志(巨延生)", notes = "根据操作类型查询mapper日志", response = BaseResult.class)
-    public BaseResult pageMapperLogByOperateType(@PathVariable(value = "OperateType") Byte OperateType,
+    public BaseResult pageMapperLogByOperateType(@RequestParam(value = "operateType") Byte operateType,
                                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
                                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
-        if (OperateType == null || OperateType <= 0) {
-            LOGGER.error(LOG_PREFIX + "操作类型查询mapper日志输入错误 OperateType = {}", OperateType);
+        if (operateType == null || operateType <= 0) {
+            LOGGER.error(LOG_PREFIX + "操作类型查询mapper日志输入错误 OperateType = {}", operateType);
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
         }
-        LOGGER.info("根据操作类型查询mapper日志：" + OperateType);
-        return BaseResult.success(runMethodLogService.pageMapperLogByOperateType(OperateType,page,size,orderField,orderType));
+        LOGGER.info("根据操作类型查询mapper日志：" + operateType);
+        return BaseResult.success(runMethodLogService.pageMapperLogByOperateType(operateType, page, size, orderField, orderType));
     }
+
     /**
      * 根据影响行数查询mapper日志
      *
-     * @param InfluenceRow
+     * @param influenceRow
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/query/mapper/log/influenceRow", method = RequestMethod.GET)
     @ApiOperation(value = "根据影响行数查询mapper日志(巨延生)", notes = "根据影响行数查询mapper日志", response = BaseResult.class)
-    public BaseResult pageMapperLogByInfluenceRow(@PathVariable(value = "pageMapperLogByInfluenceRow") Integer InfluenceRow,
-                                                 @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                                 @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
-                                                 @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
-                                                 @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
-        if (InfluenceRow == null || InfluenceRow <= 0) {
-            LOGGER.error(LOG_PREFIX + "影响行数查询mapper日志输入错误 InfluenceRow = {}", InfluenceRow);
+    public BaseResult pageMapperLogByInfluenceRow(@RequestParam(value = "influenceRow") Integer influenceRow,
+                                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
+        if (influenceRow == null || influenceRow <= 0) {
+            LOGGER.error(LOG_PREFIX + "影响行数查询mapper日志输入错误 InfluenceRow = {}", influenceRow);
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
         }
-        LOGGER.info("根据影响行数查询mapper日志：" + InfluenceRow);
-        return BaseResult.success(runMethodLogService.pageMapperLogByInfluenceRow(InfluenceRow,page,size,orderField,orderType));
+        LOGGER.info("根据影响行数查询mapper日志：" + influenceRow);
+        return BaseResult.success(runMethodLogService.pageMapperLogByInfluenceRow(influenceRow, page, size, orderField, orderType));
     }
+
     /**
      * 根据方法参数模糊查询mapper日志
      *
@@ -372,10 +374,10 @@ public class MonitorController extends BaseController {
     @RequestMapping(value = "/query/mapper/log/methodparam", method = RequestMethod.GET)
     @ApiOperation(value = "根据方法参数模糊查询mapper日志(巨延生)", notes = "根据方法参数模糊查询mapper日志", response = BaseResult.class)
     public BaseResult querymapperLogByMethodParam(@RequestParam(value = "methodParam") String methodParam,
-                                                   @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                                   @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
-                                                   @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
-                                                   @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
+                                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                                  @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                                  @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
         if (methodParam == null || "".equals(methodParam)) {
             LOGGER.error(LOG_PREFIX + "查询mapper日志方法参数输入错误 methodParam = {}", methodParam);
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
@@ -383,47 +385,71 @@ public class MonitorController extends BaseController {
         LOGGER.info("根据方法参数模糊查询mapper日志：" + methodParam);
         return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogByMethodParam(methodParam, page, size, orderField, orderType)));
     }
+
+    /**
+     * 根据ServiceId查询mapper日志
+     *
+     * @param serviceId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/query/mapper/log/serivce", method = RequestMethod.GET)
+    @ApiOperation(value = "根据ServiceId查询mapper日志(巨延生)", notes = "根据ServiceId查询mapper日志", response = BaseResult.class)
+    public BaseResult querymapperLogByServiceId(@RequestParam(value = "serviceId") Integer serviceId,
+                                                @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                                @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                                @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                                @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
+        if (serviceId == null || serviceId < 0) {
+            LOGGER.error(LOG_PREFIX + "根据ServiceId查询mapper日志失败 serviceId = {}", serviceId);
+            return BaseResult.fail(ResultEnum.INPUT_ERROR);
+        }
+        LOGGER.info("根据ServiceId查询mapper日志：" + serviceId);
+        return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogByServiceId(serviceId, page, size, orderField, orderType)));
+    }
+
     /**
      * 根据SQL语句模糊查询mapper日志
      *
-     * @param SqlStatement
+     * @param sql
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/query/mapper/log/sqlStatement", method = RequestMethod.GET)
+    @RequestMapping(value = "/query/mapper/log/sql", method = RequestMethod.GET)
     @ApiOperation(value = "根据SQL语句模糊查询mapper日志(巨延生)", notes = "根据SQL语句模糊查询mapper日志", response = BaseResult.class)
-    public BaseResult querymapperLogBySqlStatement(@RequestParam(value = "SqlStatement") String SqlStatement,
+    public BaseResult querymapperLogBySqlStatement(@RequestParam(value = "sql") String sql,
                                                    @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                    @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                                    @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
                                                    @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
-        if (SqlStatement == null || "".equals(SqlStatement)) {
-            LOGGER.error(LOG_PREFIX + "查询mapper日志SQL语句输入错误 SqlStatement = {}", SqlStatement);
+        if (sql == null || "".equals(sql)) {
+            LOGGER.error(LOG_PREFIX + "查询mapper日志SQL语句输入错误 SqlStatement = {}", sql);
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
         }
-        LOGGER.info("根据SQL语句模糊查询mapper日志：" + SqlStatement);
-        return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogBySqlStatement(SqlStatement, page, size, orderField, orderType)));
+        LOGGER.info("根据SQL语句模糊查询mapper日志：" + sql);
+        return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogBySqlStatement(sql, page, size, orderField, orderType)));
     }
+
     /**
      * 根据错误信息模糊查询mapper日志
      *
-     * @param errorMessage
+     * @param error
      * @return
      * @throws AppException
      */
-    @RequestMapping(value = "/query/mapper/log/errormessage", method = RequestMethod.GET)
+    @RequestMapping(value = "/query/mapper/log/error", method = RequestMethod.GET)
     @ApiOperation(value = "根据错误信息模糊查询mapper日志(巨延生)", notes = "根据错误信息模糊查询mapper日志", response = BaseResult.class)
-    public BaseResult pageMapperLogByError(@RequestParam(value = "errorMessage") String errorMessage,
-                                                    @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                                    @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
-                                                    @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
-                                                    @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
-        if (errorMessage == null || "".equals(errorMessage)) {
-            LOGGER.error(LOG_PREFIX + "查询mapper日志错误信息输入错误 errorMessage = {}", errorMessage);
+    public BaseResult pageMapperLogByError(@RequestParam(value = "error") String error,
+                                           @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                           @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+                                           @RequestParam(value = "orderField", required = false, defaultValue = "add_time") String orderField,
+                                           @RequestParam(value = "orderType", required = false, defaultValue = "DESC") String orderType) throws Exception {
+        if (error == null || "".equals(error)) {
+            LOGGER.error(LOG_PREFIX + "查询mapper日志错误信息输入错误 errorMessage = {}", error);
             return BaseResult.fail(ResultEnum.INPUT_ERROR);
         }
-        LOGGER.info("根据错误信息模糊查询Service日志：" + errorMessage);
-        return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogByError(errorMessage, page, size, orderField, orderType)));
+        LOGGER.info("根据错误信息模糊查询Service日志：" + error);
+        return BaseResult.success(new PageInfo(runMethodLogService.pageMapperLogByError(error, page, size, orderField, orderType)));
     }
 
     /**
