@@ -734,6 +734,30 @@ public class RunServiceLogExample {
             addCriterion("parent_id not between", value1, value2, "parentId");
             return (Criteria) this;
         }
+
+        /**
+         * 补充方法
+         */
+        public Criteria andMethodParamLike(String value) {
+            addCriterion("method_param like", value, "methodParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnValueLike(String value) {
+            addCriterion("return_value like", value, "returnValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andErrorMessageLike(String value) {
+            addCriterion("error_message like", value, "errorMessage");
+            return (Criteria) this;
+        }
+
+
+//        public Criteria andOperatorNameLike(String value) {
+//            addCriterion("operator_name like", value, "operatorName");
+//            return (Criteria) this;
+//        }
     }
 
     public static class Criteria extends GeneratedCriteria {
