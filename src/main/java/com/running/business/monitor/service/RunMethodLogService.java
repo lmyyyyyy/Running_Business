@@ -4,6 +4,7 @@ import com.running.business.exception.AppException;
 import com.running.business.monitor.pojo.RunMapperLogWithBLOBs;
 import com.running.business.monitor.pojo.RunServiceLogWithBLOBs;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -285,3 +286,6 @@ public interface RunMethodLogService {
      */
     List<RunMapperLogWithBLOBs> pageMapperLogByTimeCost(Long startTime, Long endTime, Integer page, Integer size, String orderField, String orderType) throws AppException;
 }
+
+
+

@@ -319,6 +319,7 @@ public class MonitorController extends BaseController {
         LOGGER.info("根据service方法id查询mapper日志：" + id);
         return BaseResult.success(runMethodLogService.queryMapperLogByID(id));
     }
+
     /**
      * 根据操作类型查询mapper日志
      *
@@ -366,7 +367,7 @@ public class MonitorController extends BaseController {
      *
      * @param methodParam
      * @return
-     * @throws AppException
+     * @throws Exception
      */
     @RequestMapping(value = "/query/mapper/log/methodparam", method = RequestMethod.GET)
     @ApiOperation(value = "根据方法参数模糊查询mapper日志(巨延生)", notes = "根据方法参数模糊查询mapper日志", response = BaseResult.class)
@@ -476,7 +477,7 @@ public class MonitorController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/query/mapperLog/TargetTableName", method = RequestMethod.GET)
+    @RequestMapping(value = "/query/mapperLog/targetTableName", method = RequestMethod.GET)
     @ApiOperation(value = "根据表名模糊查询mapper日志(巨延生)", notes = "根据表名模糊查询mapper日志", response = BaseResult.class)
     public BaseResult queryMapperLogByTargetTableName(@RequestParam(value = "targetTableName") String targetTableName,
                                                       @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
