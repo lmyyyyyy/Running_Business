@@ -201,17 +201,41 @@ public final class CookieUtils {
             domainName = "";
         } else {
             serverName = serverName.toLowerCase();
-            serverName = serverName.substring(7);
+            if (serverName.startsWith("http://")) {
+                serverName = serverName.substring(7);
+            } else if (serverName.startsWith("https://")) {
+                serverName = serverName.substring(8);
+            }
             final int end = serverName.indexOf("/");
             serverName = serverName.substring(0, end);
             final String[] domains = serverName.split("\\.");
             int len = domains.length;
+            boolean flag = true;
+            for (int i = 0; i < len; i ++) {
+                if (!RegexUtils.checkDigit(domains[i])) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                for (int i = 0; i < len; i ++) {
+                    if (i == 0) {
+                        domainName = domains[i];
+                        continue;
+                    }
+                    domainName += "." + domains[i];
+                }
+                if (domainName != null && domainName.indexOf(":") > 0) {
+                    String[] ary = domainName.split("\\:");
+                    domainName = ary[0];
+                }
+                return domainName;
+            }
             if (len > 3) {
                 // www.xxx.com.cn
-                domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
+                domainName = domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= 3 && len > 1) {
                 // xxx.com or xxx.cn
-                domainName = "." + domains[len - 2] + "." + domains[len - 1];
+                domainName = domains[len - 2] + "." + domains[len - 1];
             } else {
                 domainName = serverName;
             }
@@ -222,6 +246,61 @@ public final class CookieUtils {
             domainName = ary[0];
         }
         return domainName;
+    }
+
+    public static void main(String[] args) {
+        String serverName = "http://39.106.207.137/Running_Business-0.1.0/swagger-ui.html\n";
+        String domainName = null;
+        if (serverName == null || serverName.equals("")) {
+            domainName = "";
+        } else {
+            serverName = serverName.toLowerCase();
+            if (serverName.startsWith("http://")) {
+                serverName = serverName.substring(7);
+            } else if (serverName.startsWith("https://")) {
+                serverName = serverName.substring(8);
+            }
+            final int end = serverName.indexOf("/");
+            serverName = serverName.substring(0, end);
+            final String[] domains = serverName.split("\\.");
+            System.out.println(domains[0]);
+            int len = domains.length;
+            boolean flag = true;
+            for (int i = 0; i < len; i ++) {
+                if (!RegexUtils.checkDigit(domains[i])) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                for (int i = 0; i < len; i ++) {
+                    if (i == 0) {
+                        domainName = domains[i];
+                        continue;
+                    }
+                    domainName += "." + domains[i];
+                }
+                if (domainName != null && domainName.indexOf(":") > 0) {
+                    String[] ary = domainName.split("\\:");
+                    domainName = ary[0];
+                }
+                System.out.println(domainName);
+            }
+            if (len > 3) {
+                // www.xxx.com.cn
+                domainName = domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
+            } else if (len <= 3 && len > 1) {
+                // xxx.com or xxx.cn
+                domainName = domains[len - 2] + "." + domains[len - 1];
+            } else {
+                domainName = serverName;
+            }
+        }
+
+        if (domainName != null && domainName.indexOf(":") > 0) {
+            String[] ary = domainName.split("\\:");
+            domainName = ary[0];
+        }
+        System.out.println(domainName);
     }
 
 }
