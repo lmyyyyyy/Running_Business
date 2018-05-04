@@ -232,7 +232,7 @@ public final class CookieUtils {
             }
             if (len > 3) {
                 // www.xxx.com.cn
-                domainName = domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
+                domainName = domains[len-4] + "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= 3 && len > 1) {
                 // xxx.com or xxx.cn
                 domainName = domains[len - 2] + "." + domains[len - 1];
@@ -249,30 +249,33 @@ public final class CookieUtils {
     }
 
     public static void main(String[] args) {
-        String serverName = "http://39.106.207.137/Running_Business-0.1.0/swagger-ui.html\n";
+        String serverName = "http://192.168.1.103:8080/index/users/login";
+        //serverName = "http://www.baidu.com.cn/Running_Business-0.1.0/swagger-ui.html#!/%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97/loginUsingPOST_4";
         String domainName = null;
+
         if (serverName == null || serverName.equals("")) {
             domainName = "";
         } else {
             serverName = serverName.toLowerCase();
             if (serverName.startsWith("http://")) {
                 serverName = serverName.substring(7);
+                System.out.println(serverName);
             } else if (serverName.startsWith("https://")) {
                 serverName = serverName.substring(8);
             }
             final int end = serverName.indexOf("/");
             serverName = serverName.substring(0, end);
+            System.out.println(serverName);
             final String[] domains = serverName.split("\\.");
-            System.out.println(domains[0]);
             int len = domains.length;
             boolean flag = true;
-            for (int i = 0; i < len; i ++) {
+            for (int i = 0; i < len; i++) {
                 if (!RegexUtils.checkDigit(domains[i])) {
                     flag = false;
                 }
             }
             if (flag) {
-                for (int i = 0; i < len; i ++) {
+                for (int i = 0; i < len; i++) {
                     if (i == 0) {
                         domainName = domains[i];
                         continue;
@@ -284,10 +287,11 @@ public final class CookieUtils {
                     domainName = ary[0];
                 }
                 System.out.println(domainName);
+                return;
             }
             if (len > 3) {
                 // www.xxx.com.cn
-                domainName = domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
+                domainName = domains[len-4] + "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= 3 && len > 1) {
                 // xxx.com or xxx.cn
                 domainName = domains[len - 2] + "." + domains[len - 1];
@@ -302,5 +306,4 @@ public final class CookieUtils {
         }
         System.out.println(domainName);
     }
-
 }
