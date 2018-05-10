@@ -19,7 +19,10 @@
     <bean id="requestUtil" class="com.running.business.util.RequestUtil">
         <property name="jedisClient" ref="jedisClient"/>
     </bean>
+    <bean class="com.running.business.common.CorsConfigurerAdapter"></bean>
     <!-- 使用 Swagger Restful API文档时，添加此注解 -->
+    <!-- 访问静态资源 -->
+    <mvc:resources location="/WEB-INF/img/" mapping="/img/**"/>
     <mvc:default-servlet-handler/>
     <mvc:interceptors>
         <!-- Interceptor拦截所有请求 -->
@@ -127,5 +130,6 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
 
 </beans>  

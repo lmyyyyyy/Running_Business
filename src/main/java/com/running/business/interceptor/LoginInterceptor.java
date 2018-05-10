@@ -57,7 +57,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (str == null || str.equals("")) {
             UserUtil.unbindUser();
             LOGGER.info("--还没登录，跳到登录界面--", o);
-            httpServletResponse.sendRedirect(defultLogin);
+            httpServletResponse.setStatus(99980003);
             return false;
         }
         try {
@@ -71,6 +71,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         } catch (Exception e) {
             LOGGER.error("--当前线程与用户绑定失败 error = {}", e);
+            httpServletResponse.setStatus(99980003);
             return false;
         }
         LOGGER.info("{} 验证成功,放行", str);
