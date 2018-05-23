@@ -50,6 +50,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        // 所有预检请求放行,不走sso
+        if ("OPTIONS".equals(httpServletRequest.getMethod())) {
+            return true;
+        }
         LOGGER.info("验证TOKEN是否失效Begin...");
         treadLocal.set(System.currentTimeMillis());
         String token = getToken(httpServletRequest);
