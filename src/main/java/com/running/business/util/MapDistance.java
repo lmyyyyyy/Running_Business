@@ -144,11 +144,11 @@ public class MapDistance {
         //测试经纬度2：117.00999000000002  36.66123
         System.out.println(getDistance("39.929986","116.395645","39.90403","116.407526"));
 
-        System.out.println(getAround("117.11811", "36.68484", "13000"));
+        System.out.println(getAround("45.717828", "126.641554", "2000"));
         //117.01028712333508(Double), 117.22593287666493(Double),
         //36.44829619896034(Double), 36.92138380103966(Double)
         System.out.println(getDistanceOfMeter(40.008600, 116.487560, 40.000985, 116.486266));
-        double[] a = getRectangle(117.11811, 36.68484, 1000);
+        double[] a = getRectangle(126.641554, 45.717828, 2000);
         for (int i=0; i<a.length; i ++) {
             System.out.println(a[i]);
         }
