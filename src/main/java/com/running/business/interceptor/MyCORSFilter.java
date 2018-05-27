@@ -23,7 +23,7 @@ public class MyCORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String origin = (String) servletRequest.getRemoteHost() + ":" + servletRequest.getRemotePort();
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie");
         response.setHeader("Access-Control-Allow-Credentials", "true");

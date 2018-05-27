@@ -122,7 +122,7 @@ public class RunOrderPayServiceImpl implements RunOrderPayService {
         criteria.andOrderidEqualTo(oid);
         List<RunOrderPay> list = runOrderPayMapper.selectByExample(example);
         if (!ValidateUtil.isValid(list)) {
-            throw new AppException(ResultEnum.NOT_MSG.getCode(), ResultEnum.NOT_MSG.getMsg());
+            throw new AppException(ResultEnum.ORDER_PAY_INFO_EMPTY.getCode(), ResultEnum.ORDER_PAY_INFO_EMPTY.getMsg());
         }
         return BaseResult.success(list);
     }

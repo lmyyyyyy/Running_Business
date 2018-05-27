@@ -1,6 +1,7 @@
 package com.running.business.service.impl;
 
 import com.running.business.common.ResultEnum;
+import com.running.business.enums.OrderPayTypeEnum;
 import com.running.business.enums.OrderStatusEnum;
 import com.running.business.enums.OrderTypeEnum;
 import com.running.business.exception.AppException;
@@ -47,7 +48,11 @@ public class HelpBuyOrderServiceImpl implements HelpBuyOrderService, OrderServic
         if (runOrderService.orderIdIsExist(order.getOrderid())) {
             order.setOrderid(runOrderService.generatorOrderId());
         }
-        order.setStatus(OrderStatusEnum.UNPAID.getCode());
+        if (order.getPayType().equals(OrderPayTypeEnum.ONLINE_PAY.getCode())) {
+            order.setStatus(OrderStatusEnum.UNPAID.getCode());
+        } else {
+            order.setStatus(OrderStatusEnum.PAID.getCode());
+        }
         order.setUpdateTime(new Date());
         validateOrderFeilds(order);
         LOGGER.info("{} 订单入库", LOG_PREFIX);

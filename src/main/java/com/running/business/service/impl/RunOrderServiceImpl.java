@@ -16,6 +16,8 @@ import com.running.business.facade.Cashier;
 import com.running.business.mapper.RunOrderMapper;
 import com.running.business.mapper.RunUserInfoMapper;
 import com.running.business.pojo.RunDeliveryAddress;
+import com.running.business.pojo.RunDeliveryBalance;
+import com.running.business.pojo.RunDeliveryBalanceRecord;
 import com.running.business.pojo.RunDeliveryDistance;
 import com.running.business.pojo.RunDeliveryInfo;
 import com.running.business.pojo.RunOrder;
@@ -26,6 +28,8 @@ import com.running.business.pojo.RunUserInfo;
 import com.running.business.pojo.RunUserPreference;
 import com.running.business.service.RefundRecordService;
 import com.running.business.service.RunDeliveryAddressService;
+import com.running.business.service.RunDeliveryBalanceRecordService;
+import com.running.business.service.RunDeliveryBalanceService;
 import com.running.business.service.RunDeliveryDistanceService;
 import com.running.business.service.RunDeliveryInfoService;
 import com.running.business.service.RunOrderPayService;
@@ -78,7 +82,6 @@ public class RunOrderServiceImpl implements RunOrderService {
     @Autowired
     private RunDeliveryDistanceService runDeliveryDistanceService;
 
-
     @Autowired
     private RunDeliveryAddressService runDeliveryAddressService;
 
@@ -87,6 +90,12 @@ public class RunOrderServiceImpl implements RunOrderService {
 
     @Autowired
     private RunUserPreferenceService runUserPreferenceService;
+
+    @Autowired
+    private RunDeliveryBalanceService runDeliveryBalanceService;
+
+    @Autowired
+    private RunDeliveryBalanceRecordService runDeliveryBalanceRecordService;
 
     /**
      * 验证订单是否已被抢 false:未被抢；true:已被抢
@@ -210,16 +219,31 @@ public class RunOrderServiceImpl implements RunOrderService {
         if (status == null || status < 0) {
             throw new AppException(ResultEnum.ORDER_STATUS_IS_ERROR);
         }
-        RunOrder order = new RunOrder();
+        RunOrder order = this.getRunOrderByOID(orderId);
         order.setOrderid(orderId);
         order.setStatus(status);
         order.setUpdateTime(new Date());
-        if (status.equals(OrderStatusEnum.SENDING)) {
+        if (status.equals(OrderStatusEnum.SENDING.getCode())) {
             order.setTargetTime(new Date());
-        } else if (status.equals(OrderStatusEnum.FINISH)) {
+        } else if (status.equals(OrderStatusEnum.FINISH.getCode())) {
             order.setFinishTime(new Date());
+            //todo 如果订单是在线支付则更新配送员余额
+            if (order.getPayType().equals(OrderPayTypeEnum.ONLINE_PAY.getCode())) {
+                RunOrderPay orderPay = (RunOrderPay) runOrderPayService.getRunOrderPayByOID(orderId).getData();
+                double amount = orderPay.getOrderActualPrice();
+                RunDeliveryBalance balance = runDeliveryBalanceService.getRunDeliveryBalanceByDID(order.getDid());
+                RunDeliveryBalanceRecord runDeliveryBalanceRecord = new RunDeliveryBalanceRecord();
+                runDeliveryBalanceRecord.setOldBalance(balance.getDeliveryBalance());
+                balance.setDeliveryBalance(balance.getDeliveryBalance() + amount);
+                runDeliveryBalanceService.updateRunDeliveryBalance(balance);
+                runDeliveryBalanceRecord.setDid(order.getDid());
+                runDeliveryBalanceRecord.setType(true);
+                runDeliveryBalanceRecord.setAmount(amount);
+                runDeliveryBalanceRecord.setNewBalance(balance.getDeliveryBalance());
+                runDeliveryBalanceRecordService.saveRunDeliveryRecord(runDeliveryBalanceRecord);
+            }
             this.updateDeliveryPoint(orderId);
-        } else if (status.equals(OrderStatusEnum.RECEIVED)) {
+        } else if (status.equals(OrderStatusEnum.RECEIVED.getCode())) {
             order.setRecvTime(new Date());
         }
         runOrderMapper.updateByPrimaryKeySelective(order);
@@ -435,8 +459,12 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         example.setOrderByClause(" add_time " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(list);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(list);
+        return results;
     }
 
     /**
@@ -503,14 +531,19 @@ public class RunOrderServiceImpl implements RunOrderService {
             } else {
                 criteria.andSourceLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
                 criteria.andSourceLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
-                criteria.andRecvLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
-                criteria.andRecvLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));
+                /*criteria.andRecvLatitudeBetween(String.valueOf(range[1]), String.valueOf(range[3]));
+                criteria.andRecvLongitudeBetween(String.valueOf(range[0]), String.valueOf(range[2]));*/
             }
         }
         example.setOrderByClause(" add_time " + orderType + ", distance " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, longitude, latitude);
-        return new PageInfo<>(orderByOrderVO(list));
+        PageInfo<OrderVO> pageInfo1 = new PageInfo<>();
+        pageInfo1.setTotal(pageInfo.getTotal());
+        pageInfo1.setList(orderByOrderVO(list));
+
+        return pageInfo1;
     }
 
     @Override
@@ -563,8 +596,12 @@ public class RunOrderServiceImpl implements RunOrderService {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(list);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(list);
+        return results;
     }
 
     /**
@@ -614,8 +651,12 @@ public class RunOrderServiceImpl implements RunOrderService {
         criteria.andGoodsLike("%" + keyword + "%");
         example.setOrderByClause(orderField + " " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> orderVOS = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(orderVOS);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(orderVOS);
+        return results;
     }
 
     /**
