@@ -515,7 +515,7 @@ public class RunDeliveryuserServiceImpl implements RunDeliveryuserService {
         if (deliveryuser == null) {
             throw new AppException(ResultEnum.DELIVERY_ID_IS_ERROR);
         }
-        return deliveryuser.getAvailable().equals(AvailableEnum.CAN);
+        return deliveryuser.getAvailable().equals(AvailableEnum.CAN.getCode());
     }
 
     /**

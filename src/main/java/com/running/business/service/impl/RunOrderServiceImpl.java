@@ -220,16 +220,16 @@ public class RunOrderServiceImpl implements RunOrderService {
             throw new AppException(ResultEnum.ORDER_STATUS_IS_ERROR);
         }
         RunOrder order = this.getRunOrderByOID(orderId);
-        RunOrderPay orderPay = (RunOrderPay) runOrderPayService.getRunOrderPayByOID(orderId).getData();
         order.setOrderid(orderId);
         order.setStatus(status);
         order.setUpdateTime(new Date());
-        if (status.equals(OrderStatusEnum.SENDING)) {
+        if (status.equals(OrderStatusEnum.SENDING.getCode())) {
             order.setTargetTime(new Date());
-        } else if (status.equals(OrderStatusEnum.FINISH)) {
+        } else if (status.equals(OrderStatusEnum.FINISH.getCode())) {
             order.setFinishTime(new Date());
             //todo 如果订单是在线支付则更新配送员余额
-            if (order.getPayType().equals(OrderPayTypeEnum.ONLINE_PAY)) {
+            if (order.getPayType().equals(OrderPayTypeEnum.ONLINE_PAY.getCode())) {
+                RunOrderPay orderPay = (RunOrderPay) runOrderPayService.getRunOrderPayByOID(orderId).getData();
                 double amount = orderPay.getOrderActualPrice();
                 RunDeliveryBalance balance = runDeliveryBalanceService.getRunDeliveryBalanceByDID(order.getDid());
                 RunDeliveryBalanceRecord runDeliveryBalanceRecord = new RunDeliveryBalanceRecord();
@@ -243,7 +243,7 @@ public class RunOrderServiceImpl implements RunOrderService {
                 runDeliveryBalanceRecordService.saveRunDeliveryRecord(runDeliveryBalanceRecord);
             }
             this.updateDeliveryPoint(orderId);
-        } else if (status.equals(OrderStatusEnum.RECEIVED)) {
+        } else if (status.equals(OrderStatusEnum.RECEIVED.getCode())) {
             order.setRecvTime(new Date());
         }
         runOrderMapper.updateByPrimaryKeySelective(order);
@@ -459,8 +459,12 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         example.setOrderByClause(" add_time " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(list);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(list);
+        return results;
     }
 
     /**
@@ -533,8 +537,13 @@ public class RunOrderServiceImpl implements RunOrderService {
         }
         example.setOrderByClause(" add_time " + orderType + ", distance " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, longitude, latitude);
-        return new PageInfo<>(orderByOrderVO(list));
+        PageInfo<OrderVO> pageInfo1 = new PageInfo<>();
+        pageInfo1.setTotal(pageInfo.getTotal());
+        pageInfo1.setList(orderByOrderVO(list));
+
+        return pageInfo1;
     }
 
     @Override
@@ -587,8 +596,12 @@ public class RunOrderServiceImpl implements RunOrderService {
             criteria.andRemarkLike("%" + keyword.trim() + "%");
         }
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> list = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(list);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(list);
+        return results;
     }
 
     /**
@@ -638,8 +651,12 @@ public class RunOrderServiceImpl implements RunOrderService {
         criteria.andGoodsLike("%" + keyword + "%");
         example.setOrderByClause(orderField + " " + orderType);
         List<RunOrder> orders = runOrderMapper.selectByExample(example);
+        PageInfo<RunOrder> pageInfo = new PageInfo<>(orders);
         List<OrderVO> orderVOS = convertOrders2VOs(orders, null, null);
-        return new PageInfo<>(orderVOS);
+        PageInfo<OrderVO> results = new PageInfo<>();
+        results.setTotal(pageInfo.getTotal());
+        results.setList(orderVOS);
+        return results;
     }
 
     /**
